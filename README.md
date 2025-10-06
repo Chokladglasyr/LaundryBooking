@@ -15,7 +15,8 @@ Creating a webapp(PWA) to create more availability, better reach and more engage
 + User flow
 
 ## Backend
-| [MongoDB](https://www.mongodb.com/docs/) | [Fastify](https://fastify.dev/docs/latest/) |
+| POSTGRES | [Fastify](https://fastify.dev/docs/latest/) | 
+(notiser)
 
 ### API Design
 <img src="./assets/ER.png">
