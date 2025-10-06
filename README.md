@@ -6,6 +6,10 @@ The booking system at the moment is signing your name on a paper hanging outside
 ## Solution
 Creating a webapp(PWA) to create more availability, better reach and more engagement. It will be easier to reschedule. It will be easier to reach out to residents it there is something faulty with a room.
 
+## Deployments
+[Frontend](https://laundry-booking-gamma.vercel.app/)  
+
+
 ## Design
 [Here](https://www.figma.com/board/IKHKqr4RaCf8KjO0XaHlmD/Booking-system?node-id=0-1&t=4wGbw7552KR8bFFD-1) you can find  
 + User research
@@ -15,7 +19,7 @@ Creating a webapp(PWA) to create more availability, better reach and more engage
 + User flow
 
 ## Backend
-| POSTGRES | [Fastify](https://fastify.dev/docs/latest/) | 
+| PostgreSQL | [Fastify](https://fastify.dev/docs/latest/) | 
 (notiser)
 
 ### API Design
