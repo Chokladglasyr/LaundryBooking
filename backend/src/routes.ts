@@ -6,6 +6,7 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         url: '/',
         handler: (req, reply) =>{
             console.log("hello")
+            return {"message": "Welcome to my backend"}
         }
     })
 }
