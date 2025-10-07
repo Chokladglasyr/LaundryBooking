@@ -4,10 +4,16 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     server.route({
         method: "GET",
         url: '/',
-        handler: (req, reply) =>{
+        preHandler: server.authenticate,
+        handler: async(req, reply) =>{
             console.log("hello")
             return {"message": "Welcome to my backend"}
         }
+    }),
+    server.route({
+        method: "POST",
+        url: "/login",
+        handler: (req, reply) => {}
     })
 }
 
