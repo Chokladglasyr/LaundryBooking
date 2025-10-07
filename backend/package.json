@@ -3,7 +3,8 @@
     "@fastify/cors": "^11.1.0",
     "@fastify/jwt": "^10.0.0",
     "fastify": "^5.6.1",
-    "fastify-plugin": "^5.1.0"
+    "fastify-plugin": "^5.1.0",
+    "pg": "^8.16.3"
   },
   "name": "backend",
   "module": "index.ts",
