@@ -1,8 +1,10 @@
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/index.ts": {
+      "runtime": "bun"
     }
-  ]
+  },
+  "installCommand": "bun install",
+  "buildCommand": ""
 }
