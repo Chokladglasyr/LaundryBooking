@@ -13,16 +13,25 @@ const start = (async () => {
     await app.register(auth);
     await app.register(routes, {});
     console.log("Running")
-    // const PORT = 3000;
-    // await server.listen({ port: PORT });
-    // console.log("Listening on port ", PORT);
   } catch (err) {
     console.error("Server failed: ", err);
     process.exit(1);
   }
 })();
 
+if(process.env.NODE_ENV !== 'production') {
+  start.then(() => {
+    const PORT = 3000;
+    app.listen({ port: PORT });
+    console.log("Listening on port ", PORT);
+
+  }).catch((err) => {
+    console.error("Failed to start locally: ", err)
+  })
+}
+
 export default async function handler(req: any, res: any) {
+  await start;
   await app.ready()
   app.server.emit('request', req, res)
 }
