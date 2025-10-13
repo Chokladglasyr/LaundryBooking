@@ -5,6 +5,7 @@ import {
   UserDatabaseModel,
 } from "../types/authTypes";
 import { saveUser } from "../repository";
+import bcrypt from 'bcrypt'
 
 export async function signup(
   req: FastifyRequest<{ Body: SignupRequest }>,
@@ -13,11 +14,12 @@ export async function signup(
     if(!req.body.name || !req.body.email || !req.body.password || !req.body.apt_nr) {
         reply.status(400).send("Required fields missing input.")
     }
+
   const newUser: UserDatabaseModel = {
     id: crypto.randomUUID(),
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password,
+    password: await bcrypt.hash(req.body.password, 10),
     apt_nr: req.body.apt_nr,
     created_at: new Date().toISOString(),
   };

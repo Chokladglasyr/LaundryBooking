@@ -2,6 +2,7 @@
   "dependencies": {
     "@fastify/cors": "^11.1.0",
     "@fastify/jwt": "^10.0.0",
+    "@types/bcrypt": "^6.0.0",
     "@types/pg": "^8.15.5",
     "bcrypt": "^6.0.0",
     "fastify": "^5.6.1",
