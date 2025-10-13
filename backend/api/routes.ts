@@ -23,6 +23,11 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         handler: authController.signup
     })
     server.route({
+        method: 'GET',
+        url: '/rules',
+        handler: ruleController.getAllRules
+    })
+    server.route({
         method: 'POST',
         url: '/rule',
         handler: ruleController.createRule
