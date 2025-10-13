@@ -1,9 +1,27 @@
-import fastify from "fastify";
+import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import routes from "./routes";
 import auth from "./auth";
 import PostgresConnection from "./db";
+import fastifyJwt from "@fastify/jwt";
+import { TokenPayload } from "./types/authTypes";
 
 const app = fastify();
+  if (!process.env.MY_SECRET_KEY) {
+    throw new Error("secret key for jwt is undefined");
+  }
+  await app.register(fastifyJwt, {
+    secret: process.env.MY_SECRET_KEY,
+  });
+    app.decorate(
+    "authenticate",
+    async (req: FastifyRequest, reply: FastifyReply) => {
+      try {
+        await req.jwtVerify<TokenPayload>();
+      } catch (err) {
+        return reply.status(401).send({message: "Not authorized"});
+      }
+    }
+  );
 
 const start = async () => {
   try {
@@ -12,7 +30,6 @@ const start = async () => {
 
     await app.register(auth);
     await app.register(routes, {});
-    console.log("Running");
 
     if (process.env.NODE_ENV !== "production") {
       const PORT = 3000;

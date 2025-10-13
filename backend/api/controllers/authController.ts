@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import {
   LoginRequest,
   SignupRequest,
@@ -7,6 +7,8 @@ import {
 } from "../types/authTypes";
 import { saveUser } from "../repository";
 import PostgresConnection from "../db";
+
+const app = fastify()
 
 export async function signup(
   req: FastifyRequest<{ Body: SignupRequest }>,
