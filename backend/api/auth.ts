@@ -13,14 +13,14 @@ declare module "fastify" {
   }
 }
 
-async function auth(server: FastifyInstance, options: FastifyPluginOptions) {
+async function auth(app: FastifyInstance, options: FastifyPluginOptions) {
   if (!process.env.MY_SECRET_KEY) {
     throw new Error("secret key for jwt is undefined");
   }
-  await server.register(fastifyJwt, {
+  await app.register(fastifyJwt, {
     secret: process.env.MY_SECRET_KEY,
   });
-  server.decorate(
+  app.decorate(
     "authenticate",
     async (req: FastifyRequest, reply: FastifyReply) => {
       try {

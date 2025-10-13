@@ -13,7 +13,7 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     server.route({
         method: "POST",
         url: "/login",
-        handler: (req, reply) => {}
+        handler:authController.login
     })
     server.route({
         method: 'POST',

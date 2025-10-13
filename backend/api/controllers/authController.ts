@@ -1,11 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
+  LoginRequest,
   SignupRequest,
   TokenPayload,
   UserDatabaseModel,
 } from "../types/authTypes";
 import { saveUser } from "../repository";
 import bcrypt from "bcrypt";
+import PostgresConnection from "../db";
 
 export async function signup(
   req: FastifyRequest<{ Body: SignupRequest }>,
@@ -25,8 +27,8 @@ export async function signup(
     name: req.body.name,
     email: req.body.email,
     password: await Bun.password.hash(req.body.password, {
-        algorithm: 'bcrypt',
-        cost: 10
+      algorithm: "bcrypt",
+      cost: 10,
     }),
     apt_nr: req.body.apt_nr,
     created_at: new Date().toISOString(),
@@ -39,6 +41,7 @@ export async function signup(
     email: newUser.email,
     type: "",
   };
+  console.log(tokenPayload);
   const newAccessToken = await reply.jwtSign(
     { ...tokenPayload, type: "access_token" },
     { expiresIn: "3600s" }
@@ -64,4 +67,22 @@ export async function signup(
       created_at: newUser.created_at,
     },
   });
+}
+
+export async function login(
+  req: FastifyRequest<{ Body: LoginRequest }>,
+  reply: FastifyReply
+) {
+  if (!req.body.email || !req.body.password) {
+    return reply.status(400).send("Required fields missing input.");
+  }
+  const {email, password } = req.body
+  const user = await PostgresConnection.runQuery(`SELECT * FROM users WHERE email = '${email}'`)
+
+  const match = await Bun.password.verify(password, user[0].password)
+  if(!match){
+    return reply.status(402).send("Incorrect credentials")
+  }
+
+  reply.status(201).send({message: "Logged in", user:{ name: user[0].name, email: user[0].email}})
 }
