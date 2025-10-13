@@ -19,9 +19,6 @@ async function auth(server: FastifyInstance, options: FastifyPluginOptions) {
   }
   await server.register(fastifyJwt, {
     secret: process.env.MY_SECRET_KEY,
-    sign: {
-      expiresIn: 10_000,
-    },
   });
   server.decorate(
     "authenticate",

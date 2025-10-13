@@ -5,26 +5,34 @@ import {
   UserDatabaseModel,
 } from "../types/authTypes";
 import { saveUser } from "../repository";
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
 
 export async function signup(
   req: FastifyRequest<{ Body: SignupRequest }>,
   reply: FastifyReply
 ) {
-    if(!req.body.name || !req.body.email || !req.body.password || !req.body.apt_nr) {
-        reply.status(400).send("Required fields missing input.")
-    }
+  if (
+    !req.body.name ||
+    !req.body.email ||
+    !req.body.password ||
+    !req.body.apt_nr
+  ) {
+    return reply.status(400).send("Required fields missing input.");
+  }
 
   const newUser: UserDatabaseModel = {
     id: crypto.randomUUID(),
     name: req.body.name,
     email: req.body.email,
-    password: await bcrypt.hash(req.body.password, 10),
+    password: await Bun.password.hash(req.body.password, {
+        algorithm: 'bcrypt',
+        cost: 10
+    }),
     apt_nr: req.body.apt_nr,
     created_at: new Date().toISOString(),
   };
-  console.log(newUser)
-  saveUser(newUser)
+  console.log(newUser);
+  await saveUser(newUser);
 
   const tokenPayload: TokenPayload = {
     user_id: newUser.id,
@@ -32,14 +40,10 @@ export async function signup(
     type: "",
   };
   const newAccessToken = await reply.jwtSign(
-    {
-      ...tokenPayload,
-      type: "acess_token",
-    },
-    {
-      expiresIn: "3600s",
-    }
+    { ...tokenPayload, type: "access_token" },
+    { expiresIn: "3600s" }
   );
+
   const newRefreshToken = await reply.jwtSign(
     {
       ...tokenPayload,
@@ -53,11 +57,11 @@ export async function signup(
     access_token: newAccessToken,
     refresh_token: newRefreshToken,
     user: {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-        apt_nr: newUser.apt_nr,
-        created_at: newUser.created_at
-    }
-  })
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      apt_nr: newUser.apt_nr,
+      created_at: newUser.created_at,
+    },
+  });
 }
