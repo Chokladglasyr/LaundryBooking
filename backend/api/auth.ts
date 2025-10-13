@@ -5,7 +5,7 @@ import {
   FastifyReply,
   FastifyRequest,
 } from "fastify";
-import { TokenPayload } from "./types/auth";
+import { TokenPayload } from "./types/authTypes";
 
 declare module "fastify" {
   interface FastifyInstance {

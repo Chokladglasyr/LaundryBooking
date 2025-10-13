@@ -8,7 +8,7 @@ export type UserDatabaseModel = {
     name: string
     email: string
     password: string
-    apt_nr: number
+    apt_nr: string
     created_at: string
 }
 export type SignupRequest = {

@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
+import * as authController from './controllers/authController'
 
 async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     server.route({
@@ -13,6 +14,11 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         method: "POST",
         url: "/login",
         handler: (req, reply) => {}
+    })
+    server.route({
+        method: 'POST',
+        url: '/signup',
+        handler: authController.signup
     })
 }
 
