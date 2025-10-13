@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import * as authController from './controllers/authController'
+import * as ruleController from './controllers/ruleController'
 
 async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     server.route({
@@ -19,6 +20,11 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         method: 'POST',
         url: '/signup',
         handler: authController.signup
+    })
+    server.route({
+        method: 'POST',
+        url: '/rule',
+        handler: ruleController.createRule
     })
 }
 

@@ -6,7 +6,6 @@ import {
   UserDatabaseModel,
 } from "../types/authTypes";
 import { saveUser } from "../repository";
-import bcrypt from "bcrypt";
 import PostgresConnection from "../db";
 
 export async function signup(
