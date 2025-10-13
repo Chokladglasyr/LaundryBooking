@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import * as authController from './controllers/authController'
 import * as ruleController from './controllers/ruleController'
+import * as messageController from './controllers/messageController'
 
 async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     server.route({
@@ -25,6 +26,11 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         method: 'POST',
         url: '/rule',
         handler: ruleController.createRule
+    })
+    server.route({
+        method:'POST',
+        url: '/message',
+        handler:messageController.createMessage
     })
 }
 
