@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { rulesRequest } from "../types/requestTypes";
+import { rulesAndMsgsRequest } from "../types/requestTypes";
 import PostgresConnection from "../db";
 import { insertRule } from "../repository";
 
-export async function createRule(req: FastifyRequest<{Body: rulesRequest}>, reply: FastifyReply) {
+export async function createRule(req: FastifyRequest<{Body: rulesAndMsgsRequest}>, reply: FastifyReply) {
 
 
     const newRule = {
