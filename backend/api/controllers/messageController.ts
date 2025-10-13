@@ -3,6 +3,11 @@ import { rulesAndMsgsRequest } from "../types/requestTypes";
 import { insertMessage } from "../repository";
 import PostgresConnection from "../db";
 
+export async function getAllMessages(req: FastifyRequest, reply: FastifyReply) {
+    const allMessages = await PostgresConnection.runQuery(`SELECT * FROM messages;`)
+    reply.status(200).send({message: "Messages fetched", messages: allMessages})
+}
+
 export async function createMessage(req: FastifyRequest<{Body: rulesAndMsgsRequest}>, reply: FastifyReply) {
     const newMsg = {
         id: crypto.randomUUID(),

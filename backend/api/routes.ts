@@ -33,6 +33,11 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         handler: ruleController.createRule
     })
     server.route({
+        method:'GET',
+        url: '/messages',
+        handler: messageController.getAllMessages
+    })
+    server.route({
         method:'POST',
         url: '/message',
         handler:messageController.createMessage
