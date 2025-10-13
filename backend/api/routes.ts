@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import * as authController from './controllers/authController'
 import * as ruleController from './controllers/ruleController'
 import * as messageController from './controllers/messageController'
+import * as userController from './controllers/userController'
 
 async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     server.route({
@@ -21,6 +22,11 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         method: 'POST',
         url: '/signup',
         handler: authController.signup
+    })
+    server.route({
+        method: 'GET',
+        url: '/users',
+        handler: userController.getAllUsers
     })
     server.route({
         method: 'GET',

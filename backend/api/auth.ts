@@ -20,15 +20,15 @@ async function auth(app: FastifyInstance, options: FastifyPluginOptions) {
   // await app.register(fastifyJwt, {
   //   secret: process.env.MY_SECRET_KEY,
   // });
-  app.decorate(
-    "authenticate",
-    async (req: FastifyRequest, reply: FastifyReply) => {
-      try {
-        await req.jwtVerify<TokenPayload>();
-      } catch (err) {
-        return reply.status(401).send("Not authorized");
-      }
-    }
-  );
+  // app.decorate(
+  //   "authenticate",
+  //   async (req: FastifyRequest, reply: FastifyReply) => {
+  //     try {
+  //       await req.jwtVerify<TokenPayload>();
+  //     } catch (err) {
+  //       return reply.status(401).send("Not authorized");
+  //     }
+  //   }
+  // );
 }
 export default auth;
