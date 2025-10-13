@@ -14,5 +14,5 @@ export async function createRule(req: FastifyRequest<{Body: rulesAndMsgsRequest}
 
     await insertRule(newRule)
     const created = await PostgresConnection.runQuery(`SELECT * FROM rules WHERE id = '${newRule.id}'`)
-    reply.status(201).send({message: "New rule created", rule: created[0]})
+    reply.status(201).send({message: "New rule created", created_rule: created[0]})
 }
