@@ -19,6 +19,11 @@ export async function createRule(req: FastifyRequest<{Body: rulesAndMsgsRequest}
     const created = await PostgresConnection.runQuery(`SELECT * FROM rules WHERE id = '${newRule.id}'`)
     reply.status(201).send({message: "New rule created", created_rule: created[0]})
 }
+export async function getOneRule(req: FastifyRequest<{Querystring: idRequest}>, reply: FastifyReply) {
+    const {id } = req.query
+    const rule = await PostgresConnection.runQuery(`SELECT * FROM rules WHERE id = '${id}'`)
+    reply.status(200).send({message: "Rule fetched", rule: rule[0]})
+}
 export async function updateOneRule(req:FastifyRequest<{Body: rulesAndMsgsRequest, Querystring: idRequest}>, reply: FastifyReply) {
     const {id} = req.query
     const ruleToUpdate = {
