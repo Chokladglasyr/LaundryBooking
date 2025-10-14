@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/index.ts": {
-      "runtime": "bun"
+      "runtime": "bun@latest"
     }
   },
   "installCommand": "bun install",
