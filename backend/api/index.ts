@@ -30,8 +30,8 @@ if(process.env.NODE_ENV !== "production"){
   start()
 }
 
-// export default async function handler(req: any, res: any) {
-//   await start();
-//   await app.ready();
-//   app.server.emit("request", req, res);
-// }
+export default async function handler(req: any, res: any) {
+  await start();
+  await app.ready();
+  app.server.emit("request", req, res);
+}
