@@ -1,6 +1,7 @@
 import PostgresConnection from "./db";
-import { UserDatabaseModel } from "./types/authTypes";
+import { UserDatabaseModel, UserUpdateModel } from "./types/authTypes";
 import { RuleDatabaseModel } from "./types/databaseModelTypes";
+import { idRequest } from "./types/requestTypes";
 
 
 export async function saveUser(user: UserDatabaseModel) {
@@ -10,7 +11,12 @@ export async function saveUser(user: UserDatabaseModel) {
         VALUES ('${id}', '${name}', '${email}', '${password}', '${apt_nr}', '${created_at}')`
   );
 }
-
+export async function updateUser(user: UserUpdateModel, id: string) {
+    const {name, email, password, updated_at} = user
+    PostgresConnection.runQuery(
+        `UPDATE users SET name = '${name}', email = '${email}', password = '${password}', updated_at = '${updated_at}' WHERE id = '${id}'`
+    )
+}
 export async function insertRule(rule: RuleDatabaseModel) {
   await PostgresConnection.runQuery(
     `INSERT INTO rules (id, title, description) VALUES('${rule.id}', '${rule.title}', '${rule.description}')`

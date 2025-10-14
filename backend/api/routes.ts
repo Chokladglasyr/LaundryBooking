@@ -37,6 +37,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         handler: userController.getOneUser
     })
     server.route({
+        method: 'PUT',
+        url:'/user',
+        preHandler: server.authenticate,
+        handler: userController.updateOneUser
+    })
+    server.route({
         method: 'DELETE',
         url: '/user',
         preHandler: server.authenticate,
