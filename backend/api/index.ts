@@ -1,7 +1,9 @@
-import fastify from "fastify";
+import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import routes from "./routes";
 import auth from "./auth";
 import PostgresConnection from "./db";
+import fastifyJwt from "@fastify/jwt";
+import { TokenPayload } from "./types/authTypes";
 
 const app = fastify();
 
@@ -12,7 +14,6 @@ const start = async () => {
 
     await app.register(auth);
     await app.register(routes, {});
-    console.log("Running");
 
     if (process.env.NODE_ENV !== "production") {
       const PORT = 3000;

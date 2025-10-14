@@ -71,7 +71,7 @@ class PostgresConnection {
   static async runQuery(query: string) {
     const dbClient = await this.getDbClient()
     const result = await dbClient.query(query)
-    console.log("Query run")
+
     return result.rows
   }
 }

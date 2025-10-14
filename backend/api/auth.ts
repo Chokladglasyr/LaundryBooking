@@ -6,6 +6,7 @@ import {
   FastifyRequest,
 } from "fastify";
 import { TokenPayload } from "./types/authTypes";
+import fp from "fastify-plugin"
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -26,9 +27,11 @@ async function auth(app: FastifyInstance, options: FastifyPluginOptions) {
       try {
         await req.jwtVerify<TokenPayload>();
       } catch (err) {
-        return reply.status(401).send("Not authorized");
+        return reply.status(401).send({message: "Not authorized"});
       }
     }
   );
 }
-export default auth;
+export default fp(auth, {
+  name: 'auth'
+})
