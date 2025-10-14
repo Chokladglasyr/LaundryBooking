@@ -30,4 +30,8 @@ export async function updateOneRule(req:FastifyRequest<{Body: rulesAndMsgsReques
     const updatedRule = await PostgresConnection.runQuery(`SELECT * FROM rules WHERE id = '${id}'`)
     reply.status(200).send({message: "Rule updated", rule: updatedRule})
 }
-
+export async function deleteRule(req: FastifyRequest<{Querystring: idRequest}>, reply: FastifyReply) {
+    const { id } = req.query
+    await PostgresConnection.runQuery(`DELETE FROM rules WHERE id = '${id}'`)
+    reply.status(200).send({message: `Rule with id: ${id} deleted`})
+}

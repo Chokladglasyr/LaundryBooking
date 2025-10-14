@@ -67,6 +67,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         handler: ruleController.updateOneRule
     })
     server.route({
+        method: 'DELETE',
+        url:'/rule',
+        preHandler: server.authenticate,
+        handler: ruleController.deleteRule
+    })
+    server.route({
         method:'GET',
         url: '/messages',
         preHandler: server.authenticate,
