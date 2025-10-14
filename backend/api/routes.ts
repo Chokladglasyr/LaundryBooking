@@ -61,6 +61,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         handler: ruleController.createRule
     })
     server.route({
+        method: 'PUT',
+        url: '/rule',
+        preHandler: server.authenticate,
+        handler: ruleController.updateOneRule
+    })
+    server.route({
         method:'GET',
         url: '/messages',
         preHandler: server.authenticate,

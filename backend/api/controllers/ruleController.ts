@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { rulesAndMsgsRequest } from "../types/requestTypes";
+import { idRequest, rulesAndMsgsRequest } from "../types/requestTypes";
 import PostgresConnection from "../db";
-import { insertRule } from "../repository";
+import { insertRule, updateRule } from "../repository";
 
 export async function getAllRules(req: FastifyRequest, reply: FastifyReply) {
     const allRules = await PostgresConnection.runQuery(`SELECT * FROM rules;`)
@@ -19,7 +19,15 @@ export async function createRule(req: FastifyRequest<{Body: rulesAndMsgsRequest}
     const created = await PostgresConnection.runQuery(`SELECT * FROM rules WHERE id = '${newRule.id}'`)
     reply.status(201).send({message: "New rule created", created_rule: created[0]})
 }
-export function updateRule(req:FastifyRequest, reply: FastifyReply) {
-
+export async function updateOneRule(req:FastifyRequest<{Body: rulesAndMsgsRequest, Querystring: idRequest}>, reply: FastifyReply) {
+    const {id} = req.query
+    const ruleToUpdate = {
+        title: req.body.title,
+        description: req.body.description,
+        updated_at:  new Date().toISOString(),
+    }
+    await updateRule(ruleToUpdate, id)
+    const updatedRule = await PostgresConnection.runQuery(`SELECT * FROM rules WHERE id = '${id}'`)
+    reply.status(200).send({message: "Rule updated", rule: updatedRule})
 }
 

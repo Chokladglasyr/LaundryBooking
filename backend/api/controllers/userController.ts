@@ -35,5 +35,6 @@ export async function updateOneUser(req: FastifyRequest<{Querystring:idRequest, 
     updated_at: new Date().toISOString(),
     }
     await updateUser(userToUpdate, id)
-    reply.status(200).send({message: "User updated", userToUpdate})
+    const updatedUser = await PostgresConnection.runQuery(`SELECT * FROM users WHERE id = '${id}'`)
+    reply.status(200).send({message: "User updated", updatedUser})
 }
