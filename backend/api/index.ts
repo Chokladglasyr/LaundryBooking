@@ -16,7 +16,7 @@ const start = async () => {
     await app.register(routes, {});
 
     if (process.env.NODE_ENV !== "production") {
-      const PORT = 3000;
+      const PORT = Number(process.env.PORT) || 3000;
       await app.listen({ port: PORT });
       console.log("Listening on port ", PORT);
     }
