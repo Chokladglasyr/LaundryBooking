@@ -12,7 +12,7 @@
   "type": "module",
   "scripts": {
     "start": "bun ./api/index.ts",
-    "dev": "bun --hot ./api/index.ts"
+    "dev": "bun --watch ./api/index.ts"
   },
   "private": true,
   "devDependencies": {
