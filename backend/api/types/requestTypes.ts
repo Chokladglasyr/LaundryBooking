@@ -11,3 +11,6 @@ export type bookingRequest = {
     room_id: string
     booking_date: string
 }
+export type idRequest = {
+    id: string
+}

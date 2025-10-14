@@ -32,6 +32,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     })
     server.route({
         method: 'GET',
+        url: '/user',
+        preHandler: server.authenticate,
+        handler: userController.getOneUser
+    })
+    server.route({
+        method: 'GET',
         url: '/rules',
         preHandler: server.authenticate,
         handler: ruleController.getAllRules
