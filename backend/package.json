@@ -12,7 +12,8 @@
   "type": "module",
   "scripts": {
     "start": "bun run ./src/index.ts",
-    "dev": "bun --hot ./src/index.ts"
+    "dev": "bun --hot ./src/index.ts",
+    "build": "bun run build"
   },
   "private": true,
   "devDependencies": {
