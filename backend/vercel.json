@@ -6,5 +6,5 @@
     }
   },
   "installCommand": "bun install",
-  "buildCommand": ""
+  "buildCommand": "bun run build"
 }

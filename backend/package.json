@@ -12,11 +12,13 @@
   "type": "module",
   "scripts": {
     "start": "bun run ./src/index.ts",
-    "dev": "bun --hot ./src/index.ts"
+    "dev": "bun --hot ./src/index.ts",
+    "build": "bun-vercel ./api/index.ts"
   },
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "bun-vercel": "^1.0.0-alpha.4"
   },
   "peerDependencies": {
     "typescript": "^5"
