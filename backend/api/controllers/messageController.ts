@@ -1,11 +1,17 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { rulesAndMsgsRequest } from "../types/requestTypes";
+import { idRequest, rulesAndMsgsRequest } from "../types/requestTypes";
 import { insertMessage } from "../repository";
 import PostgresConnection from "../db";
 
 export async function getAllMessages(req: FastifyRequest, reply: FastifyReply) {
     const allMessages = await PostgresConnection.runQuery(`SELECT * FROM messages;`)
     reply.status(200).send({message: "Messages fetched", messages: allMessages})
+}
+
+export async function getOneMessage(req: FastifyRequest<{Querystring: idRequest}>, reply: FastifyReply) {
+    const {id} = req.query
+    const message = await PostgresConnection.runQuery(`SELECT * FROM messages WHERE id = '${id}'`)
+    reply.status(200).send({message: "Message fetched", fetched_message: message[0]})
 }
 
 export async function createMessage(req: FastifyRequest<{Body: rulesAndMsgsRequest}>, reply: FastifyReply) {

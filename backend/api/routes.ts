@@ -48,6 +48,7 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         preHandler: server.authenticate,
         handler: userController.deleteUser
     })
+
     server.route({
         method: 'GET',
         url: '/rules',
@@ -78,11 +79,18 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         preHandler: server.authenticate,
         handler: ruleController.deleteRule
     })
+
     server.route({
         method:'GET',
         url: '/messages',
         preHandler: server.authenticate,
         handler: messageController.getAllMessages
+    })
+    server.route({
+        method:'GET',
+        url: '/message',
+        preHandler: server.authenticate,
+        handler: messageController.getOneMessage
     })
     server.route({
         method:'POST',
