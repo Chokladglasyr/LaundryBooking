@@ -39,7 +39,7 @@ export async function updateOneUser(
   const updatedUser = await PostgresConnection.runQuery(
     `SELECT * FROM users WHERE id = '${id}'`
   );
-  reply.status(200).send({ message: "User updated", updatedUser });
+  reply.status(200).send({ message: "User updated", updated_user: updatedUser });
 }
 
 export async function deleteUser(
