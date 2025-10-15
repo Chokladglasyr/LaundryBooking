@@ -23,6 +23,12 @@ export type RoomDatabaseModel = {
     name: string
     description: string
 }
+export type RoomUpdateModel = {
+    id: string
+    name: string
+    description: string
+    updated_at: string
+}
 export type BookingDatabaseModel = {
     id: string
     user_id: string

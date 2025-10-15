@@ -1,8 +1,11 @@
+import { postgres } from "bun";
 import PostgresConnection from "./db";
 import { UserDatabaseModel, UserUpdateModel } from "./types/authTypes";
 import {
   MessageDatabaseModel,
   MessageUpdateModel,
+  RoomDatabaseModel,
+  RoomUpdateModel,
   RuleDatabaseModel,
   RuleUpdateModel,
 } from "./types/databaseModelTypes";
@@ -66,5 +69,30 @@ export async function updateMessage(message: MessageUpdateModel, id: string) {
   } catch (err) {
     console.error("Error updating message: ", err);
     throw new Error("Could not update message.");
+  }
+}
+
+export async function insertRoom(room: RoomDatabaseModel) {
+  try {
+    const { id, name, description } = room;
+    const text = `INSERT INTO rooms (id, name, description) VALUES($1, $2, $3);`;
+    const values = [id, name, description];
+    await PostgresConnection.runQuery(text, values);
+  } catch (err) {
+    console.error("Error inserting new room: ", err);
+  }
+}
+export async function updateRoom(room: RoomUpdateModel, id: string) {
+  try {
+    if(!room) {
+        throw new Error("Missing room.")
+    }
+    const {name, description, updated_at} = room
+    const text = `UPDATE rooms SET name = $1, description = $2, updated_at = $3 WHERE id = $4`
+    const values = [name, description, updated_at, id]
+    await PostgresConnection.runQuery(text, values)
+
+  } catch (err) {
+    console.error("Error updating room: ", err);
   }
 }
