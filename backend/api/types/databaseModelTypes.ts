@@ -1,3 +1,5 @@
+import { StringAsNumber } from "fastify/types/utils"
+
 export type RuleDatabaseModel = {
     id: string
     title: string
@@ -24,7 +26,6 @@ export type RoomDatabaseModel = {
     description: string
 }
 export type RoomUpdateModel = {
-    id: string
     name: string
     description: string
     updated_at: string
