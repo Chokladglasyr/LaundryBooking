@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import PostgresConnection from "../db";
+import { idRequest } from "../types/requestTypes";
 
 export async function getAllBookings(req: FastifyRequest, reply: FastifyReply) {
     try {
@@ -14,9 +15,19 @@ export async function getAllBookings(req: FastifyRequest, reply: FastifyReply) {
         console.error("Error fetching bookings.")
     }
 }
-export async function getOneBooking(req: FastifyRequest, reply: FastifyReply) {
+export async function getOneBooking(req: FastifyRequest<{Querystring: idRequest}>, reply: FastifyReply) {
     try {
-
+        const {id} = req.query
+        if(!id) {
+            return reply.status(400).send({message: "Missing parameters."})
+        }
+        const text = `SELECT * FROM bookings WHERE id = $1`
+        const values = [id]
+        const booking = await PostgresConnection.runQuery(text, values)
+        if(!booking || booking.length === 0) {
+            return reply.status(404).send({message: `Booking not found with id: ${id}'`})
+        }
+        reply.status(200).send({message: "Fetched booking succesfully.", booking: booking})
     } catch(err) {
         console.error("Error fetching booking.")
     }
