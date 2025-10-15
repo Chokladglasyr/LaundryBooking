@@ -26,6 +26,11 @@ export async function getOneUser(
     const text = `SELECT * FROM users WHERE id = $1`;
     const values = [id];
     const user = await PostgresConnection.runQuery(text, values);
+    if (!user || user.length === 0) {
+      return reply
+        .status(404)
+        .send({ message: `No user found with id: ${id}` });
+    }
     reply.status(200).send({ message: "User fetched", user: user });
   } catch (err) {
     console.error("Error fetching user: ", err);
