@@ -3,6 +3,11 @@ export type RuleDatabaseModel = {
     title: string
     description: string
 }
+export type RuleUpdateModel = {
+    title: string
+    description: string
+    updated_at: string
+}
 export type MessageDatabaseModel = {
     id: string
     title: string

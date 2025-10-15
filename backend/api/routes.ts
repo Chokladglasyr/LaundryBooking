@@ -32,15 +32,51 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     })
     server.route({
         method: 'GET',
+        url: '/user',
+        preHandler: server.authenticate,
+        handler: userController.getOneUser
+    })
+    server.route({
+        method: 'PUT',
+        url:'/user',
+        preHandler: server.authenticate,
+        handler: userController.updateOneUser
+    })
+    server.route({
+        method: 'DELETE',
+        url: '/user',
+        preHandler: server.authenticate,
+        handler: userController.deleteUser
+    })
+    server.route({
+        method: 'GET',
         url: '/rules',
         preHandler: server.authenticate,
         handler: ruleController.getAllRules
+    })
+    server.route({
+        method: 'GET',
+        url: '/rule',
+        preHandler: server.authenticate,
+        handler: ruleController.getOneRule
     })
     server.route({
         method: 'POST',
         url: '/rule',
         preHandler: server.authenticate,
         handler: ruleController.createRule
+    })
+    server.route({
+        method: 'PUT',
+        url: '/rule',
+        preHandler: server.authenticate,
+        handler: ruleController.updateOneRule
+    })
+    server.route({
+        method: 'DELETE',
+        url:'/rule',
+        preHandler: server.authenticate,
+        handler: ruleController.deleteRule
     })
     server.route({
         method:'GET',

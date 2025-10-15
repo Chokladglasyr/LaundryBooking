@@ -14,21 +14,21 @@ const start = async () => {
 
     await app.register(auth);
     await app.register(routes, {});
-  } catch (err) {
-    console.error("Server failed: ", err);
-    process.exit(1);
-  }
-};
-await start()
-// if(process.env.NODE_ENV !== "production"){
-//   start()
-// }
 
     if (process.env.NODE_ENV !== "production") {
       const PORT = Number(process.env.PORT) || 3000;
       await app.listen({ port: PORT });
       console.log("Listening on port ", PORT);
     }
+  } catch (err) {
+    console.error("Server failed: ", err);
+    process.exit(1);
+  }
+};
+
+if(process.env.NODE_ENV !== "production"){
+  start()
+}
 
 export default async function handler(req: any, res: any) {
   await start();

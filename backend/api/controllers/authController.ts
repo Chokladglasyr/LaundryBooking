@@ -33,6 +33,7 @@ export async function signup(
     }),
     apt_nr: req.body.apt_nr,
     created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   };
   console.log(newUser);
   await saveUser(newUser);
