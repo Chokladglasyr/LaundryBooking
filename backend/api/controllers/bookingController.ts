@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import PostgresConnection from "../db";
-import { idRequest } from "../types/requestTypes";
+import { bookingRequest, idRequest } from "../types/requestTypes";
+import { insertBooking } from "../repository";
 
 export async function getAllBookings(req: FastifyRequest, reply: FastifyReply) {
     try {
@@ -32,9 +33,25 @@ export async function getOneBooking(req: FastifyRequest<{Querystring: idRequest}
         console.error("Error fetching booking.")
     }
 }
-export async function createBooking(req: FastifyRequest, reply: FastifyReply) {
+export async function createBooking(req: FastifyRequest<{Body: bookingRequest}>, reply: FastifyReply) {
     try {
-
+        if(!req.body.booking_date || !req.body.room_id || !req.body.user_id) {
+            return reply.status(400).send({message: "Missing required fields."})
+        }
+        const newBooking = {
+            id: crypto.randomUUID(),
+            user_id: req.body.user_id,
+            room_id: req.body.room_id,
+            booking_date: req.body.booking_date
+        }
+        await insertBooking(newBooking)
+        const text = `SELECT * FROM bookings WHERE id = $1`
+        const values = [newBooking.id]
+        const createdBooking = await PostgresConnection.runQuery(text, values)
+        if(!createdBooking || createdBooking.length === 0) {
+            return reply.status(404).send({message: "Error fetching new booking."})
+        }
+        reply.status(201).send({message: "New booking created.", booking: createdBooking})
     } catch(err) {
         console.error("Error creating booking.")
     }
