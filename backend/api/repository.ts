@@ -2,8 +2,7 @@ import { postgres } from "bun";
 import PostgresConnection from "./db";
 import { UserDatabaseModel, UserUpdateModel } from "./types/authTypes";
 import {
-    BookingDatabaseModel,
-  BookingUpdateModel,
+  BookingDatabaseModel,
   MessageDatabaseModel,
   MessageUpdateModel,
   RoomDatabaseModel,
@@ -86,30 +85,28 @@ export async function insertRoom(room: RoomDatabaseModel) {
 }
 export async function updateRoom(room: RoomUpdateModel, id: string) {
   try {
-    if(!room) {
-        throw new Error("Missing room.")
+    if (!room) {
+      throw new Error("Missing room.");
     }
-    const {name, description, updated_at} = room
-    const text = `UPDATE rooms SET name = $1, description = $2, updated_at = $3 WHERE id = $4`
-    const values = [name, description, updated_at, id]
-    await PostgresConnection.runQuery(text, values)
-
+    const { name, description, updated_at } = room;
+    const text = `UPDATE rooms SET name = $1, description = $2, updated_at = $3 WHERE id = $4`;
+    const values = [name, description, updated_at, id];
+    await PostgresConnection.runQuery(text, values);
   } catch (err) {
     console.error("Error updating room: ", err);
   }
 }
 
 export async function insertBooking(booking: BookingDatabaseModel) {
-    try {
-
-    } catch(err) {
-        console.error("Error inserting new booking: ", err)
+  try {
+    if (!booking) {
+      throw new Error("Missing booking.");
     }
-}
-export async function updateBooking(booking: BookingUpdateModel, id: string) {
-    try {
-        
-    } catch(err) {
-        console.error("Error updating booking: ", err)
-    }
+    const { id, user_id, room_id, booking_date } = booking;
+    const text = `INSERT INTO bookings (id, user_id, room_id, booking_date) VALUES($1, $2, $3, $4)`;
+    const values = [id, user_id, room_id, booking_date];
+    await PostgresConnection.runQuery(text, values);
+  } catch (err) {
+    console.error("Error inserting new booking: ", err);
+  }
 }
