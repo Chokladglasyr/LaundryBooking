@@ -4,6 +4,7 @@ import * as ruleController from './controllers/ruleController'
 import * as messageController from './controllers/messageController'
 import * as userController from './controllers/userController'
 import * as roomController from './controllers/roomController'
+import * as bookingController from './controllers/bookingController'
 import fp from "fastify-plugin"
 
 async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
@@ -140,6 +141,36 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         url: '/room',
         preHandler: server.authenticate,
         handler: roomController.deleteRoom
+    })
+    server.route({
+        method:'GET',
+        url: '/bookings',
+        preHandler: server.authenticate,
+        handler: bookingController.getAllBookings
+    })
+    server.route({
+        method: 'GET',
+        url: '/booking',
+        preHandler: server.authenticate,
+        handler: bookingController.getOneBooking
+    })
+    server.route({
+        method: 'POST',
+        url: '/booking',
+        preHandler: server.authenticate,
+        handler: bookingController.createBooking
+    })
+    server.route({
+        method: 'PUT',
+        url: '/booking',
+        preHandler: server.authenticate,
+        handler: bookingController.updateOneBooking
+    })
+        server.route({
+        method: 'DELETE',
+        url: '/booking',
+        preHandler: server.authenticate,
+        handler: bookingController.deleteBooking
     })
 }
 

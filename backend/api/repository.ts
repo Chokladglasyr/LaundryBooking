@@ -2,6 +2,8 @@ import { postgres } from "bun";
 import PostgresConnection from "./db";
 import { UserDatabaseModel, UserUpdateModel } from "./types/authTypes";
 import {
+    BookingDatabaseModel,
+  BookingUpdateModel,
   MessageDatabaseModel,
   MessageUpdateModel,
   RoomDatabaseModel,
@@ -95,4 +97,19 @@ export async function updateRoom(room: RoomUpdateModel, id: string) {
   } catch (err) {
     console.error("Error updating room: ", err);
   }
+}
+
+export async function insertBooking(booking: BookingDatabaseModel) {
+    try {
+
+    } catch(err) {
+        console.error("Error inserting new booking: ", err)
+    }
+}
+export async function updateBooking(booking: BookingUpdateModel, id: string) {
+    try {
+        
+    } catch(err) {
+        console.error("Error updating booking: ", err)
+    }
 }
