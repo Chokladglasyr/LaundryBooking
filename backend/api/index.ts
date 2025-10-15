@@ -17,7 +17,7 @@ const start = async () => {
 
     if (process.env.NODE_ENV !== "production") {
       const PORT = Number(process.env.PORT) || 3000;
-      await app.listen({ port: PORT });
+      await app.listen({ port: PORT , host: "0.0.0.0"});
       console.log("Listening on port ", PORT);
     }
   } catch (err) {
