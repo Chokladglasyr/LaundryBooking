@@ -83,7 +83,7 @@ export async function updateOneMessage(
       updated_at: new Date().toISOString(),
     };
     await updateMessage(messageToUpdate, id);
-    const text = `SELECT * FROM messages WHERE id = $id`;
+    const text = `SELECT * FROM messages WHERE id = $1`;
     const values = [id];
     const updatedMessage = await PostgresConnection.runQuery(text, values);
     if (!updatedMessage || updatedMessage.length === 0) {

@@ -29,7 +29,7 @@ export async function getOneRule(
     const values = [id];
     const rule = await PostgresConnection.runQuery(text, values);
     if (!rule || rule.length === 0) {
-      return reply.status(400).send({ message: "No rule found." });
+      return reply.status(400).send({ message: `No rule found with id: ${id}.` });
     }
     reply.status(200).send({ message: "Rule fetched", rule: rule[0] });
   } catch (err) {
@@ -51,7 +51,7 @@ export async function createRule(
       description: req.body.description,
     };
     await insertRule(newRule);
-    const text = `SELECT * FROM rules WHERE id = $id`;
+    const text = `SELECT * FROM rules WHERE id = $1`;
     const values = [newRule.id];
     const created = await PostgresConnection.runQuery(text, values);
     if (!created) {
