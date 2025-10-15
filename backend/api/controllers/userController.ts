@@ -41,23 +41,6 @@ export async function updateOneUser(
   req: FastifyRequest<{ Querystring: idRequest; Body: UserUpdateModel }>,
   reply: FastifyReply
 ) {
-<<<<<<< HEAD
-  const { id } = req.query;
-  const userToUpdate = {
-    name: req.body.name,
-    email: req.body.email,
-    password: await Bun.password.hash(req.body.password, {
-      algorithm: "bcrypt",
-      cost: 10,
-    }),
-    updated_at: new Date().toISOString(),
-  };
-  await updateUser(userToUpdate, id);
-  const updatedUser = await PostgresConnection.runQuery(
-    `SELECT * FROM users WHERE id = '${id}'`
-  );
-  reply.status(200).send({ message: "User updated", updated_user: updatedUser });
-=======
   try {
     const { id } = req.query;
     if (!id) {
@@ -88,7 +71,6 @@ export async function updateOneUser(
   } catch (err) {
     console.error("Error updating user: ", err);
   }
->>>>>>> 050f2673df8f5aee1bfb1986cb56ebf6ab01482b
 }
 
 export async function deleteUser(
