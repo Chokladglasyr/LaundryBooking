@@ -68,9 +68,9 @@ class PostgresConnection {
     await dbClient.query(query)
     console.log("Admin exists")
   }
-  static async runQuery(query: string) {
+  static async runQuery(text: string, values?: string[]) {
     const dbClient = await this.getDbClient()
-    const result = await dbClient.query(query)
+    const result = await dbClient.query(text, values)
 
     return result.rows
   }

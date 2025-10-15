@@ -13,6 +13,11 @@ export type MessageDatabaseModel = {
     title: string
     description: string
 }
+export type MessageUpdateModel = {
+    title: string
+    description: string
+    updated_at: string
+}
 export type RoomDatabaseModel = {
     id: string
     name: string
