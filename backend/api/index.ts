@@ -5,12 +5,12 @@ import PostgresConnection from "./db";
 import fastifyJwt from "@fastify/jwt";
 import { TokenPayload } from "./types/authTypes";
 
-const app = fastify();
+const app = fastify({});
 
 const start = async () => {
   try {
-    await PostgresConnection.initTables();
-    await PostgresConnection.createAdmin();
+    // await PostgresConnection.initTables();
+    // await PostgresConnection.createAdmin();
 
     await app.register(auth);
     await app.register(routes, {});
