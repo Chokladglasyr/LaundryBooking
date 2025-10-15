@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { idRequest, rulesAndMsgsRequest } from "../types/requestTypes";
-import { insertMessage } from "../repository";
+import { insertMessage, updateMessage } from "../repository";
 import PostgresConnection from "../db";
+import { MessageUpdateModel } from "../types/databaseModelTypes";
 
 export async function getAllMessages(req: FastifyRequest, reply: FastifyReply) {
     const allMessages = await PostgresConnection.runQuery(`SELECT * FROM messages;`)
@@ -23,4 +24,16 @@ export async function createMessage(req: FastifyRequest<{Body: rulesAndMsgsReque
     await insertMessage(newMsg)
     const created = await PostgresConnection.runQuery(`SELECT * FROM messages WHERE id = '${newMsg.id}'`)
     reply.status(201).send({message: "New message created", created_message: created[0]})
+}
+
+export async function updateOneMessage(req: FastifyRequest<{Body: rulesAndMsgsRequest, Querystring: idRequest}>, reply: FastifyReply) {
+    const {id} = req.query
+    const messageToUpdate = {
+        title: req.body.title,
+        description: req.body.description,
+        updated_at: new Date().toISOString()
+    }
+    await updateMessage(messageToUpdate, id)
+    const updatedMessage = await PostgresConnection.runQuery(`SELECT * FROM messages WHERE id = '${id}'`)
+    reply.status(200).send({message: "Message updated", updated_message: updatedMessage})
 }

@@ -1,6 +1,6 @@
 import PostgresConnection from "./db";
 import { UserDatabaseModel, UserUpdateModel } from "./types/authTypes";
-import { RuleDatabaseModel, RuleUpdateModel } from "./types/databaseModelTypes";
+import { MessageDatabaseModel, MessageUpdateModel, RuleDatabaseModel, RuleUpdateModel } from "./types/databaseModelTypes";
 import { idRequest } from "./types/requestTypes";
 
 
@@ -32,4 +32,10 @@ export async function insertMessage(rule: RuleDatabaseModel) {
   await PostgresConnection.runQuery(
     `INSERT INTO messages (id, title, description) VALUES('${rule.id}', '${rule.title}', '${rule.description}')`
   );
+}
+export async function updateMessage(message: MessageUpdateModel, id: string) {
+    const {title, description, updated_at} = message
+    await PostgresConnection.runQuery(
+        `UPDATE messages SET title = '${title}', description = '${description}', updated_at = '${updated_at}' WHERE id = '${id}'`
+    )
 }

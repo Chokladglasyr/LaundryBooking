@@ -98,6 +98,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         preHandler: server.authenticate,
         handler:messageController.createMessage
     })
+    server.route({
+        method: 'PUT',
+        url: '/message',
+        preHandler: server.authenticate,
+        handler: messageController.updateOneMessage
+    })
 }
 
 export default fp(routes, {
