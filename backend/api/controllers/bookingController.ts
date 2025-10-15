@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import PostgresConnection from "../db";
 import { bookingRequest, idRequest } from "../types/requestTypes";
 import { insertBooking } from "../repository";
-import { BookingUpdateModel } from "../types/databaseModelTypes";
 
 export async function getAllBookings(req: FastifyRequest, reply: FastifyReply) {
     try {
@@ -58,9 +57,16 @@ export async function createBooking(req: FastifyRequest<{Body: bookingRequest}>,
     }
 }
 
-export async function deleteBooking(req: FastifyRequest, reply: FastifyReply) {
+export async function deleteBooking(req: FastifyRequest<{Querystring: idRequest}>, reply: FastifyReply) {
     try {
-
+        const {id} = req.query
+        if(!id) {
+            return reply.status(400).send({message: "Missing parameters."})
+        }
+        const text = `DELETE FROM bookings WHERE id = $1`
+        const values = [id]
+        await PostgresConnection.runQuery(text, values)
+        reply.status(200).send({message: `Deleted booking with id: '${id}'`})
     } catch(err) {
         console.error("Error deleting booking.")
     }
