@@ -48,9 +48,9 @@ export async function updateOneRule(
     updated_at: new Date().toISOString(),
   };
   await updateRule(ruleToUpdate, id);
-  const updatedRule = await PostgresConnection.runQuery(
-    `SELECT * FROM rules WHERE id = '${id}'`
-  );
+  const text = `SELECT * FROM rules WHERE id = $1`
+  const values = [id]
+  const updatedRule = await PostgresConnection.runQuery(text, values);
   reply.status(200).send({ message: "Rule updated", rule: updatedRule });
 }
 

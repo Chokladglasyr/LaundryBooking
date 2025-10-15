@@ -9,8 +9,6 @@ export type UserDatabaseModel = {
     email: string
     password: string
     apt_nr: string
-    created_at: string
-    updated_at: string
 }
 export type UserUpdateModel = {
     name: string
