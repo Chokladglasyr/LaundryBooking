@@ -23,10 +23,12 @@ export async function insertRule(rule: RuleDatabaseModel) {
   );
 }
 export async function updateRule(rule: RuleUpdateModel, id: string) {
-    const {title, description, updated_at} = rule
+ try {    const {title, description, updated_at} = rule
     await PostgresConnection.runQuery(
         `UPDATE rules SET title = '${title}', description = '${description}', updated_at = '${updated_at}' WHERE id = '${id}'`
-    )
+    )} catch(err) {
+        throw new Error("Could not update rule.")
+    }
 }
 export async function insertMessage(rule: RuleDatabaseModel) {
   await PostgresConnection.runQuery(
@@ -34,8 +36,11 @@ export async function insertMessage(rule: RuleDatabaseModel) {
   );
 }
 export async function updateMessage(message: MessageUpdateModel, id: string) {
-    const {title, description, updated_at} = message
+try{    const {title, description, updated_at} = message
     await PostgresConnection.runQuery(
         `UPDATE messages SET title = '${title}', description = '${description}', updated_at = '${updated_at}' WHERE id = '${id}'`
-    )
+    )} catch(err) {
+        console.error("Error updating message: ", err)
+        throw new Error("Could not update message.")
+    }
 }
