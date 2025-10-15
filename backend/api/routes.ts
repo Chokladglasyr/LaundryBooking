@@ -104,6 +104,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
         preHandler: server.authenticate,
         handler: messageController.updateOneMessage
     })
+    server.route({
+        method: 'DELETE',
+        url: '/message',
+        preHandler: server.authenticate,
+        handler: messageController.deleteMessage    
+    })
 }
 
 export default fp(routes, {

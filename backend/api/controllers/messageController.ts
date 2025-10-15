@@ -37,3 +37,9 @@ export async function updateOneMessage(req: FastifyRequest<{Body: rulesAndMsgsRe
     const updatedMessage = await PostgresConnection.runQuery(`SELECT * FROM messages WHERE id = '${id}'`)
     reply.status(200).send({message: "Message updated", updated_message: updatedMessage})
 }
+
+export async function deleteMessage(req: FastifyRequest<{Querystring: idRequest}>, reply: FastifyReply) {
+    const {id} = req.query
+    await PostgresConnection.runQuery(`DELETE FROM messages WHERE id = '${id}'`)
+    reply.status(200).send({message: `Message with id: ${id} was deleted succesfully.`})
+}
