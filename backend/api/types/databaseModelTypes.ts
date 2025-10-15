@@ -36,9 +36,3 @@ export type BookingDatabaseModel = {
     room_id: string
     booking_date: string
 }
-export type BookingUpdateModel = {
-    user_id: string
-    room_id: string
-    booking_date: string
-}
-

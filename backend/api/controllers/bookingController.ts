@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import PostgresConnection from "../db";
 import { bookingRequest, idRequest } from "../types/requestTypes";
 import { insertBooking } from "../repository";
+import { BookingUpdateModel } from "../types/databaseModelTypes";
 
 export async function getAllBookings(req: FastifyRequest, reply: FastifyReply) {
     try {
@@ -56,13 +57,7 @@ export async function createBooking(req: FastifyRequest<{Body: bookingRequest}>,
         console.error("Error creating booking.")
     }
 }
-export async function updateOneBooking(req: FastifyRequest, reply: FastifyReply) {
-    try {
 
-    } catch(err) {
-        console.error("Error updating booking.")
-    }
-}
 export async function deleteBooking(req: FastifyRequest, reply: FastifyReply) {
     try {
 
