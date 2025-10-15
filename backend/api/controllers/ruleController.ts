@@ -55,7 +55,7 @@ export async function createRule(
     const values = [newRule.id];
     const created = await PostgresConnection.runQuery(text, values);
     if (!created) {
-      return reply.status(404).send({ message: "Error fetchiing new rule" });
+      return reply.status(404).send({ message: "Error fetching new rule" });
     }
     reply
       .status(201)
