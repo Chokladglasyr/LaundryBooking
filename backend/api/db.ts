@@ -7,10 +7,7 @@ class PostgresConnection {
   static async getDbClient(): Promise<Client> {
     if (!this.dbClient) {
       this.dbClient = new Client({
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        port: 5432,
-        database: process.env.DB_DATABASE,
+        connectionString: process.env.CONNECTION_STRING
       });
       await this.dbClient.connect();
     }
