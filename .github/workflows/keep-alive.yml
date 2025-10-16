@@ -2,9 +2,11 @@ name: Keep Render Awake
 on:
   schedule:
     - cron: "*/12 * * * *" 
+  workflow_dispatch:
+    
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Render App
-        run: curl -s https://laundrybooking.onrender.com/ > /dev/null
+        run: curl -s https://laundrybooking.onrender.com > /dev/null
