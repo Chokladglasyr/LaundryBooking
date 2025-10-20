@@ -10,6 +10,7 @@ export type bookingRequest = {
     user_id: string
     room_id: string
     booking_date: string
+    booking_timeslot: string
 }
 export type idRequest = {
     id: string

@@ -46,7 +46,7 @@ export async function createBooking(
   reply: FastifyReply
 ) {
   try {
-    if (!req.body.booking_date || !req.body.room_id || !req.body.user_id) {
+    if (!req.body.booking_date || !req.body.room_id || !req.body.user_id || !req.body.booking_timeslot) {
       return reply.status(400).send({ message: "Missing required fields." });
     }
     const newBooking = {
@@ -54,6 +54,7 @@ export async function createBooking(
       user_id: req.body.user_id,
       room_id: req.body.room_id,
       booking_date: req.body.booking_date,
+      booking_timeslot: req.body.booking_timeslot
     };
     await insertBooking(newBooking);
     const text = `SELECT * FROM bookings WHERE id = $1`;
@@ -86,4 +87,23 @@ export async function deleteBooking(
   } catch (err) {
     console.error("Error deleting booking.");
   }
+}
+
+export async function hasBooking(req: FastifyRequest<{Querystring: idRequest}>, reply: FastifyReply) {
+    try {
+        const {id} = req.query
+        if(!id) {
+            return reply.status(400).send({message: "Missing parameters."})
+        }
+        const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= CURRENT_DATE`
+        const values = [id]
+        const existingBooking = await PostgresConnection.runQuery(text, values)
+        if(existingBooking) {
+            return reply.status(409).send({message: "User already has an active booking."})
+        }
+        reply.status(200).send({message: "User has no active bookings."})
+
+    } catch(err) {
+        console.error("Error fetching an ongoing booking, ", err)
+    }
 }

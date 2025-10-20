@@ -102,9 +102,9 @@ export async function insertBooking(booking: BookingDatabaseModel) {
     if (!booking) {
       throw new Error("Missing booking.");
     }
-    const { id, user_id, room_id, booking_date } = booking;
-    const text = `INSERT INTO bookings (id, user_id, room_id, booking_date) VALUES($1, $2, $3, $4)`;
-    const values = [id, user_id, room_id, booking_date];
+    const { id, user_id, room_id, booking_date, booking_timeslot } = booking;
+    const text = `INSERT INTO bookings (id, user_id, room_id, booking_date, booking_timeslot) VALUES($1, $2, $3, $4, $5)`;
+    const values = [id, user_id, room_id, booking_date, booking_timeslot];
     await PostgresConnection.runQuery(text, values);
   } catch (err) {
     console.error("Error inserting new booking: ", err);
