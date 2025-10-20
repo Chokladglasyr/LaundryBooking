@@ -50,6 +50,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     preHandler: server.authenticate,
     handler: userController.deleteUser,
   });
+  server.route({
+    method: "GET",
+    url: '/search',
+    preHandler: server.authenticate,
+    handler: userController.searchUser
+  })
 
   server.route({
     method: "GET",

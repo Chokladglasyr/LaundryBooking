@@ -73,11 +73,5 @@ class PostgresConnection {
     console.log()
     return result.rows
   }
-  static async runDateQuery(text: string, values?: Date[]) {
-    const dbClient = await this.getDbClient()
-    const result = await dbClient.query(text, values)
-    console.log()
-    return result.rows
-  }
 }
 export default PostgresConnection;
