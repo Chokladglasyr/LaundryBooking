@@ -35,6 +35,8 @@ class PostgresConnection {
     id TEXT PRIMARY KEY,
     user_id TEXT REFERENCES users (id) ON DELETE CASCADE,
     room_id TEXT REFERENCES rooms (id) ON DELETE CASCADE,
+    booking_date TIMESTAMP NOT NULL,
+    booking_timeslot TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     CREATE TABLE IF NOT EXISTS rules (
@@ -65,10 +67,16 @@ class PostgresConnection {
     await dbClient.query(query)
     console.log("Admin exists")
   }
-  static async runQuery(text: string, values?: string[]) {
+  static async runQuery(text: string, values?: (string | Date)[]) {
     const dbClient = await this.getDbClient()
     const result = await dbClient.query(text, values)
-
+    console.log()
+    return result.rows
+  }
+  static async runDateQuery(text: string, values?: Date[]) {
+    const dbClient = await this.getDbClient()
+    const result = await dbClient.query(text, values)
+    console.log()
     return result.rows
   }
 }

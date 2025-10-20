@@ -35,4 +35,5 @@ export type BookingDatabaseModel = {
     user_id: string
     room_id: string
     booking_date: string
+    booking_timeslot: string
 }

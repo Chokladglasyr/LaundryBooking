@@ -10,6 +10,8 @@ import {
   RuleDatabaseModel,
   RuleUpdateModel,
 } from "./types/databaseModelTypes";
+import { idRequest } from "./types/requestTypes";
+import { idText } from "typescript";
 
 export async function saveUser(user: UserDatabaseModel) {
   try {
@@ -102,11 +104,28 @@ export async function insertBooking(booking: BookingDatabaseModel) {
     if (!booking) {
       throw new Error("Missing booking.");
     }
-    const { id, user_id, room_id, booking_date } = booking;
-    const text = `INSERT INTO bookings (id, user_id, room_id, booking_date) VALUES($1, $2, $3, $4)`;
-    const values = [id, user_id, room_id, booking_date];
+    const { id, user_id, room_id, booking_date, booking_timeslot } = booking;
+    const text = `INSERT INTO bookings (id, user_id, room_id, booking_date, booking_timeslot) VALUES($1, $2, $3, $4, $5)`;
+    const values = [id, user_id, room_id, booking_date, booking_timeslot];
     await PostgresConnection.runQuery(text, values);
   } catch (err) {
     console.error("Error inserting new booking: ", err);
   }
+}
+export async function checkForBooking(user_id: string) {
+    try{
+        if(!user_id) {
+            throw new Error("Missing user_id.")
+        }
+        const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= CURRENT_DATE`
+        const values = [user_id]
+        const existingBooking = await PostgresConnection.runQuery(text, values)
+        if(!existingBooking || existingBooking.length === 0) {
+         return {status: 200}
+        } else {
+            return {status: 409}
+        }
+    } catch(err) {
+        console.error("Error checking for existing booking: ", err)
+    }
 }

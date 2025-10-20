@@ -166,6 +166,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     preHandler: server.authenticate,
     handler: bookingController.deleteBooking,
   });
+  server.route({
+    method: 'GET',
+    url: '/booking/health',
+    preHandler: server.authenticate,
+    handler: bookingController.hasBooking
+  })
 }
 
 export default fp(routes, {
