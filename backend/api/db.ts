@@ -35,6 +35,8 @@ class PostgresConnection {
     id TEXT PRIMARY KEY,
     user_id TEXT REFERENCES users (id) ON DELETE CASCADE,
     room_id TEXT REFERENCES rooms (id) ON DELETE CASCADE,
+    booking_date TEXT NOT NULL,
+    booking_timeslot TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     CREATE TABLE IF NOT EXISTS rules (
