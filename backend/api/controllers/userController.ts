@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import PostgresConnection from "../db";
-import { idRequest } from "../types/requestTypes";
+import { idRequest, searchRequest } from "../types/requestTypes";
 import { UserUpdateModel } from "../types/authTypes";
 import { updateUser } from "../repository";
 
@@ -89,4 +89,22 @@ export async function deleteUser(
   } catch (err) {
     console.error("Error deleting user: ", err);
   }
+}
+
+export async function searchUser(req: FastifyRequest<{Querystring: searchRequest}>, reply: FastifyReply) {
+  if(!req.query) {
+    return reply.status(400).send({message: "Missing parameters."})
+  }
+  const {name, column} = req.query
+  const allowedColumns = ['name', 'email', 'apt_nr']
+  if(!allowedColumns.includes(column)) {
+    return reply.status(404).send({message: `No columns found in database called ${column}`})
+  }
+  const text = `SELECT * FROM users WHERE ${column} ~* $1`
+  const values = [name] 
+  const users = await PostgresConnection.runQuery(text, values)
+  if(!users || users.length === 0){
+    return reply.status(404).send("No users found.")
+  }
+  reply.status(200).send({message: "Users found", users: users})
 }

@@ -15,3 +15,7 @@ export type bookingRequest = {
 export type idRequest = {
     id: string
 }
+export type searchRequest = {
+    name: string
+    column: string
+}
