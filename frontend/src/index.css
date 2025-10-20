@@ -1,5 +1,18 @@
 :root {
+  background-color: #2c9ce2;
+}
+* {
   margin: 0;
   box-sizing: border-box;
-  background-color: #242424;
+  font-family: "Nunito Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100,
+    "YTLC" 500;
+}
+.logo {
+  width: 200px;
+  height: 200px;
 }

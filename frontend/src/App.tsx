@@ -1,17 +1,19 @@
-import laundryLogo from './assets/logo.svg'
+import { useState } from 'react'
 import './App.css'
+import { Outlet } from 'react-router-dom'
+import Home from './components/Home'
+import Login from './components/Login'
 
 function App() {
+const [loggedIn, setLoggedIn] = useState(false)
+
 
 
   return (
     <>
-      <div>
-
-        <a href="#" target="_blank">
-          <img src={laundryLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+    {loggedIn && <Home></Home>}
+    {!loggedIn && <Login />}
+<Outlet></Outlet>
 
 
     </>
