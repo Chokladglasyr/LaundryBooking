@@ -1,15 +1,11 @@
 function Home() {
-
-
   return (
     <>
-      <div>
-    <h1>hej</h1>
-      </div>
+    <div className="landing" id="home">
 
-
+      <p>hej</p>
+    </div>
     </>
-  )
+  );
 }
-
-export default Home
+export default Home;

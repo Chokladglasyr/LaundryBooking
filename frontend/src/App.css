@@ -1,8 +1,17 @@
-div {
+@import './css/home.css';
+
+#root {
+    height: 100vh;
+}
+.app {
   display: flex;
-  height: 100vh;
   justify-content: center;
   align-items: center;
+  height: 100%;
+}
+.company-logo {
+  position: relative;
+  margin: 1rem;
 }
 h1 {
   color: #ffffff;
@@ -16,6 +25,7 @@ input {
 }
 .login-page{
   display: flex;
+  align-items: center;
   flex-direction: column;
   gap: 2rem;
   margin: auto;
