@@ -6,7 +6,9 @@ import Login from "./components/Login";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-
+  // just to get rid of warning
+  const isLoggedIn = false
+  if(isLoggedIn) setLoggedIn(true)
   return (
     <>
       <div className="app">

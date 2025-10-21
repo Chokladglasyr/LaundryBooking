@@ -2,6 +2,7 @@
 
 #root {
     height: 100vh;
+    position: relative;
 }
 .app {
   display: flex;
@@ -30,7 +31,7 @@ input {
   gap: 2rem;
   margin: auto;
 }
-.login {
+form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -41,10 +42,11 @@ input {
   border: 1px solid #2c9ce2;
   color: #ffffff;
   text-decoration: none;
+  width: fit-content;
 }
 #login {
   background-color: #3AAD2B;
 }
-#nav-admin{
+#nav-admin, #book{
   background-color: #8A38F5;
 }
