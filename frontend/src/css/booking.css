@@ -1,0 +1,94 @@
+.room-details {
+  border: solid black 1px;
+  border-radius: 10px;
+  background-color: var(--primary-grey-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  margin: 1rem;
+  height: 100px;
+  h1,
+  p {
+    color: black;
+    font-family: "Patrick Hand", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1rem;
+    text-align: center;
+  }
+  h1 {
+    font-size: 20px;
+  }
+}
+#booking {
+    overflow: scroll;
+}
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.calendar-app {
+  width: 320px;
+  height: 360px;
+  border: solid 1px black;
+  padding: 0.5rem;
+  border-radius: 10px;
+}
+.navigate-date {
+  display: flex;
+  position: relative;
+  justify-content: space-around;
+  button {
+    text-decoration: none;
+    border: none;
+    background-color: transparent;
+  }
+}
+.heading {
+    display: flex;
+    gap: 1rem;
+    width: 200px;
+    justify-content: center;
+}
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin: 1rem 0;
+  span {
+    text-align: center;
+  }
+}
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 1rem;
+  place-items: center;
+  button {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    &:focus {
+        border: dashed 1px var(--secondary-green-color);
+    }
+}
+
+}
+.valid-days {
+  background-color: var(--secondary-green-color);
+  border-radius: 10px;
+}
+.invalid-days {
+  background-color: var(--primary-grey-color);
+  border-radius: 10px;
+}
+.booked-days {
+  background-color: var(--primary-red-color);
+  border-radius: 10px;
+}

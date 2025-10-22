@@ -1,12 +1,7 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import ChooseRoom from "./ChooseRoom";
 
 function Home() {
-  const rooms = [
-    { name: "Tvättstuga 1", id: "1" },
-    { name: "Tvättstuga 2", id: "2" },
-    { name: "Tvättstuga 3", id: "3" },
-  ];
   const posts = [
     {
       id: "1",
@@ -24,36 +19,11 @@ function Home() {
     },
   ];
 
-  const [formData, setFormData] = useState({})
-
-  const navigate = useNavigate()
-  
-  const goToBooking = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    navigate(`/booking?id=${formData}`)
-  }
-  const handleInput = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const {value} = e.target
-    setFormData(value)
-
-  }
   return (
     <>
       <div className="landing" id="home">
-        <form className="booking-form" onSubmit={goToBooking}>
-          <label htmlFor="room">Välj tvättstuga:</label>
-          <select name="room" id="room" onChange={handleInput}>
-            <option value="">Tvättstuga</option>
-            {rooms.map((room, index) => (
-              <option key={index} value={room.id}>
-                {room.name}
-              </option>
-            ))}
-          </select>
-          <button className="primary-btn" id="book">
-            BOKA
-          </button>
-        </form>
+        <ChooseRoom />
+        <Outlet />
         <article className="post-container">
             <h2>Information</h2>
           {posts.map((post, index) => (
@@ -64,6 +34,7 @@ function Home() {
             </div>
           ))}
         </article>
+        
       </div>
     </>
   );

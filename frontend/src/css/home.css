@@ -5,12 +5,12 @@
   border-radius: 10px;
   display: grid;
   grid-template-columns: 1fr;
+  background-color: #ffffff;
   @media (min-width: 600px) {
     grid-template-columns: 0.7fr 1fr;
   }
 }
 #home {
-  background-color: #ffffff;
 }
 #rules {
   background-color: #fcb07e;
@@ -26,16 +26,15 @@ nav {
   position: absolute;
   top: 83px;
   left: 5%;
-  > button {
+  > a {
     border: none;
     font-size: 14px;
+    color: black;
   }
 }
 .nav-rules {
   background-color: #fcb07e;
-  > button {
-    background-color: #fcb07e;
-  }
+
 }
 .nav-back {
   background-color: #ffffff;

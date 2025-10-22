@@ -1,21 +1,17 @@
 import { useState } from "react";
 import "./App.css";
-import { Outlet } from "react-router-dom";
-import Home from "./components/Landing";
 import Login from "./components/Login";
+import Landing from "./components/Landing";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   // just to get rid of warning
   const isLoggedIn = false
   if(isLoggedIn) setLoggedIn(true)
   return (
     <>
-      <div className="app">
-        {loggedIn && <Home></Home>}
+        {loggedIn && <Landing />}
         {!loggedIn && <Login />}
-        <Outlet></Outlet>
-      </div>
     </>
   );
 }

@@ -1,5 +1,15 @@
 @import './css/home.css';
-
+@import './css/booking.css';
+:root {
+  --primary-grey-color: #C8C6D7;
+  --primary-red-color: #FD1212;
+  --primary-blue-color: #2c9ce2;
+  --primary-green-color: #3AAD2B;
+  --primary-beige-color: #FCB07E;
+  --secondary-purple-color: #8A38F5;
+  --secondary-green-color: #79B473;
+  --tertiary-green-color: #0D4505;
+}
 #root {
     height: 100vh;
     position: relative;
@@ -16,6 +26,9 @@
 }
 h1 {
   color: #ffffff;
+}
+a {
+  text-decoration: none;
 }
 input {
   width: 270px;
@@ -39,14 +52,14 @@ form {
 .primary-btn {
   padding: 1rem 3rem;
   border-radius: 50px;
-  border: 1px solid #2c9ce2;
+  border: 1px solid var(--primary-blue-color);
   color: #ffffff;
   text-decoration: none;
   width: fit-content;
 }
 #login {
-  background-color: #3AAD2B;
+  background-color: var(--primary-green-color);
 }
 #nav-admin, #book{
-  background-color: #8A38F5;
+  background-color: var(--secondary-purple-color);
 }
