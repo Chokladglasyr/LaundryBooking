@@ -21,9 +21,13 @@
   h1 {
     font-size: 20px;
   }
+  @media (min-width: 600px) {
+    grid-column: 1 / span 2;
+
+  }
 }
 #booking {
-    overflow: scroll;
+  overflow: scroll;
 }
 .calendar-container {
   display: flex;
@@ -48,10 +52,10 @@
   }
 }
 .heading {
-    display: flex;
-    gap: 1rem;
-    width: 200px;
-    justify-content: center;
+  display: flex;
+  gap: 1rem;
+  width: 200px;
+  justify-content: center;
 }
 .weekdays {
   display: grid;
@@ -75,10 +79,9 @@
     border: none;
     cursor: pointer;
     &:focus {
-        border: dashed 1px var(--secondary-green-color);
+      border: dashed 1px var(--secondary-green-color);
     }
-}
-
+  }
 }
 .valid-days {
   background-color: var(--secondary-green-color);
@@ -91,4 +94,7 @@
 .booked-days {
   background-color: var(--primary-red-color);
   border-radius: 10px;
+}
+#current-day {
+  box-shadow: 0 0 0 3px var(--primary-blue-color);
 }

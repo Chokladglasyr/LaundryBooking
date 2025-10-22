@@ -21,6 +21,7 @@ function Calendar() {
   const currentDate = new Date();
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
   const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
+  const [selectedDate, setSelectedDate] = useState(currentDate)
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
@@ -36,6 +37,15 @@ function Calendar() {
     setCurrentYear((prevYear) => (currentMonth === 11 ? prevYear +1 : prevYear))
   }
 
+  const handleDatePick = (day: number) => {
+    const pickedDate = new Date(currentYear, currentMonth, day)
+    const today = new Date()
+
+    if(pickedDate >= today){
+        setSelectedDate(pickedDate)
+    }
+  }
+  console.log(selectedDate)
   return (
     <>
       <div className="calendar-app">
@@ -63,12 +73,20 @@ function Calendar() {
               <span key={`empty-${index}`} />
             ))}
             {[...Array(daysInMonth).keys()].map((day, index) => (
-              <button className="valid-days" key={index + 1}>
+              <button onClick={() => handleDatePick(day+1)} className={new Date(currentYear, currentMonth, day+1).getTime() === selectedDate.getTime() ? 'valid-days-selected' : 'valid-days'} id={day + 1 === currentDate.getDate() && currentMonth === currentDate.getMonth() && currentYear === currentDate.getFullYear() ? 'current-day' : ''} key={index + 1}>
                 {day + 1}
               </button>
             ))}
           </div>
         </div>
+      </div>
+      <div className="booking-container">
+      <div className="timeslots-container">
+        <div className="timeslot-1">8-12</div>
+        <div className="timeslot-2">12-17</div>
+        <div className="timeslot-3">17-21</div>
+      </div>
+            <button className="primary-btn">BOKA</button>
       </div>
     </>
   );

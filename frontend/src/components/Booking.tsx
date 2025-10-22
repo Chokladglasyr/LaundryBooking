@@ -16,10 +16,10 @@ const room = {
         <p>{room.description}</p>
         </article>
         {/* <ChooseRoom /> */}
-        <div className="calendar-container">
+        {/* <div className="calendar-container"> */}
         <Calendar />
 
-        </div>
+        {/* </div> */}
         </div>
         </>
     )

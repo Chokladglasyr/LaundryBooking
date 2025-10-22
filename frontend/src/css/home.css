@@ -8,9 +8,8 @@
   background-color: #ffffff;
   @media (min-width: 600px) {
     grid-template-columns: 0.7fr 1fr;
+        place-items: center;
   }
-}
-#home {
 }
 #rules {
   background-color: #fcb07e;
