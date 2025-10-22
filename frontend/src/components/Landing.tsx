@@ -8,20 +8,21 @@ function Landing() {
   const goToRules = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     if (rules) {
-      setRules(false);
-      navigate('/rules')
-    } else {
-      setRules(true);
       navigate(-1);
+      setRules(false);
+    } else {
+      navigate('/rules')
+      setRules(true);
     }
   };
+
   const location = useLocation();
   return (
     <>
       <Link to={'/'}><img className="company-logo" src={styrelseLogo} alt="styrelsens logo" /></Link>
-      <nav className={rules ? "nav-rules" :"nav-back"}>
+      <nav className={rules ? "nav-back" :"nav-rules"}>
         <Link onClick={goToRules} to={rules ? "navigate(-1)" : "rules"}>
-          {rules ? "Ordningsregler" : "Tillbaka"}
+          {rules ? "Tillbaka" : "Ordningsregler"}
         </Link>
       </nav>
       <Outlet />
