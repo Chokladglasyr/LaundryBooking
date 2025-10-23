@@ -21,6 +21,8 @@
   h1 {
     font-size: 20px;
   }
+}
+.description-container {
   @media (min-width: 600px) {
     grid-column: 1 / span 2;
   }
@@ -112,7 +114,9 @@
   flex-direction: column;
   gap: 1rem;
 }
-.timeslot, .timeslot-selected, .timeslot-invalid {
+.timeslot,
+.timeslot-selected,
+.timeslot-invalid {
   width: 100px;
   padding: 1rem;
   border-radius: 10px;
@@ -120,8 +124,8 @@
   background-color: var(--secondary-green-color);
 }
 .timeslot-selected {
-    border: dashed 2px var(--tertiary-green-color)
+  border: dashed 2px var(--tertiary-green-color);
 }
 .timeslot-invalid {
-    background-color: var(--primary-red-color);
+  background-color: var(--primary-red-color);
 }

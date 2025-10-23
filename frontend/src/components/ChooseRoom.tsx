@@ -15,8 +15,9 @@ function ChooseRoom() {
   const goToBooking = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     navigate(`/booking?id=${formData}`);
-    // location.reload()
-  };
+    location.reload()
+};
+
   const handleInput = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
     setFormData(value);
@@ -34,7 +35,7 @@ function ChooseRoom() {
           ))}
         </select>
         <button className="primary-btn-booking" id="book">
-          BOKA
+          {window.location.pathname.includes('booking') ? 'BYT TVÄTTSTUGA' : 'BOKA' }
         </button>
       </form>
     </>
