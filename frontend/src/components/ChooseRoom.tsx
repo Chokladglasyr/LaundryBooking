@@ -33,7 +33,7 @@ function ChooseRoom() {
             </option>
           ))}
         </select>
-        <button className="primary-btn" id="book">
+        <button className="primary-btn-booking" id="book">
           BOKA
         </button>
       </form>
