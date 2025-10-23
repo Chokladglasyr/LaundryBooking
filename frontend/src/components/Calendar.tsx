@@ -35,7 +35,7 @@ function Calendar() {
   const prevMonth = () => {
     setCurrentMonth((prevMonth) => (prevMonth === 0 ? 11 : prevMonth - 1));
     setCurrentYear((prevYear) =>
-      currentMonth === 11 ? prevYear - 1 : prevYear
+      currentMonth === 0 ? prevYear - 1 : prevYear
     );
   };
   const nextMonth = () => {
