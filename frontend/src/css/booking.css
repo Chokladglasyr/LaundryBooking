@@ -81,11 +81,16 @@
     &:focus {
       border: dashed 1px var(--secondary-green-color);
     }
+    
   }
 }
 .valid-days {
   background-color: var(--secondary-green-color);
   border-radius: 10px;
+}
+.valid-days-selected {
+    border-radius: 10px;
+    border: dashed 6px var(--tertiary-green-color);
 }
 .invalid-days {
   background-color: var(--primary-grey-color);
