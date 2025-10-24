@@ -51,7 +51,7 @@ function AdminUsers() {
     <>
       <article>
         <form action="" id="user-form">
-          <label htmlFor="user-form">Ny regel: </label>
+          <label htmlFor="user-form">Ny boende: </label>
           <input
             className="input-admin"
             type="text"
@@ -90,7 +90,11 @@ function AdminUsers() {
           </button>
         </form>
       </article>
-      <form action="">
+      <article className="edit-container">
+      <form id="search-user" action="">
+        <div>
+
+        <label htmlFor="users">Sök efter:</label>
         <select
           name="users"
           id="users"
@@ -101,6 +105,7 @@ function AdminUsers() {
           <option value="email">Email</option>
           <option value="apt_nr">Lägenhetsnummer</option>
         </select>
+        </div>
         <input
           type={searchType === "email" ? "email" : "text"}
           placeholder="Sökterm"
@@ -108,7 +113,6 @@ function AdminUsers() {
         />
         <button className="primary-btn-booking">SÖK</button>
       </form>
-      <article className="edit-container">
         {users.map((user, index) => (
           <form key={index} id={`edit-user-form-${index}`} action="">
             <label htmlFor="edit-user-form">

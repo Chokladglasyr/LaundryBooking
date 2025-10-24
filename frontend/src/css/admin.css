@@ -13,13 +13,12 @@
   }
 }
 #admin {
-    @media (max-width: 500px) {
-
-        overflow: scroll;
-    }
+  @media (max-width: 500px) {
+    overflow: scroll;
+  }
   .edit-container {
-    @media (min-width: 500px)  {
-        overflow: scroll;
+    @media (min-width: 500px) {
+      overflow: scroll;
     }
   }
   article {
@@ -29,24 +28,37 @@
   textarea {
     border-radius: 10px;
   }
-  textarea{
+  textarea {
     padding: 0.7rem;
   }
+  label {
+    margin-right: 1rem;
+  }
   .btn-container {
-      display: flex;
-      justify-content: space-around;
+    display: flex;
+    gap: 1rem;
     @media (min-width: 500px) {
       justify-content: end;
       gap: 1rem;
     }
   }
 }
-#create-msg, #create-room, #create-rule, #create-user {
+#create-msg,
+#create-room,
+#create-rule,
+#create-user {
   margin: 0 auto;
 }
-#edit-msg-form, #edit-room-form, #edit-rule-form, #edit-user-form {
+#edit-msg-form,
+#edit-room-form,
+#edit-rule-form,
+#edit-user-form {
   margin-bottom: 1rem;
   textarea {
     padding: 0.7rem;
   }
+}
+#search-user {
+  align-items: center;
+  margin: 2rem 0;
 }
