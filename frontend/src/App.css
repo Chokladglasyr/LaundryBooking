@@ -43,13 +43,15 @@ input {
   flex-direction: column;
   gap: 2rem;
   margin: auto;
+  justify-content: center;
+  height: 100vh;
 }
 form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.primary-btn {
+.primary-btn, .primary-btn-booking {
   padding: 1rem 3rem;
   border-radius: 50px;
   border: 1px solid var(--primary-blue-color);
@@ -60,6 +62,6 @@ form {
 #login {
   background-color: var(--primary-green-color);
 }
-#nav-admin, #book{
+#nav-admin, .primary-btn-booking{
   background-color: var(--secondary-purple-color);
 }
