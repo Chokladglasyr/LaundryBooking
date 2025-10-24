@@ -85,7 +85,7 @@ function AdminUsers() {
             onChange={handleInput}
           />
 
-          <button id="create-user" className="primary-btn">
+          <button id="create-user" className="primary-btn-green">
             SPARA
           </button>
         </form>
@@ -140,10 +140,10 @@ function AdminUsers() {
             />
 
             <div className="btn-container">
-              <button id={`edit-user-${index}`} className="primary-btn">
+              <button id={`edit-user-${index}`} className="primary-btn-green">
                 SPARA
               </button>
-              <button id={`delete-user-${index}`} className="primary-btn">
+              <button id={`delete-user-${index}`} className="primary-btn-red">
                 RADERA
               </button>
             </div>
