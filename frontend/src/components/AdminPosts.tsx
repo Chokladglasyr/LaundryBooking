@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 function AdminPosts() {
+  const [formData, setFormData] = useState({});
   const posts = [
     {
       id: "1",
@@ -57,6 +60,12 @@ function AdminPosts() {
       date: "2025-10-25",
     },
   ];
+  const handleInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
   return (
     <>
       <article>
@@ -68,9 +77,15 @@ function AdminPosts() {
             name="title"
             id="title"
             placeholder="Rubrik"
+            onChange={handleInput}
           />
-          <textarea name="description" id="description" rows={8}></textarea>
-          <button id="create-msg" className="primary-btn">
+          <textarea
+            name="description"
+            id="description"
+            rows={8}
+            onChange={handleInput}
+          ></textarea>
+          <button id="create-msg" className="primary-btn-green">
             SPARA
           </button>
         </form>
@@ -78,22 +93,30 @@ function AdminPosts() {
       <article className="edit-container">
         {posts.map((post, index) => (
           <form key={index} id="edit-msg-form" action="">
-            <label htmlFor="edit-msg-form">{`Redigera meddelande ${index+1}`} </label>
+            <label htmlFor="edit-msg-form">
+              {`Redigera meddelande ${index + 1}`}{" "}
+            </label>
             <input
               className="input-admin"
               type="text"
               name="title"
-              id="title"
+              id={`title-${index}`}
               value={post.title}
+              onChange={handleInput}
             />
-            <textarea name="description" id="description" rows={8}>
-              {post.description}
+            <textarea
+              name="description"
+              id={`description-${index}`}
+              rows={8}
+              value={post.description}
+              onChange={handleInput}
+            >
             </textarea>
             <div className="btn-container">
-              <button id="edit-msg" className="primary-btn">
+              <button id={`edit-msg-${index}`} className="primary-btn-green">
                 SPARA
               </button>
-              <button id="delete-msg" className="primary-btn">
+              <button id={`delete-msg-${index}`} className="primary-btn-red">
                 RADERA
               </button>
             </div>
