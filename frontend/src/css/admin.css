@@ -12,3 +12,27 @@
     background-color: var(--primary-beige-color);
   }
 }
+#admin {
+  overflow: scroll;
+  article {
+    padding: 1rem;
+  }
+  input,
+  textarea {
+    border-radius: 10px;
+  }
+  .btn-container {
+      display: flex;
+      justify-content: space-around;
+    @media (min-width: 500px) {
+      justify-content: end;
+      gap: 1rem;
+    }
+  }
+}
+#create-msg, #create-room {
+  margin: 0 auto;
+}
+#edit-msg-form, #edit-room-form {
+  margin-bottom: 1rem;
+}

@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
 import { useEffect, useState } from "react";
-import AdminMsg from "./AdminMsg";
+import AdminMsg from "./AdminPosts";
 
 function Admin() {
     const location = useLocation()
@@ -18,7 +18,7 @@ function Admin() {
   return (
     <>
       <CompanyLogo />
-      <div className="landing">
+      <div className="landing" id="admin">
         <nav id="nav-admin">
           {destinations.map((d) =>
             pathName === d.path ? (
