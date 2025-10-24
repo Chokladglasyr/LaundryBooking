@@ -1,0 +1,14 @@
+#nav-admin {
+  position: absolute;
+  top: 88px;
+  left: 5%;
+  margin-left: 0.6rem;
+  a {
+    width: fit-content;
+    border-radius: 20px 20px 0 0;
+    padding: 5px 1rem;
+    text-decoration: none;
+    color: #000;
+    background-color: var(--primary-beige-color);
+  }
+}

@@ -1,5 +1,6 @@
 @import './css/home.css';
 @import './css/booking.css';
+@import './css/admin.css';
 :root {
   --primary-grey-color: #C8C6D7;
   --primary-red-color: #FD1212;
@@ -62,6 +63,6 @@ form {
 #login {
   background-color: var(--primary-green-color);
 }
-#nav-admin, .primary-btn-booking{
+#btn-admin, .primary-btn-booking{
   background-color: var(--secondary-purple-color);
 }
