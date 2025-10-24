@@ -34,10 +34,10 @@ function AdminRooms() {
           </button>
         </form>
       </article>
-      <article>
+      <article className="edit-container">
         {rooms.map((room, index) => (
           <form key={index} id="edit-room-form" action="">
-            <label htmlFor="edit-room-form">{room.name} </label>
+            <label htmlFor="edit-room-form">{`Redigera ${room.name}`} </label>
             <input
               className="input-admin"
               type="text"

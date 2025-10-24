@@ -75,10 +75,10 @@ function AdminPosts() {
           </button>
         </form>
       </article>
-      <article>
+      <article className="edit-container">
         {posts.map((post, index) => (
           <form key={index} id="edit-msg-form" action="">
-            <label htmlFor="edit-msg-form">{`Meddelande nummer ${index+1}`} </label>
+            <label htmlFor="edit-msg-form">{`Redigera meddelande ${index+1}`} </label>
             <input
               className="input-admin"
               type="text"

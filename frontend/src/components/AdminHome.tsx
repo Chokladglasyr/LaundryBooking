@@ -14,11 +14,11 @@ function Admin() {
   useEffect(() => {
     setPathName(location.pathname.replace('/admin/', ''))
   }, [location])
-  console.log(pathName)
+
   return (
     <>
       <CompanyLogo />
-      <div className="landing" id="admin">
+      <div className="landing" id="admin"   >
         <nav id="nav-admin">
           {destinations.map((d) =>
             pathName === d.path ? (

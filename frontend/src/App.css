@@ -60,12 +60,12 @@ form {
   text-decoration: none;
   width: fit-content;
 }
-#login, #create-msg, #edit-msg, #create-room, #edit-room {
+#login, #create-msg, #edit-msg, #create-room, #edit-room, #create-rule, #edit-rule, #edit-user, #create-user {
   background-color: var(--primary-green-color);
 }
 #btn-admin, .primary-btn-booking{
   background-color: var(--secondary-purple-color);
 }
-#delete-msg, #delete-room {
+#delete-msg, #delete-room, #delete-rule, #delete-user {
   background-color: var(--primary-red-color);
 }

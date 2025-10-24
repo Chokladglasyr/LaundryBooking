@@ -13,13 +13,24 @@
   }
 }
 #admin {
-  overflow: scroll;
+    @media (max-width: 500px) {
+
+        overflow: scroll;
+    }
+  .edit-container {
+    @media (min-width: 500px)  {
+        overflow: scroll;
+    }
+  }
   article {
     padding: 1rem;
   }
   input,
   textarea {
     border-radius: 10px;
+  }
+  textarea{
+    padding: 0.7rem;
   }
   .btn-container {
       display: flex;
@@ -30,9 +41,12 @@
     }
   }
 }
-#create-msg, #create-room {
+#create-msg, #create-room, #create-rule, #create-user {
   margin: 0 auto;
 }
-#edit-msg-form, #edit-room-form {
+#edit-msg-form, #edit-room-form, #edit-rule-form, #edit-user-form {
   margin-bottom: 1rem;
+  textarea {
+    padding: 0.7rem;
+  }
 }
