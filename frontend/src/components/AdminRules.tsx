@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 function AdminRules() {
+  const [formData, setFormData] = useState({});
   const rules = [
     {
       id: "1",
@@ -18,7 +21,7 @@ function AdminRules() {
       description:
         "Efter tvättpasset skall var och en städa efter sig genom att torka av golvet och maskinerna. Lämna tvättstugan i det skicka som du själv önskar finna den.",
     },
-        {
+    {
       id: "1",
       title: "Nycklar",
       description:
@@ -36,7 +39,7 @@ function AdminRules() {
       description:
         "Efter tvättpasset skall var och en städa efter sig genom att torka av golvet och maskinerna. Lämna tvättstugan i det skicka som du själv önskar finna den.",
     },
-        {
+    {
       id: "1",
       title: "Nycklar",
       description:
@@ -55,8 +58,14 @@ function AdminRules() {
         "Efter tvättpasset skall var och en städa efter sig genom att torka av golvet och maskinerna. Lämna tvättstugan i det skicka som du själv önskar finna den.",
     },
   ];
-    return(
-        <>
+  const handleInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  return (
+    <>
       <article>
         <form action="" id="rules-form">
           <label htmlFor="rules-form">Ny regel: </label>
@@ -66,9 +75,15 @@ function AdminRules() {
             name="title"
             id="title"
             placeholder="Rubrik"
+            onChange={handleInput}
           />
-          <textarea name="description" id="description" rows={8}></textarea>
-          <button id="create-rule" className="primary-btn">
+          <textarea
+            name="description"
+            id="description"
+            rows={8}
+            onChange={handleInput}
+          ></textarea>
+          <button id="create-rule" className="primary-btn-green">
             SPARA
           </button>
         </form>
@@ -76,29 +91,36 @@ function AdminRules() {
       <article className="edit-container">
         {rules.map((rule, index) => (
           <form key={index} id="edit-rule-form" action="">
-            <label htmlFor="edit-msg-form">{`Redigera regel ${index+1}`} </label>
+            <label htmlFor="edit-msg-form">
+              {`Redigera regel ${index + 1}`}
+            </label>
             <input
               className="input-admin"
               type="text"
               name="title"
-              id="title"
+              id={`title-${index}`}
               value={rule.title}
+              onChange={handleInput}
             />
-            <textarea name="description" id="description" rows={8}>
-              {rule.description}
-            </textarea>
+            <textarea
+              name="description"
+              id={`description-${index}`}
+              rows={8}
+              onChange={handleInput}
+              value={rule.description}
+            ></textarea>
             <div className="btn-container">
-              <button id="edit-rule" className="primary-btn">
+              <button id={`edit-rule-${index}`} className="primary-btn-green">
                 SPARA
               </button>
-              <button id="delete-rule" className="primary-btn">
+              <button id={`delete-rule-${index}`} className="primary-btn-red">
                 RADERA
               </button>
             </div>
           </form>
         ))}
       </article>
-        </>
-    )
+    </>
+  );
 }
-export default AdminRules
+export default AdminRules;
