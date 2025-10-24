@@ -1,0 +1,64 @@
+#nav-admin {
+  position: absolute;
+  top: 88px;
+  left: 5%;
+  margin-left: 0.6rem;
+  a {
+    width: fit-content;
+    border-radius: 20px 20px 0 0;
+    padding: 5px 1rem;
+    text-decoration: none;
+    color: #000;
+    background-color: var(--primary-beige-color);
+  }
+}
+#admin {
+  @media (max-width: 500px) {
+    overflow: scroll;
+  }
+  .edit-container {
+    @media (min-width: 500px) {
+      overflow: scroll;
+    }
+  }
+  article {
+    padding: 1rem;
+  }
+  input,
+  textarea {
+    border-radius: 10px;
+  }
+  textarea {
+    padding: 0.7rem;
+  }
+  label {
+    margin-right: 1rem;
+  }
+  .btn-container {
+    display: flex;
+    gap: 1rem;
+    @media (min-width: 500px) {
+      justify-content: end;
+      gap: 1rem;
+    }
+  }
+}
+#create-msg,
+#create-room,
+#create-rule,
+#create-user {
+  margin: 0 auto;
+}
+#edit-msg-form,
+#edit-room-form,
+#edit-rule-form,
+#edit-user-form {
+  margin-bottom: 1rem;
+  textarea {
+    padding: 0.7rem;
+  }
+}
+#search-user {
+  align-items: center;
+  margin: 2rem 0;
+}

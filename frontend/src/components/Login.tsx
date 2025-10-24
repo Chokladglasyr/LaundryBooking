@@ -23,7 +23,7 @@ function Login() {
         <Link to={'/home'} className="primary-btn" id="login">
           LOGGA IN
         </Link>
-        {/* <button onClick={goToAdmin} className="primary-btn" id="nav-admin">
+        {/* <button onClick={goToAdmin} className="primary-btn" id="btn-admin">
           GÅ TILL ADMIN
         </button> */}
       </div>
