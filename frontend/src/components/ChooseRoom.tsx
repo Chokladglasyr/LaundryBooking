@@ -35,7 +35,7 @@ function ChooseRoom() {
           ))}
         </select>
         <button className="primary-btn-booking" id="book">
-          {window.location.pathname.includes('booking') ? 'BYT TVÄTTSTUGA' : 'BOKA' }
+          {window.location.pathname.includes('booking') ? 'BYT' : 'BOKA' }
         </button>
       </form>
     </>

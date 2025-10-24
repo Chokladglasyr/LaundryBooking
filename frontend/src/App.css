@@ -43,6 +43,8 @@ input {
   flex-direction: column;
   gap: 2rem;
   margin: auto;
+  justify-content: center;
+  height: 100vh;
 }
 form {
   display: flex;

@@ -17,6 +17,47 @@ function Home() {
         "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
       date: "2025-10-25",
     },
+        {
+      id: "1",
+      title: "Stöld!",
+      description:
+        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
+      date: "2025-10-25",
+    },
+    {
+      id: "2",
+      title: "Glöm ej avboka!",
+      description:
+        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
+      date: "2025-10-25",
+    },
+        {
+      id: "1",
+      title: "Stöld!",
+      description:
+        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
+      date: "2025-10-25",
+    },
+    {
+      id: "2",
+      title: "Glöm ej avboka!",
+      description:
+        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
+      date: "2025-10-25",
+    },    {
+      id: "1",
+      title: "Stöld!",
+      description:
+        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
+      date: "2025-10-25",
+    },
+    {
+      id: "2",
+      title: "Glöm ej avboka!",
+      description:
+        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
+      date: "2025-10-25",
+    },
   ];
 
   return (
