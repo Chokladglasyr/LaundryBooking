@@ -10,13 +10,11 @@ import {
   RuleDatabaseModel,
   RuleUpdateModel,
 } from "./types/databaseModelTypes";
-import { idRequest } from "./types/requestTypes";
-import { idText } from "typescript";
 
 export async function saveUser(user: UserDatabaseModel) {
   try {
     const { id, name, email, password, apt_nr } = user;
-    const text = `INSERT INTE users (id, name, email, password, apt_nr)`;
+    const text = `INSERT INTO users (id, name, email, password, apt_nr) VALUES ($1, $2, $3, $4, $5)`;
     const values = [id, name, email, password, apt_nr];
     await PostgresConnection.runQuery(text, values);
   } catch (err) {

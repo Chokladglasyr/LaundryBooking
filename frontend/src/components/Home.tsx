@@ -1,7 +1,20 @@
 import { Outlet } from "react-router-dom";
 import ChooseRoom from "./ChooseRoom";
+// import { useState } from "react";
+// import type { Posts } from "../types/types";
+import axios from "axios";
 
 function Home() {
+    // const [posts, setPosts] = useState<Posts[]>([])
+    async function getPosts() {
+        try {
+            const res = await axios.get('http://localhost:3000/messages')
+            console.log(res)
+        } catch(err) {
+            console.log(err)
+        }
+    }
+    getPosts();
   const posts = [
     {
       id: "1",

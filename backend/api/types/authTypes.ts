@@ -26,3 +26,10 @@ export type LoginRequest = {
     email: string
     password: string
 }
+export type User = {
+    id: string
+    name: string
+    email: string
+    apt_nr: string
+    password: string
+}

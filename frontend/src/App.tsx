@@ -4,7 +4,7 @@ import Login from "./components/Login";
 import Landing from "./components/Landing";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   // just to get rid of warning
   const isLoggedIn = false
   if(isLoggedIn) setLoggedIn(true)
