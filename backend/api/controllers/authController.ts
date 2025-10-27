@@ -70,7 +70,7 @@ export async function signup(
     });
   } catch (err) {
     console.error("Error with signup: ", err);
-    return reply.status(500).send({error: err})
+    return reply.status(500).send({ error: err });
   }
 }
 
@@ -86,7 +86,7 @@ export async function login(
     const text = `SELECT * FROM users WHERE email = $1`;
     const values = [email];
     const userRows = await PostgresConnection.runQuery(text, values);
-    const user = userRows as User[]
+    const user = userRows as User[];
     if (!user || user.length === 0) {
       return reply
         .status(404)
@@ -96,7 +96,7 @@ export async function login(
     if (!match) {
       return reply.status(401).send("Incorrect credentials");
     }
-    
+
     const tokenPayload: TokenPayload = {
       user_id: user[0].id,
       email: user[0].email,
@@ -117,14 +117,27 @@ export async function login(
         expiresIn: "30d",
       }
     );
+    const isSecure = process.env.NODE_ENV === "production" ? "Secure" : "";
+    reply.setCookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      path: "/",
+    });
+    reply.setCookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      path: "/",
+    });
     reply.status(200).send({
       message: "Logged in",
-      access_token: newAccessToken,
-      refresh_token: newRefreshToken,
       user: { name: user[0].name, email: user[0].email },
     });
   } catch (err) {
     console.error("Error when logging in: ", err);
-    return reply.status(500).send({message: "Something went wrong, ", error: err})
+    return reply
+      .status(500)
+      .send({ message: "Something went wrong, ", error: err });
   }
 }
