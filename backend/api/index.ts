@@ -7,7 +7,7 @@ import fastifyCors from "@fastify/cors";
 const app = fastify({});
 
 await app.register(fastifyCors, {
-  origin: ['https://laundry-booking-gamma.vercel.app', 'http://localhost:3000'],
+  origin: ['https://laundry-booking-gamma.vercel.app', 'http://localhost:5173'],
   credentials: true
 })
 
