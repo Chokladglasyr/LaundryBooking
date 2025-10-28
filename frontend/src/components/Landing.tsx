@@ -22,6 +22,7 @@ function Landing() {
     }
   };
   const location = useLocation();
+
   return (
     <>
       <CompanyLogo />
@@ -32,6 +33,7 @@ function Landing() {
       </nav>
       <Outlet />
       {location.pathname === "/" && <Home />}
+
     </>
   );
 }

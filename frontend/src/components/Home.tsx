@@ -8,7 +8,7 @@ function Home() {
     // const [posts, setPosts] = useState<Posts[]>([])
     async function getPosts() {
         try {
-            const res = await axios.get('http://localhost:3000/messages')
+            const res = await axios.get('http://localhost:3000/messages', {withCredentials: true})
             console.log(res)
         } catch(err) {
             console.log(err)
