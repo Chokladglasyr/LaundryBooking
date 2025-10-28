@@ -3,9 +3,6 @@ import Home from "./Home";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
 
-
-
-
 function Landing() {
   const [rules, setRules] = useState(false);
   const navigate = useNavigate();
@@ -15,7 +12,7 @@ function Landing() {
       navigate(-1);
       setRules(false);
     } else {
-      navigate('/rules')
+      navigate("/rules");
       setRules(true);
     }
   };
@@ -24,14 +21,13 @@ function Landing() {
   return (
     <>
       <CompanyLogo />
-      <nav id="nav-landing" className={rules ? "nav-back" :"nav-rules"}>
+      <nav id="nav-landing" className={rules ? "nav-back" : "nav-rules"}>
         <Link onClick={goToRules} to={rules ? "navigate(-1)" : "rules"}>
           {rules ? "Tillbaka" : "Ordningsregler"}
         </Link>
       </nav>
       <Outlet />
       {location.pathname === "/" && <Home />}
-
     </>
   );
 }
