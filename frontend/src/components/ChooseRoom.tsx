@@ -1,16 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Rooms } from "../store/types";
+import axios from "axios";
 
 function ChooseRoom() {
-  const rooms = [
-    { name: "Tvättstuga 1", id: "1" },
-    { name: "Tvättstuga 2", id: "2" },
-    { name: "Tvättstuga 3", id: "3" },
-  ];
-
+//   const rooms = [
+//     { name: "Tvättstuga 1", id: "1" },
+//     { name: "Tvättstuga 2", id: "2" },
+//     { name: "Tvättstuga 3", id: "3" },
+//   ];
+  const [rooms, setRooms] = useState<Rooms []>([])
   const [formData, setFormData] = useState({});
 
   const navigate = useNavigate();
+
+  useEffect(() =>{
+    async function getRooms() {
+        try{
+            const res = await axios.get('/rooms', {withCredentials: true})
+            setRooms(res.data.rooms)
+        } catch(err) {
+            console.error("Failed to fetch rooms: ", err)
+        }
+    }
+    getRooms();
+  }, [])
 
   const goToBooking = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
