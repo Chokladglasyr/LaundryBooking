@@ -5,26 +5,24 @@ import type { Posts } from "../store/types";
 import axios from "axios";
 
 function Home() {
-    const [posts, setPosts] = useState<Posts[]>([])
-    const [loading, setLoading] = useState(true)
-    
-    useEffect(() =>{
-        async function getPosts() {
-            try {
-                const res = await axios.get('/messages', {withCredentials: true})
-                console.log(res.data)
-                setPosts(res.data.messages)
-                setLoading(false)
+  const [posts, setPosts] = useState<Posts[]>([]);
+  const [loading, setLoading] = useState(true);
 
-            } catch(err: unknown) {
-                if(err instanceof Error){
-                    console.error("Failed fetching posts: ", err)
-                }
-                setLoading(false)
-            }
+  useEffect(() => {
+    async function getPosts() {
+      try {
+        const res = await axios.get("/messages", { withCredentials: true });
+        setPosts(res.data.messages);
+        setLoading(false);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Failed fetching posts: ", err);
         }
-        getPosts();  
-    }, [])
+        setLoading(false);
+      }
+    }
+    getPosts();
+  }, []);
 
   return (
     <>
@@ -32,17 +30,18 @@ function Home() {
         <ChooseRoom />
         <Outlet />
         <article className="post-container">
-            <h2>Information</h2>
-            {loading && <p>Hämtar meddelanden...</p>}
+          <h2>Information</h2>
+          {loading && <p>Hämtar meddelanden...</p>}
           {posts.map((post, index) => (
             <div className="post" key={index}>
               <h3>{post.title}</h3>
-              <p className="post-date">{new Date(post.created_at).toLocaleDateString("sv-SE")}</p>
+              <p className="post-date">
+                {new Date(post.created_at).toLocaleDateString("sv-SE")}
+              </p>
               <p>{post.description}</p>
             </div>
           ))}
         </article>
-        
       </div>
     </>
   );

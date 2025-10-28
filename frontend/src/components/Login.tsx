@@ -3,16 +3,17 @@ import axios from "axios";
 import { useState } from "react";
 import type { LoginProps } from "../store/types";
 
-function Login({setUser, setLoggedIn}: LoginProps) {
-
+function Login({ setLoggedIn }: LoginProps) {
   const [formData, setFormData] = useState({});
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/login",{ ...formData}, {withCredentials: true});
-      // console.log(res.data.user);
-      setUser(res.data.user)
-      setLoggedIn(true)
+      await axios.post(
+        "http://localhost:3000/login",
+        { ...formData },
+        { withCredentials: true }
+      );
+      setLoggedIn(true);
     } catch (err) {
       console.error("Something went wrong when loggin in: ", err);
     }
@@ -21,7 +22,7 @@ function Login({setUser, setLoggedIn}: LoginProps) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  
+
   return (
     <>
       <div className="login-page">

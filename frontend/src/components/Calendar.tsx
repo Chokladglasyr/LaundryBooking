@@ -22,10 +22,10 @@ function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
   const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
   const [selectedDate, setSelectedDate] = useState(currentDate);
-  const [selectedTime, setSelectedTime] = useState(0)
-  
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const [selectedTime, setSelectedTime] = useState(0);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
@@ -53,10 +53,9 @@ function Calendar() {
     }
   };
   const handleTimePick = (time: number) => {
-    setSelectedTime(time)
-  }
-  console.log(selectedDate);
-  console.log(selectedTime);
+    setSelectedTime(time);
+  };
+
   return (
     <>
       <div className="calendar-app">
@@ -110,11 +109,31 @@ function Calendar() {
       </div>
       <div className="booking-container">
         <div className="timeslots-container">
-          <button onClick={() => handleTimePick(1)} className={selectedTime === 1 ? 'timeslot-selected' : 'timeslot'} value={1}>8-12</button>
-          <button onClick={() => handleTimePick(2)} className={selectedTime === 2 ? 'timeslot-selected' : 'timeslot'} value={2}>12-17</button>
-          <button onClick={() => handleTimePick(3)} className={selectedTime === 3 ? 'timeslot-selected' : 'timeslot'} value={3}>17-21</button>
+          <button
+            onClick={() => handleTimePick(1)}
+            className={selectedTime === 1 ? "timeslot-selected" : "timeslot"}
+            value={1}
+          >
+            8-12
+          </button>
+          <button
+            onClick={() => handleTimePick(2)}
+            className={selectedTime === 2 ? "timeslot-selected" : "timeslot"}
+            value={2}
+          >
+            12-17
+          </button>
+          <button
+            onClick={() => handleTimePick(3)}
+            className={selectedTime === 3 ? "timeslot-selected" : "timeslot"}
+            value={3}
+          >
+            17-21
+          </button>
         </div>
-        <button className="primary-btn-booking" id="book-time">BOKA</button>
+        <button className="primary-btn-booking" id="book-time">
+          BOKA
+        </button>
       </div>
     </>
   );

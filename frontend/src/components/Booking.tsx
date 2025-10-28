@@ -10,16 +10,15 @@ function Booking() {
   const room_id = params.get("id");
   useEffect(() => {
     async function getRoom() {
-        if(!room_id) return
+      if (!room_id) return;
       const res = await axios.get(`room?id=${room_id}`, {
-          withCredentials: true,
-        });
-        console.log(res.data.room[0])
+        withCredentials: true,
+      });
       setRoom(res.data.room[0]);
     }
     getRoom();
-  },[room_id]);
-  console.log(room?.description)
+  }, [room_id]);
+
   return (
     <>
       <div className="landing" id="booking">
