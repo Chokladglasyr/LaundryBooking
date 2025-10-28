@@ -10,7 +10,7 @@ function Login({setUser, setLoggedIn}: LoginProps) {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:3000/login",{ ...formData}, {withCredentials: true});
-      console.log(res.data.user);
+      // console.log(res.data.user);
       setUser(res.data.user)
       setLoggedIn(true)
     } catch (err) {

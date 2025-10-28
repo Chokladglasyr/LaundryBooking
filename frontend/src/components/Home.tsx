@@ -1,77 +1,30 @@
 import { Outlet } from "react-router-dom";
 import ChooseRoom from "./ChooseRoom";
-// import { useState } from "react";
-// import type { Posts } from "../types/types";
+import { useEffect, useState } from "react";
+import type { Posts } from "../store/types";
 import axios from "axios";
 
 function Home() {
-    // const [posts, setPosts] = useState<Posts[]>([])
-    async function getPosts() {
-        try {
-            const res = await axios.get('http://localhost:3000/messages', {withCredentials: true})
-            console.log(res)
-        } catch(err) {
-            console.log(err)
+    const [posts, setPosts] = useState<Posts[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() =>{
+        async function getPosts() {
+            try {
+                const res = await axios.get('/messages', {withCredentials: true})
+                console.log(res.data)
+                setPosts(res.data.messages)
+                setLoading(false)
+                // console.log(res)
+            } catch(err: unknown) {
+                if(err instanceof Error){
+                    console.error("Failed fetching posts: ", err)
+                }
+                setLoading(false)
+            }
         }
-    }
-    getPosts();
-  const posts = [
-    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-        {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-        {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-  ];
+        getPosts();  
+    }, [])
 
   return (
     <>
@@ -80,10 +33,11 @@ function Home() {
         <Outlet />
         <article className="post-container">
             <h2>Information</h2>
+            {loading && <p>Hämtar meddelanden...</p>}
           {posts.map((post, index) => (
             <div className="post" key={index}>
               <h3>{post.title}</h3>
-              <p className="post-date">{post.date}</p>
+              <p className="post-date">{new Date(post.created_at).toLocaleDateString("sv-SE")}</p>
               <p>{post.description}</p>
             </div>
           ))}

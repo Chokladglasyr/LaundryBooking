@@ -3,12 +3,14 @@ import "./App.css";
 import Login from "./components/Login";
 import Landing from "./components/Landing";
 import { UserContext, type User} from "./store/types";
+import axios from "axios";
 
 
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  axios.defaults.baseURL = 'http://localhost:3000'
   
 const logout = () => {
   setUser(null)
