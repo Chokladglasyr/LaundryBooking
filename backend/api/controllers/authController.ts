@@ -132,7 +132,7 @@ export async function login(
     });
     reply.status(200).send({
       message: "Logged in",
-      user: { name: user[0].name, email: user[0].email },
+      user: { id: user[0].id, name: user[0].name, email: user[0].email, apt_nr: user[0].apt_nr },
     });
   } catch (err) {
     console.error("Error when logging in: ", err);
@@ -141,3 +141,4 @@ export async function login(
       .send({ message: "Something went wrong, ", error: err });
   }
 }
+// export async function logout(req: FastifyRequest, reply: FastifyReply)
