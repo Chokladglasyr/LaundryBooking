@@ -22,6 +22,7 @@ class PostgresConnection {
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     apt_nr TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     CREATE TABLE IF NOT EXISTS rooms (
@@ -60,8 +61,8 @@ class PostgresConnection {
   static async createAdmin() {
     const dbClient = await this.getDbClient()
     const query = `
-    INSERT INTO users (id, name, email, password, apt_nr)
-    VALUES (1, 'admin', 'admin@admin.com', '$2a$12$UC8e731ozxX4mPIntr5N/.FPY3fZLiJGwq8iF5U5DsOoMQ0QDY1O.', '1')
+    INSERT INTO users (id, name, email, password, apt_nr, role)
+    VALUES (1, 'admin', 'admin@admin.com', '$2a$12$UC8e731ozxX4mPIntr5N/.FPY3fZLiJGwq8iF5U5DsOoMQ0QDY1O.', '1', 'admin')
     ON CONFLICT (email) DO NOTHING;
     `
     await dbClient.query(query)
