@@ -7,7 +7,7 @@ import axios from "axios";
 function Home() {
     const [posts, setPosts] = useState<Posts[]>([])
     const [loading, setLoading] = useState(true)
-
+    
     useEffect(() =>{
         async function getPosts() {
             try {
@@ -15,7 +15,7 @@ function Home() {
                 console.log(res.data)
                 setPosts(res.data.messages)
                 setLoading(false)
-                // console.log(res)
+
             } catch(err: unknown) {
                 if(err instanceof Error){
                     console.error("Failed fetching posts: ", err)

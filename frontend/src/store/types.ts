@@ -1,5 +1,10 @@
 import { createContext } from "react";
 
+export type Rooms = {
+    id: string
+    name: string
+    description: string
+}
 export type Posts = {
     id: string;
     title: string;
