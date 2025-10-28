@@ -3,24 +3,45 @@ import { type Rooms } from "../store/types";
 import Calendar from "./Calendar";
 import ChooseRoom from "./ChooseRoom";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 function Booking() {
   const [room, setRoom] = useState<Rooms | null>(null);
-  const params = new URLSearchParams(document.location.search);
+  const [error, setError] = useState<string | null>(null);
+  const [params] = useSearchParams();
   const room_id = params.get("id");
+
   useEffect(() => {
+    const controller = new AbortController();
+    if (!room_id) return;
     async function getRoom() {
       if (!room_id) return;
-      const res = await axios.get(`room?id=${room_id}`, {
-        withCredentials: true,
-      });
-      setRoom(res.data.room[0]);
+      try {
+        const res = await axios.get(`room?id=${room_id}`, {
+          withCredentials: true,
+          signal: controller.signal,
+        });
+        setRoom(res.data.room[0]);
+      } catch (err) {
+        console.log(err)
+        if (err instanceof Error) {
+          if (err.name === "AbortError") {
+            console.log("Fetch was aborted.");
+          } else if(!axios.isCancel(err)) {
+            setError(err.message);
+          }
+        }
+      }
     }
     getRoom();
+    return () => {
+      controller.abort();
+    };
   }, [room_id]);
 
   return (
     <>
+      {error && <p>Error: {error}</p>}
       <div className="landing" id="booking">
         <div className="description-container">
           <article className="room-details">
