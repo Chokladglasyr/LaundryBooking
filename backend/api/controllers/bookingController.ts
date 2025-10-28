@@ -54,7 +54,7 @@ export async function createBooking(
     ) {
       return reply.status(400).send({ message: "Missing required fields." });
     }
-    const existing = await checkForBooking(req.body.user_id);
+    const existing = await checkForBooking(req.body.user_id, req.body.room_id, req.body.booking_timeslot, req.body.booking_date);
     if (!existing) {
       return reply
         .status(400)
@@ -63,7 +63,7 @@ export async function createBooking(
     if (existing.status === 409) {
       return reply
         .status(409)
-        .send({ message: "User already has an active booking." });
+        .send({ message: existing.message});
     } else {
       const newBooking = {
         id: crypto.randomUUID(),
