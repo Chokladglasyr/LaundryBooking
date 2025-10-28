@@ -21,6 +21,7 @@ function Login({setUser, setLoggedIn}: LoginProps) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  
   return (
     <>
       <div className="login-page">

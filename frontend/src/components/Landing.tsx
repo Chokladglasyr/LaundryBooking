@@ -21,7 +21,6 @@ function Landing() {
       setRules(true);
     }
   };
-
   const location = useLocation();
   return (
     <>
