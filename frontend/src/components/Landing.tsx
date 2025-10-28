@@ -1,9 +1,15 @@
-import { useState, type MouseEvent } from "react";
+import { useContext, useState, type MouseEvent } from "react";
 import Home from "./Home";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
+import { UserContext } from "../store/types";
+
+
+
 function Landing() {
   const [rules, setRules] = useState(false);
+  const user = useContext(UserContext)
+  console.log(user)
   const navigate = useNavigate();
   const goToRules = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -15,7 +21,6 @@ function Landing() {
       setRules(true);
     }
   };
-
   const location = useLocation();
   return (
     <>

@@ -2,16 +2,25 @@ import { useState } from "react";
 import "./App.css";
 import Login from "./components/Login";
 import Landing from "./components/Landing";
+import { UserContext, type User} from "./store/types";
+
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  // just to get rid of warning
-  const isLoggedIn = false
-  if(isLoggedIn) setLoggedIn(true)
+  const [user, setUser] = useState<User | null>(null);
+  
+
+
+  console.log(user);
+
   return (
     <>
-        {loggedIn && <Landing />}
-        {!loggedIn && <Login />}
+      <UserContext.Provider value={{user, setUser}}>
+      {loggedIn && <Landing />}
+      {!loggedIn && <Login setLoggedIn={setLoggedIn} setUser={setUser} />}
+
+      </UserContext.Provider>
     </>
   );
 }
