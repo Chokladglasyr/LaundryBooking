@@ -29,7 +29,7 @@ function ChooseRoom() {
   const goToBooking = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     navigate(`/booking?id=${formData}`);
-    location.reload()
+    // location.reload()
 };
 
   const handleInput = (e: React.ChangeEvent<HTMLSelectElement>) => {
