@@ -10,7 +10,10 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   
-
+const logout = () => {
+  setUser(null)
+  setLoggedIn(false)
+}
 
   console.log(user);
 
@@ -19,7 +22,7 @@ function App() {
       <UserContext.Provider value={{user, setUser}}>
       {loggedIn && <Landing />}
       {!loggedIn && <Login setLoggedIn={setLoggedIn} setUser={setUser} />}
-
+          <button onClick={logout}>Logout</button>
       </UserContext.Provider>
     </>
   );
