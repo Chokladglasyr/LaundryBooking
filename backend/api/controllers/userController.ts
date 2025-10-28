@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import PostgresConnection from "../db";
 import { idRequest, searchRequest } from "../types/requestTypes";
-import { UserUpdateModel } from "../types/authTypes";
+import { TokenPayload, UserUpdateModel } from "../types/authTypes";
 import { updateUser } from "../repository";
 
 export async function getAllUsers(req: FastifyRequest, reply: FastifyReply) {
@@ -107,4 +107,20 @@ export async function searchUser(req: FastifyRequest<{Querystring: searchRequest
     return reply.status(404).send("No users found.")
   }
   reply.status(200).send({message: "Users found", users: users})
+}
+
+export async function getLoggedIn(req: FastifyRequest, reply: FastifyReply) {
+try{  const decoded = await req.jwtVerify()
+  const token = decoded as TokenPayload
+  const text = `SELECT * FROM users WHERE id=$1`
+  const values =[token.user_id]
+  const user = await PostgresConnection.runQuery(text, values)
+  if(!user || user.length === 0) {
+    return reply.status(404).send({message:"No logged in user found"})
+  }
+  return reply.status(200).send({message: "Logged in user found.", user: user})
+} catch(err) {
+  console.error("Error fetching logged in user: ", err)
+  return reply.status(500).send({message: "Error fetching logged in user: ", err})
+}
 }

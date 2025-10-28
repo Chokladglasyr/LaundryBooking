@@ -28,6 +28,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
   });
   server.route({
     method: "GET",
+    url: "/me",
+    preHandler: server.authenticate,
+    handler: userController.getLoggedIn
+  })
+  server.route({
+    method: "GET",
     url: "/users",
     preHandler: server.authenticate,
     handler: userController.getAllUsers,

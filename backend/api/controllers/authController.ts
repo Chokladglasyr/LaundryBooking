@@ -141,4 +141,11 @@ export async function login(
       .send({ message: "Something went wrong, ", error: err });
   }
 }
-// export async function logout(req: FastifyRequest, reply: FastifyReply)
+export async function logout(req: FastifyRequest, reply: FastifyReply) {
+  try {
+
+  } catch(err) {
+    console.error("Something went wrong logging out, ", err)
+    return reply.status(500).send({message: "Something went wrong logging out, ", err})
+  }
+}
