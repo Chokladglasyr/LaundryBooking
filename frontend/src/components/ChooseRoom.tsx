@@ -4,11 +4,6 @@ import type { Rooms } from "../store/types";
 import axios from "axios";
 
 function ChooseRoom() {
-//   const rooms = [
-//     { name: "Tvättstuga 1", id: "1" },
-//     { name: "Tvättstuga 2", id: "2" },
-//     { name: "Tvättstuga 3", id: "3" },
-//   ];
   const [rooms, setRooms] = useState<Rooms []>([])
   const [formData, setFormData] = useState({});
 
