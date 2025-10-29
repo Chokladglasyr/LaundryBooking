@@ -19,19 +19,25 @@ function App() {
           setLoggedIn(true);
         } else {
           console.log("No user logged in");
+          setLoggedIn(false);
         }
       } catch (err) {
-        console.error("No logged in user found: ", err);
-        setLoggedIn(false);
+        if (axios.isAxiosError(err) && err.response?.status === 401) {
+          console.error("No logged in user found: ", err);
+          setLoggedIn(false);
+        } else {
+          console.error("Error checking if logged in: ", err);
+        }
       }
     };
     ifLoggedIn();
   }, []);
+  console.log(loggedIn);
 
   return (
     <>
-      {loggedIn && <Landing />}
-      {!loggedIn && <Login setLoggedIn={setLoggedIn} />}
+      {loggedIn ? <Landing /> : <Login setLoggedIn={setLoggedIn} />}
+
       <button onClick={logout}>Logout</button>
     </>
   );

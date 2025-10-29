@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Landing from "./components/Landing.tsx";
 import Booking from "./components/Booking.tsx";
 import Rules from "./components/Rules.tsx";
 import Admin from "./components/AdminHome.tsx";
@@ -17,10 +16,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    middleware: [authMiddleware],
     children: [
-      { path: "rules", element: <Rules /> },
-      { path: "booking", element: <Booking /> },
+      { path: "rules", middleware: [authMiddleware], element: <Rules /> },
+      { path: "booking", middleware: [authMiddleware], element: <Booking /> },
     ],
   },
   {
@@ -44,10 +42,6 @@ const router = createBrowserRouter([
         element: <AdminRooms />
       }
     ],
-  },
-  {
-    path: "/home",
-    element: <Landing />,
   },
 ]);
 
