@@ -51,7 +51,7 @@ function Booking() {
           <ChooseRoom />
         </div>
 
-        <Calendar />
+        <Calendar room_id={room_id} />
       </div>
     </>
   );

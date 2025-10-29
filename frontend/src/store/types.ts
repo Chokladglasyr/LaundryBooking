@@ -32,6 +32,6 @@ export type User = {
 export type LoginProps = {
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export type User_idProps = {
-  user_id: string
+export type CalendarProps = {
+  room_id: string | null
 }

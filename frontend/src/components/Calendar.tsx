@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import LeftArrow from "../assets/left.png";
 import RightArrow from "../assets/right.png";
-import type { BookingType } from "../store/types";
+import type { BookingType, CalendarProps, User } from "../store/types";
 import { useLoaderData } from "react-router-dom";
+import axios from "axios";
 
-function Calendar() {
+function Calendar({ room_id }: CalendarProps) {
   const daysOfWeek = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"];
   const monthsOfYear = [
     "Januari",
@@ -25,8 +26,8 @@ function Calendar() {
   const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [selectedTime, setSelectedTime] = useState(0);
-  const user = useLoaderData();
-  // const [bookings, setBookings] = useState<BookingType | null>(null);
+  const user = useLoaderData<User>();
+  const [bookings, setBookings] = useState<BookingType[] | null>(null);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -49,8 +50,32 @@ function Calendar() {
     );
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await axios.get("/bookings", { withCredentials: true });
+        setBookings(res.data.bookings);
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error("Error fetching bookings: ", err);
+        }
+      }
+    };
+    fetchBookings();
+  }, []);
 
+  if (!bookings) {
+    console.log("Error");
+    return;
+  }
+  const userBookings = bookings.filter(
+    (booking) => booking.user_id === user.id && booking.room_id === room_id
+  );
+  console.log("user", userBookings);
+  const roomBookings = bookings.filter(
+    (booking) => booking.room_id === room_id
+  );
+  console.log("room", roomBookings);
   const handleDatePick = (day: number) => {
     const pickedDate = new Date(currentYear, currentMonth, day);
 
@@ -61,8 +86,6 @@ function Calendar() {
   const handleTimePick = (time: number) => {
     setSelectedTime(time);
   };
-
-  console.log(user);
 
   return (
     <>
@@ -119,21 +142,21 @@ function Calendar() {
         <div className="timeslots-container">
           <button
             onClick={() => handleTimePick(1)}
-            className={selectedTime === 1 ? "timeslot-selected" : "timeslot"}
+            className={selectedTime === 1 ? "timeslot-selected" : roomBookings.some((booking) => new Date(booking.booking_date).toLocaleDateString() === selectedDate.toLocaleDateString() && booking.booking_timeslot === '1') ? "timeslot-invalid" : "timeslot"}
             value={1}
           >
             8-12
           </button>
           <button
             onClick={() => handleTimePick(2)}
-            className={selectedTime === 2 ? "timeslot-selected" : "timeslot"}
+            className={selectedTime === 2 ? "timeslot-selected" : roomBookings.some((booking) => new Date(booking.booking_date).toLocaleDateString() === selectedDate.toLocaleDateString() && booking.booking_timeslot === '2') ? "timeslot-invalid" :  "timeslot"}
             value={2}
           >
             12-17
           </button>
           <button
             onClick={() => handleTimePick(3)}
-            className={selectedTime === 3 ? "timeslot-selected" : "timeslot"}
+            className={selectedTime === 3 ? "timeslot-selected" : roomBookings.some((booking) => new Date(booking.booking_date).toLocaleDateString() === selectedDate.toLocaleDateString() && booking.booking_timeslot === '3') ? "timeslot-invalid" : "timeslot"}
             value={3}
           >
             17-21
