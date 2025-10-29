@@ -110,20 +110,40 @@ export async function insertBooking(booking: BookingDatabaseModel) {
     console.error("Error inserting new booking: ", err);
   }
 }
-export async function checkForBooking(user_id: string) {
-    try{
-        if(!user_id) {
-            throw new Error("Missing user_id.")
-        }
-        const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= CURRENT_DATE`
-        const values = [user_id]
-        const existingBooking = await PostgresConnection.runQuery(text, values)
-        if(!existingBooking || existingBooking.length === 0) {
-         return {status: 200}
-        } else {
-            return {status: 409}
-        }
-    } catch(err) {
-        console.error("Error checking for existing booking: ", err)
+export async function checkForBooking(
+  user_id: string,
+  room_id: string,
+  booking_timeslot: string,
+  booking_date: string
+) {
+  try {
+    if (!user_id) {
+      throw new Error("Missing user_id.");
     }
+    const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= CURRENT_DATE`;
+    const values = [user_id];
+    const existingBooking = await PostgresConnection.runQuery(text, values);
+
+    if (!existingBooking || existingBooking.length === 0) {
+      const text2 = `SELECT * FROM bookings WHERE room_id = $1 AND booking_timeslot = $2 AND booking_date = $3`;
+      const values2 = [room_id, booking_timeslot, new Date(booking_date)];
+      const existingBooking2 = await PostgresConnection.runQuery(
+        text2,
+        values2
+      );
+
+      if (!existingBooking2 || existingBooking2.length === 0) {
+        console.log("finns inget bokat");
+        return { status: 200 };
+      } else {
+        console.log("tiden är bokad");
+        return { message: "Timeslot already booked.", status: 409 };
+      }
+    } else {
+      console.log("user redan bokad");
+      return { message: "User already has an active booking.", status: 409 };
+    }
+  } catch (err) {
+    console.error("Error checking for existing booking: ", err);
+  }
 }
