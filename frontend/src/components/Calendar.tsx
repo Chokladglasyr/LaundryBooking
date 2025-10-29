@@ -76,9 +76,10 @@ function Calendar({ room_id }: CalendarProps) {
     (booking) => booking.room_id === room_id
   );
   console.log("room", roomBookings);
+
   const handleDatePick = (day: number) => {
     const pickedDate = new Date(currentYear, currentMonth, day);
-
+    
     if (pickedDate >= today) {
       setSelectedDate(pickedDate);
     }
@@ -86,7 +87,9 @@ function Calendar({ room_id }: CalendarProps) {
   const handleTimePick = (time: number) => {
     setSelectedTime(time);
   };
-
+  const isTimeslotBooked = (timeslot: string) =>{
+    return roomBookings.some((booking) => new Date(booking.booking_date).toLocaleDateString() === selectedDate.toLocaleDateString() && booking.booking_timeslot === timeslot)
+  }
   return (
     <>
       <div className="calendar-app">
@@ -142,22 +145,25 @@ function Calendar({ room_id }: CalendarProps) {
         <div className="timeslots-container">
           <button
             onClick={() => handleTimePick(1)}
-            className={selectedTime === 1 ? "timeslot-selected" : roomBookings.some((booking) => new Date(booking.booking_date).toLocaleDateString() === selectedDate.toLocaleDateString() && booking.booking_timeslot === '1') ? "timeslot-invalid" : "timeslot"}
+            className={selectedTime === 1 ? "timeslot-selected" : isTimeslotBooked("1") ? "timeslot-invalid" : "timeslot"}
             value={1}
+            disabled = {isTimeslotBooked("1")}
           >
             8-12
           </button>
           <button
             onClick={() => handleTimePick(2)}
-            className={selectedTime === 2 ? "timeslot-selected" : roomBookings.some((booking) => new Date(booking.booking_date).toLocaleDateString() === selectedDate.toLocaleDateString() && booking.booking_timeslot === '2') ? "timeslot-invalid" :  "timeslot"}
+            className={selectedTime === 2 ? "timeslot-selected" : isTimeslotBooked("2") ? "timeslot-invalid" :  "timeslot"}
             value={2}
+            disabled = {isTimeslotBooked("2")}
           >
             12-17
           </button>
           <button
             onClick={() => handleTimePick(3)}
-            className={selectedTime === 3 ? "timeslot-selected" : roomBookings.some((booking) => new Date(booking.booking_date).toLocaleDateString() === selectedDate.toLocaleDateString() && booking.booking_timeslot === '3') ? "timeslot-invalid" : "timeslot"}
+            className={selectedTime === 3 ? "timeslot-selected" : isTimeslotBooked("3") ? "timeslot-invalid" : "timeslot"}
             value={3}
+            disabled={isTimeslotBooked("3")}
           >
             17-21
           </button>
