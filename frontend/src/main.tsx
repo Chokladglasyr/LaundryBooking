@@ -19,28 +19,28 @@ const router = createBrowserRouter([
     children: [
       { path: "rules", middleware: [authMiddleware], loader: authLoader, element: <Rules /> },
       { path: "booking", middleware: [authMiddleware], loader: authLoader, element: <Booking /> },
-    ],
-  },
-  {
-    path: "/admin",
-    element: <Admin />,
-    children: [
       {
-        path: "rules",
-        element: <AdminRules />,
+        path: "admin",
+        element: <Admin />,
+        children: [
+          {
+            path: "rules",
+            element: <AdminRules />,
+          },
+          {
+            path: "messages",
+            element: <AdminPosts />
+          },
+          {
+            path: "users",
+            element: <AdminUsers />
+          },
+          {
+            path: "rooms",
+            element: <AdminRooms />
+          }
+        ],
       },
-      {
-        path: "messages",
-        element: <AdminPosts />
-      },
-      {
-        path: "users",
-        element: <AdminUsers />
-      },
-      {
-        path: "rooms",
-        element: <AdminRooms />
-      }
     ],
   },
 ]);
