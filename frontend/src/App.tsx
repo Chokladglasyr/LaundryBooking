@@ -32,7 +32,6 @@ function App() {
     };
     ifLoggedIn();
   }, []);
-  console.log(loggedIn);
 
   return (
     <>

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { type Rooms } from "../store/types";
+import { type RoomType } from "../store/types";
 import Calendar from "./Calendar";
 import ChooseRoom from "./ChooseRoom";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 
 function Booking() {
-  const [room, setRoom] = useState<Rooms | null>(null);
+  const [room, setRoom] = useState<RoomType | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [params] = useSearchParams();
   const room_id = params.get("id");
@@ -23,11 +23,11 @@ function Booking() {
         });
         setRoom(res.data.room[0]);
       } catch (err) {
-        console.log(err)
+        console.log(err);
         if (err instanceof Error) {
           if (err.name === "AbortError") {
             console.log("Fetch was aborted.");
-          } else if(!axios.isCancel(err)) {
+          } else if (!axios.isCancel(err)) {
             setError(err.message);
           }
         }
@@ -51,7 +51,7 @@ function Booking() {
           <ChooseRoom />
         </div>
 
-        <Calendar />
+        <Calendar room_id={room_id} />
       </div>
     </>
   );

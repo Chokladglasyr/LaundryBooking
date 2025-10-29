@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Rooms } from "../store/types";
+import type { RoomType } from "../store/types";
 import axios from "axios";
 
 function ChooseRoom() {
@@ -9,7 +9,7 @@ function ChooseRoom() {
 //     { name: "Tvättstuga 2", id: "2" },
 //     { name: "Tvättstuga 3", id: "3" },
 //   ];
-  const [rooms, setRooms] = useState<Rooms []>([])
+  const [rooms, setRooms] = useState<RoomType []>([])
   const [formData, setFormData] = useState({});
 
   const navigate = useNavigate();

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import type { RulesType } from "../store/types";
+import type { RuleType } from "../store/types";
 import axios from "axios";
 
 function Rules() {
-  const [rules, setRules] = useState<RulesType[]>([]);
+  const [rules, setRules] = useState<RuleType[]>([]);
   useEffect(() => {
     async function getRules() {
       const res = await axios.get("rules", { withCredentials: true });

@@ -10,15 +10,15 @@ import AdminRules from "./components/AdminRules.tsx";
 import AdminUsers from "./components/AdminUsers.tsx";
 import AdminRooms from "./components/AdminRooms.tsx";
 import AdminPosts from "./components/AdminPosts.tsx";
-import { authMiddleware } from "./store/authMiddleware.ts";
+import { authLoader, authMiddleware } from "./store/authMiddleware.ts";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { path: "rules", middleware: [authMiddleware], element: <Rules /> },
-      { path: "booking", middleware: [authMiddleware], element: <Booking /> },
+      { path: "rules", middleware: [authMiddleware], loader: authLoader, element: <Rules /> },
+      { path: "booking", middleware: [authMiddleware], loader: authLoader, element: <Booking /> },
     ],
   },
   {
