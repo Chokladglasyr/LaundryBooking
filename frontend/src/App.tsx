@@ -7,14 +7,23 @@ import axios from "axios";
 function App() {
   axios.defaults.baseURL = "http://localhost:3000";
   const [loggedIn, setLoggedIn] = useState(false);
+  // const [admin, setAdmin] = useState(false)
 
-  const logout = () => {
-    setLoggedIn(false);
+  const logout = async () => {
+    try {
+      await axios.get('/logout', {withCredentials: true})
+      setLoggedIn(false);
+    }catch(err) {
+      if(err instanceof Error) {
+        console.error("Failed to logout: ", err)
+      }
+    }
   };
   useEffect(() => {
     const ifLoggedIn = async () => {
       try {
         const res = await axios.get("/me", { withCredentials: true });
+        console.log(res)
         if (res) {
           setLoggedIn(true);
         } else {

@@ -132,7 +132,12 @@ export async function login(
     });
     reply.status(200).send({
       message: "Logged in",
-      user: { id: user[0].id, name: user[0].name, email: user[0].email, apt_nr: user[0].apt_nr },
+      user: {
+        id: user[0].id,
+        name: user[0].name,
+        email: user[0].email,
+        apt_nr: user[0].apt_nr,
+      },
     });
   } catch (err) {
     console.error("Error when logging in: ", err);
@@ -143,9 +148,13 @@ export async function login(
 }
 export async function logout(req: FastifyRequest, reply: FastifyReply) {
   try {
-
-  } catch(err) {
-    console.error("Something went wrong logging out, ", err)
-    return reply.status(500).send({message: "Something went wrong logging out, ", err})
+    reply.clearCookie("accessToken");
+    reply.clearCookie("refreshToken");
+    return reply.status(200).send({ message: "Succesfully logged out." });
+  } catch (err) {
+    console.error("Something went wrong logging out, ", err);
+    return reply
+      .status(500)
+      .send({ message: "Something went wrong logging out, ", error: err });
   }
 }
