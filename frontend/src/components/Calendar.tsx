@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LeftArrow from "../assets/left.png";
 import RightArrow from "../assets/right.png";
+import type { BookingType } from "../store/types";
+import { useLoaderData } from "react-router-dom";
 
 function Calendar() {
   const daysOfWeek = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"];
@@ -23,6 +25,8 @@ function Calendar() {
   const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [selectedTime, setSelectedTime] = useState(0);
+  const user = useLoaderData();
+  // const [bookings, setBookings] = useState<BookingType | null>(null);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -45,6 +49,8 @@ function Calendar() {
     );
   };
 
+  useEffect(() => {}, []);
+
   const handleDatePick = (day: number) => {
     const pickedDate = new Date(currentYear, currentMonth, day);
 
@@ -55,6 +61,8 @@ function Calendar() {
   const handleTimePick = (time: number) => {
     setSelectedTime(time);
   };
+
+  console.log(user);
 
   return (
     <>

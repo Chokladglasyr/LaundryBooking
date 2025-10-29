@@ -1,13 +1,21 @@
-export type Rooms = {
+export type RoomType = {
   id: string;
   name: string;
   description: string;
 };
-export type RulesType = {
+export type RuleType = {
   id: string;
   title: string;
   description: string;
 };
+export type BookingType = {
+  id: string
+  user_id: string
+  room_id: string
+  booking_date: Date
+  booking_timeslot: string
+
+}
 export type Posts = {
   id: string;
   title: string;
@@ -24,3 +32,6 @@ export type User = {
 export type LoginProps = {
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
+export type User_idProps = {
+  user_id: string
+}

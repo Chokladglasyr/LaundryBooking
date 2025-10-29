@@ -4,9 +4,14 @@ import { userContext } from "./UserContext";
 
 export async function authMiddleware({context}: LoaderFunctionArgs) {
     const res = await axios.get('http://localhost:3000/me', {withCredentials: true})
-    console.log(res.data.user[0])
+    // console.log(res.data.user[0])
     if(!res.data.user[0]) {
         throw redirect('/')
     }
     context.set(userContext, res.data.user[0])
+    return res.data.user[0]
+}
+export async function authLoader({context}: LoaderFunctionArgs){
+    const user = context.get(userContext)
+    return {user}
 }
