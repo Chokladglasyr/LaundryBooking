@@ -17,10 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    middleware: [authMiddleware],
+    // middleware: [authMiddleware],
     children: [
-      { path: "rules", element: <Rules /> },
-      { path: "booking", element: <Booking /> },
+      { path: "rules", middleware: [authMiddleware], element: <Rules /> },
+      { path: "booking", middleware: [authMiddleware], element: <Booking /> },
     ],
   },
   {
@@ -44,10 +44,6 @@ const router = createBrowserRouter([
         element: <AdminRooms />
       }
     ],
-  },
-  {
-    path: "/home",
-    element: <Landing />,
   },
 ]);
 
