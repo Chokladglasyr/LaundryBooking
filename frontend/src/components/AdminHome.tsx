@@ -16,7 +16,7 @@ function Admin() {
   useEffect(() => {
     setPathName(location.pathname.replace('/', ''));
   }, [location]);
-  console.log(pathName)
+
   return (
     <>
       <CompanyLogo />
