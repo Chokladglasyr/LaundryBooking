@@ -5,6 +5,7 @@ import AdminPosts from "./AdminPosts";
 import axios from "axios";
 
 function Admin() {
+  axios.defaults.baseURL ="http://localhost:3000"
   const location = useLocation();
   const navigate = useNavigate();
   const [pathName, setPathName] = useState(location.pathname);
@@ -19,7 +20,7 @@ function Admin() {
 
   const logout = async () => {
     try {
-      await axios.get('http://localhost:3000/logout', {withCredentials: true})
+      await axios.get('/logout', {withCredentials: true})
       navigate('/')
     }catch(err) {
       if(err instanceof Error) {

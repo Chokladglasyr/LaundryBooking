@@ -1,19 +1,19 @@
 import { Outlet } from "react-router-dom";
 import ChooseRoom from "./ChooseRoom";
 import { useEffect, useState } from "react";
-import type { Posts } from "../store/types";
+import type { PostType } from "../store/types";
 import axios from "axios";
 
 function Home() {
-  const [posts, setPosts] = useState<Posts[]>([]);
+  const [posts, setPosts] = useState<PostType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getPosts() {
       try {
-        const res = await axios.get("/messages", { withCredentials: true });
+        const res = await axios.get("/posts", { withCredentials: true });
         console.log(res)
-        setPosts(res.data.messages);
+        setPosts(res.data.posts);
         setLoading(false);
       } catch (err: unknown) {
         if (err instanceof Error) {

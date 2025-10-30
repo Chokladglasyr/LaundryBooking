@@ -49,7 +49,7 @@ export const router = createBrowserRouter([
         element: <AdminRules />,
       },
       {
-        path: "messages",
+        path: "posts",
         element: <AdminPosts />,
       },
       {

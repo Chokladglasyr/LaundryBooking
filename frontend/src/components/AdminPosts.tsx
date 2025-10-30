@@ -1,75 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { PostType } from "../store/types";
+import axios from "axios";
 
 function AdminPosts() {
   const [formData, setFormData] = useState({});
-  const posts = [
-    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-  ];
+  const [posts, setPosts] = useState<PostType[] | null>(null)
+
+  useEffect(() => {
+    async function getPosts() {
+    try {
+        const res = await axios.get('/posts', {withCredentials:true})
+        console.log(res.data.posts)
+      setPosts(res.data.posts)
+      } catch(err){
+        if(err instanceof Error) {
+          console.log("Failed to fetch posts for admin: ", err)
+        }
+      }
+    }
+      getPosts();
+  },[])
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  const createPost = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post('/post', formData, {withCredentials: true})
+      setPosts((prev) => (prev ? [res.data.post, ...prev] : [res.data.post]))
+    } catch(err) {
+      if( err instanceof Error ) {
+        console.error("Error creating new post in admin: ", err)
+      }
+    }
+  }
+  const updatePost = async (e: React.FormEvent<HTMLFormElement>) => {
+
+  }
   return (
     <>
       <article>
-        <form action="" id="msg-form">
+        <form onSubmit={createPost} id="msg-form">
           <label htmlFor="msg-form">Nytt meddelande: </label>
           <input
             className="input-admin"
@@ -91,7 +65,7 @@ function AdminPosts() {
         </form>
       </article>
       <article className="edit-container">
-        {posts.map((post, index) => (
+        {posts?.map((post, index) => (
           <form key={index} id="edit-msg-form" action="">
             <label htmlFor="edit-msg-form">
               {`Redigera meddelande ${index + 1}`}{" "}
