@@ -2,10 +2,11 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import PostgresConnection from "../db";
 import { idRequest, roomRequest } from "../types/requestTypes";
 import { insertRoom, updateRoom } from "../repository";
+import { RoomDatabaseModel } from "../types/databaseModelTypes";
 
 export async function getAllRooms(req: FastifyRequest, reply: FastifyReply) {
   try {
-    const text = `SELECT * FROM rooms;`;
+    const text = `SELECT * FROM rooms ORDER BY updated_at DESC;`;
     const rooms = await PostgresConnection.runQuery(text);
     if (!rooms || rooms.length === 0) {
       return reply.status(404).send({ message: "No rooms found." });
@@ -70,16 +71,27 @@ export async function updateOneRoom(
 ) {
   try {
     const { id } = req.query;
+    let {name, description} = req.body
     if (!id) {
       return reply.status(400).send({ message: "Missing parameters." });
     }
-    if (!req.body.description || !req.body.name) {
+    if (!description && !name) {
       return reply.status(400).send({ message: "Missing required fields." });
+    }
+    const text1 = `SELECT * FROM rooms WHERE id= $1`
+    const values1 = [id]
+    const res = await PostgresConnection.runQuery(text1, values1)
+    const untouchedRoom = res[0] as RoomDatabaseModel;
+    if(!name){
+      name = untouchedRoom.name
+    }
+    if(!description) {
+      description = untouchedRoom.description
     }
     const roomToUpdate = {
       id: id,
-      name: req.body.name,
-      description: req.body.description,
+      name: name,
+      description: description,
       updated_at: new Date().toISOString(),
     };
     await updateRoom(roomToUpdate, id);
@@ -107,7 +119,7 @@ export async function deleteRoom(
     const text = `DELETE FROM rooms WHERE id = $1`;
     const values = [id];
     await PostgresConnection.runQuery(text, values);
-    reply.status(400).send({message: `Deleted room with id: ${id}`})
+    reply.status(200).send({message: `Deleted room with id: ${id}`})
   } catch (err) {
     console.error("Error deleting room.");
   }

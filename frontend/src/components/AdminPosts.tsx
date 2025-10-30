@@ -3,15 +3,17 @@ import type { PostType } from "../store/types";
 import axios from "axios";
 
 function AdminPosts() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ title: "", description: "" });
   const [posts, setPosts] = useState<PostType[] | null>(null);
 
   useEffect(() => {
+    let cancel = false;
     async function getPosts() {
       try {
         const res = await axios.get("/posts", { withCredentials: true });
-        console.log(res.data.posts);
-        setPosts(res.data.posts);
+        if (!cancel) {
+          setPosts(res.data.posts);
+        }
       } catch (err) {
         if (err instanceof Error) {
           console.log("Failed to fetch posts for admin: ", err);
@@ -19,7 +21,11 @@ function AdminPosts() {
       }
     }
     getPosts();
+    return () => {
+      cancel = true;
+    };
   }, []);
+
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -41,6 +47,7 @@ function AdminPosts() {
     );
     setFormData({ ...formData, [name]: value });
   };
+
   const createPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -48,39 +55,39 @@ function AdminPosts() {
         withCredentials: true,
       });
       setPosts((prev) => (prev ? [res.data.post, ...prev] : [res.data.post]));
-      setFormData({});
+      setFormData({ title: "", description: "" });
     } catch (err) {
       if (err instanceof Error) {
         console.error("Error creating new post in admin: ", err);
       }
     }
   };
+
   const updatePost = async (
     e: React.FormEvent<HTMLFormElement>,
     post_id: string
   ) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`/post?id=${post_id}`, formData, {
+      await axios.put(`/post?id=${post_id}`, formData, {
         withCredentials: true,
       });
-      console.log(res.data);
     } catch (err) {
       if (err instanceof Error) {
         console.error("Error when updating post as admin: ", err);
       }
     }
   };
+
   const deletePost = async (
     e: React.MouseEvent<HTMLButtonElement>,
     id: string
   ) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const res = await axios.delete(`post?id=${id}`, {
+      await axios.delete(`post?id=${id}`, {
         withCredentials: true,
       });
-      console.log(res);
       setPosts((prev) => prev?.filter((post) => id !== post.id) || null);
     } catch (err) {
       if (err instanceof Error) {
@@ -88,6 +95,7 @@ function AdminPosts() {
       }
     }
   };
+
   return (
     <>
       <article>
@@ -98,6 +106,7 @@ function AdminPosts() {
             type="text"
             name="title"
             id="title"
+            value={formData.title}
             placeholder="Rubrik"
             onChange={handleInput}
           />
@@ -105,6 +114,7 @@ function AdminPosts() {
             name="description"
             id="description"
             rows={8}
+            value={formData.description}
             onChange={handleInput}
           ></textarea>
           <button id="create-msg" className="primary-btn-green">
@@ -113,45 +123,46 @@ function AdminPosts() {
         </form>
       </article>
       <article className="edit-container">
-        {posts?.map((post, index) => (
-          <form
-            key={index}
-            id="edit-msg-form"
-            onSubmit={(e) => updatePost(e, post.id)}
-          >
-            <label htmlFor="edit-msg-form">
-              {`Redigera meddelande ${index + 1}`}{" "}
-            </label>
-            <input
-              className="input-admin"
-              type="text"
-              name="title"
-              id={`title-${index}`}
-              value={post.title}
-              onChange={(e) => handleInputChange(e, index)}
-            />
-            <textarea
-              name="description"
-              id={`description-${index}`}
-              rows={8}
-              value={post.description}
-              onChange={(e) => handleInputChange(e, index)}
-            ></textarea>
-            <div className="btn-container">
-              <button id={`edit-msg-${index}`} className="primary-btn-green">
-                SPARA
-              </button>
-              <button
-                type="button"
-                onClick={(e) => deletePost(e, post.id)}
-                id={`delete-msg-${index}`}
-                className="primary-btn-red"
-              >
-                RADERA
-              </button>
-            </div>
-          </form>
-        ))}
+        {posts &&
+          posts.map((post, index) => (
+            <form
+              key={index}
+              id="edit-msg-form"
+              onSubmit={(e) => updatePost(e, post.id)}
+            >
+              <label htmlFor="edit-msg-form">
+                {`Redigera meddelande ${index + 1}`}
+              </label>
+              <input
+                className="input-admin"
+                type="text"
+                name="title"
+                id={`title-${index}`}
+                value={post.title}
+                onChange={(e) => handleInputChange(e, index)}
+              />
+              <textarea
+                name="description"
+                id={`description-${index}`}
+                rows={8}
+                value={post.description}
+                onChange={(e) => handleInputChange(e, index)}
+              ></textarea>
+              <div className="btn-container">
+                <button id={`edit-msg-${index}`} className="primary-btn-green">
+                  SPARA
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => deletePost(e, post.id)}
+                  id={`delete-msg-${index}`}
+                  className="primary-btn-red"
+                >
+                  RADERA
+                </button>
+              </div>
+            </form>
+          ))}
       </article>
     </>
   );
