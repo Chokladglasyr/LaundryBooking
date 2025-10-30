@@ -10,12 +10,12 @@ export type RuleUpdateModel = {
     description: string
     updated_at: string
 }
-export type MessageDatabaseModel = {
+export type PostDatabaseModel = {
     id: string
     title: string
     description: string
 }
-export type MessageUpdateModel = {
+export type PostUpdateModel = {
     title: string
     description: string
     updated_at: string

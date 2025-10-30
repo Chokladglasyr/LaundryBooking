@@ -1,4 +1,4 @@
-export type rulesAndMsgsRequest = {
+export type rulesAndPostsRequest = {
     title: string
     description: string
 }

@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import * as authController from "./controllers/authController";
 import * as ruleController from "./controllers/ruleController";
-import * as messageController from "./controllers/messageController";
+import * as postController from "./controllers/postController";
 import * as userController from "./controllers/userController";
 import * as roomController from "./controllers/roomController";
 import * as bookingController from "./controllers/bookingController";
@@ -13,7 +13,7 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     url: "/",
     preHandler: server.authenticate,
     handler: async (req, reply) => {
-      return { message: "Welcome to my backend" };
+      return { post: "Welcome to my backend" };
     },
   });
   server.route({
@@ -102,33 +102,33 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
 
   server.route({
     method: "GET",
-    url: "/messages",
+    url: "/posts",
     preHandler: server.authenticate,
-    handler: messageController.getAllMessages,
+    handler: postController.getAllPosts,
   });
   server.route({
     method: "GET",
-    url: "/message",
+    url: "/post",
     preHandler: server.authenticate,
-    handler: messageController.getOneMessage,
+    handler: postController.getOnePost,
   });
   server.route({
     method: "POST",
-    url: "/message",
+    url: "/post",
     preHandler: server.authenticate,
-    handler: messageController.createMessage,
+    handler: postController.createPost,
   });
   server.route({
     method: "PUT",
-    url: "/message",
+    url: "/post",
     preHandler: server.authenticate,
-    handler: messageController.updateOneMessage,
+    handler: postController.updateOnePost,
   });
   server.route({
     method: "DELETE",
-    url: "/message",
+    url: "/post",
     preHandler: server.authenticate,
-    handler: messageController.deleteMessage,
+    handler: postController.deletePost,
   });
   server.route({
     method: "GET",

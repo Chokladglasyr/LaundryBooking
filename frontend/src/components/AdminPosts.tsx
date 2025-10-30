@@ -1,75 +1,97 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { PostType } from "../store/types";
+import axios from "axios";
 
 function AdminPosts() {
   const [formData, setFormData] = useState({});
-  const posts = [
-    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-    {
-      id: "1",
-      title: "Stöld!",
-      description:
-        "Tidigare i veckan skedde ett stöldförsök. Fönstret krossades men inget togs förutom tvättstugenyckeln.",
-      date: "2025-10-25",
-    },
-    {
-      id: "2",
-      title: "Glöm ej avboka!",
-      description:
-        "Många gånger tvättstugorna står tomma, glöm inte avboka nu när vi har fina nya sättet att boka.",
-      date: "2025-10-25",
-    },
-  ];
+  const [posts, setPosts] = useState<PostType[] | null>(null);
+
+  useEffect(() => {
+    async function getPosts() {
+      try {
+        const res = await axios.get("/posts", { withCredentials: true });
+        console.log(res.data.posts);
+        setPosts(res.data.posts);
+      } catch (err) {
+        if (err instanceof Error) {
+          console.log("Failed to fetch posts for admin: ", err);
+        }
+      }
+    }
+    getPosts();
+  }, []);
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    index: number
+  ) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setPosts((prev) =>
+      prev
+        ? prev.map((post, i) =>
+            i === index ? { ...post, [name]: value } : post
+          )
+        : null
+    );
+    setFormData({ ...formData, [name]: value });
+  };
+  const createPost = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("/post", formData, {
+        withCredentials: true,
+      });
+      setPosts((prev) => (prev ? [res.data.post, ...prev] : [res.data.post]));
+      setFormData({});
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error creating new post in admin: ", err);
+      }
+    }
+  };
+  const updatePost = async (
+    e: React.FormEvent<HTMLFormElement>,
+    post_id: string
+  ) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(`/post?id=${post_id}`, formData, {
+        withCredentials: true,
+      });
+      console.log(res.data);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error when updating post as admin: ", err);
+      }
+    }
+  };
+  const deletePost = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    e.preventDefault()
+    try {
+      const res = await axios.delete(`post?id=${id}`, {
+        withCredentials: true,
+      });
+      console.log(res);
+      setPosts((prev) => prev?.filter((post) => id !== post.id) || null);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to delete post as admin: ", err);
+      }
+    }
+  };
   return (
     <>
       <article>
-        <form action="" id="msg-form">
+        <form onSubmit={createPost} id="msg-form">
           <label htmlFor="msg-form">Nytt meddelande: </label>
           <input
             className="input-admin"
@@ -91,8 +113,12 @@ function AdminPosts() {
         </form>
       </article>
       <article className="edit-container">
-        {posts.map((post, index) => (
-          <form key={index} id="edit-msg-form" action="">
+        {posts?.map((post, index) => (
+          <form
+            key={index}
+            id="edit-msg-form"
+            onSubmit={(e) => updatePost(e, post.id)}
+          >
             <label htmlFor="edit-msg-form">
               {`Redigera meddelande ${index + 1}`}{" "}
             </label>
@@ -102,21 +128,25 @@ function AdminPosts() {
               name="title"
               id={`title-${index}`}
               value={post.title}
-              onChange={handleInput}
+              onChange={(e) => handleInputChange(e, index)}
             />
             <textarea
               name="description"
               id={`description-${index}`}
               rows={8}
               value={post.description}
-              onChange={handleInput}
-            >
-            </textarea>
+              onChange={(e) => handleInputChange(e, index)}
+            ></textarea>
             <div className="btn-container">
               <button id={`edit-msg-${index}`} className="primary-btn-green">
                 SPARA
               </button>
-              <button id={`delete-msg-${index}`} className="primary-btn-red">
+              <button
+                type="button"
+                onClick={(e) => deletePost(e, post.id)}
+                id={`delete-msg-${index}`}
+                className="primary-btn-red"
+              >
                 RADERA
               </button>
             </div>

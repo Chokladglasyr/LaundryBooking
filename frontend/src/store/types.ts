@@ -16,7 +16,7 @@ export type BookingType = {
   booking_timeslot: string
 
 }
-export type Posts = {
+export type PostType = {
   id: string;
   title: string;
   description: string;

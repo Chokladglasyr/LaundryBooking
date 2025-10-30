@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Login from "./components/Login";
-// import Landing from "./components/Landing";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 

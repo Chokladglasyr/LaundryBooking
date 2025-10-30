@@ -3,8 +3,8 @@ import PostgresConnection from "./db";
 import { UserDatabaseModel, UserUpdateModel } from "./types/authTypes";
 import {
   BookingDatabaseModel,
-  MessageDatabaseModel,
-  MessageUpdateModel,
+  PostDatabaseModel,
+  PostUpdateModel,
   RoomDatabaseModel,
   RoomUpdateModel,
   RuleDatabaseModel,
@@ -51,25 +51,25 @@ export async function updateRule(rule: RuleUpdateModel, id: string) {
     throw new Error("Could not update rule.");
   }
 }
-export async function insertMessage(message: MessageDatabaseModel) {
+export async function insertPost(post: PostDatabaseModel) {
   try {
-    const { id, title, description } = message;
-    const text = `INSERT INTO messages (id, title, description) VALUES($1, $2, $3)`;
+    const { id, title, description } = post;
+    const text = `INSERT INTO posts (id, title, description) VALUES($1, $2, $3)`;
     const values = [id, title, description];
     await PostgresConnection.runQuery(text, values);
   } catch (err) {
-    console.error("Error while inserting new message: ", err);
+    console.error("Error while inserting new post: ", err);
   }
 }
-export async function updateMessage(message: MessageUpdateModel, id: string) {
+export async function updatePost(post: PostUpdateModel, id: string) {
   try {
-    const { title, description, updated_at } = message;
-    const text = `UPDATE messages SET title = $1, description = $2, updated_at = $3 WHERE id =$4`;
+    const { title, description, updated_at } = post;
+    const text = `UPDATE posts SET title = $1, description = $2, updated_at = $3 WHERE id =$4`;
     const values = [title, description, updated_at, id];
     await PostgresConnection.runQuery(text, values);
   } catch (err) {
-    console.error("Error updating message: ", err);
-    throw new Error("Could not update message.");
+    console.error("Error updating post: ", err);
+    throw new Error("Could not update post.");
   }
 }
 
@@ -137,11 +137,11 @@ export async function checkForBooking(
         return { status: 200 };
       } else {
         console.log("tiden är bokad");
-        return { message: "Timeslot already booked.", status: 409 };
+        return { post: "Timeslot already booked.", status: 409 };
       }
     } else {
       console.log("user redan bokad");
-      return { message: "User already has an active booking.", status: 409 };
+      return { post: "User already has an active booking.", status: 409 };
     }
   } catch (err) {
     console.error("Error checking for existing booking: ", err);

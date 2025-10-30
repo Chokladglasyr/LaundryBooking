@@ -63,7 +63,7 @@ export async function createBooking(
     if (existing.status === 409) {
       return reply
         .status(409)
-        .send({ message: existing.message});
+        .send({ message: existing.post});
     } else {
       const newBooking = {
         id: crypto.randomUUID(),
