@@ -75,12 +75,11 @@ function AdminPosts() {
     e: React.MouseEvent<HTMLButtonElement>,
     id: string
   ) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const res = await axios.delete(`post?id=${id}`, {
+      await axios.delete(`post?id=${id}`, {
         withCredentials: true,
       });
-      console.log(res);
       setPosts((prev) => prev?.filter((post) => id !== post.id) || null);
     } catch (err) {
       if (err instanceof Error) {
@@ -113,45 +112,46 @@ function AdminPosts() {
         </form>
       </article>
       <article className="edit-container">
-        {posts?.map((post, index) => (
-          <form
-            key={index}
-            id="edit-msg-form"
-            onSubmit={(e) => updatePost(e, post.id)}
-          >
-            <label htmlFor="edit-msg-form">
-              {`Redigera meddelande ${index + 1}`}{" "}
-            </label>
-            <input
-              className="input-admin"
-              type="text"
-              name="title"
-              id={`title-${index}`}
-              value={post.title}
-              onChange={(e) => handleInputChange(e, index)}
-            />
-            <textarea
-              name="description"
-              id={`description-${index}`}
-              rows={8}
-              value={post.description}
-              onChange={(e) => handleInputChange(e, index)}
-            ></textarea>
-            <div className="btn-container">
-              <button id={`edit-msg-${index}`} className="primary-btn-green">
-                SPARA
-              </button>
-              <button
-                type="button"
-                onClick={(e) => deletePost(e, post.id)}
-                id={`delete-msg-${index}`}
-                className="primary-btn-red"
-              >
-                RADERA
-              </button>
-            </div>
-          </form>
-        ))}
+        {posts &&
+          posts.map((post, index) => (
+            <form
+              key={index}
+              id="edit-msg-form"
+              onSubmit={(e) => updatePost(e, post.id)}
+            >
+              <label htmlFor="edit-msg-form">
+                {`Redigera meddelande ${index + 1}`}
+              </label>
+              <input
+                className="input-admin"
+                type="text"
+                name="title"
+                id={`title-${index}`}
+                value={post.title}
+                onChange={(e) => handleInputChange(e, index)}
+              />
+              <textarea
+                name="description"
+                id={`description-${index}`}
+                rows={8}
+                value={post.description}
+                onChange={(e) => handleInputChange(e, index)}
+              ></textarea>
+              <div className="btn-container">
+                <button id={`edit-msg-${index}`} className="primary-btn-green">
+                  SPARA
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => deletePost(e, post.id)}
+                  id={`delete-msg-${index}`}
+                  className="primary-btn-red"
+                >
+                  RADERA
+                </button>
+              </div>
+            </form>
+          ))}
       </article>
     </>
   );
