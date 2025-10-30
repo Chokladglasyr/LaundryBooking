@@ -1,27 +1,39 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
 import { useEffect, useState } from "react";
-import AdminMsg from "./AdminPosts";
+import AdminPosts from "./AdminPosts";
+import axios from "axios";
 
 function Admin() {
-    const location = useLocation()
+  const location = useLocation();
+  const navigate = useNavigate();
   const [pathName, setPathName] = useState(location.pathname);
   const destinations = [
     { name: "Regler", path: "rules" },
     { name: "Boende", path: "users" },
-    { name: "Tvättstugor", path: "rooms" }
+    { name: "Tvättstugor", path: "rooms" },
   ];
   useEffect(() => {
-    setPathName(location.pathname.replace('/admin/', ''))
-  }, [location])
+    setPathName(location.pathname.replace("/", ""));
+  }, [location]);
 
+  const logout = async () => {
+    try {
+      await axios.get('http://localhost:3000/logout', {withCredentials: true})
+      navigate('/')
+    }catch(err) {
+      if(err instanceof Error) {
+        console.error("Failed to logout: ", err)
+      }
+    }
+  };
   return (
     <>
-      <CompanyLogo />
-      <div className="landing" id="admin"   >
+      <CompanyLogo path="admin" />
+      <div className="landing" id="admin">
         <nav id="nav-admin">
           {destinations.map((d) =>
-            pathName === d.path ? (
+            pathName.includes(d.path) ? (
               ""
             ) : (
               <Link key={d.path} to={`${d.path}`}>
@@ -29,11 +41,14 @@ function Admin() {
               </Link>
             )
           )}
-          {location.pathname != '/admin' && <Link to={'/admin'}>Meddelande</Link>}
+          {location.pathname != "/admin" && (
+            <Link to={"/admin"}>Meddelande</Link>
+          )}
         </nav>
-        {location.pathname === '/admin' && <AdminMsg />}
+        {location.pathname === "/admin" && <AdminPosts />}
         <Outlet />
       </div>
+      <button onClick={logout}>Logout</button>
     </>
   );
 }

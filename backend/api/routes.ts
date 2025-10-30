@@ -22,6 +22,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     handler: authController.login,
   });
   server.route({
+    method: 'GET',
+    url: "/logout",
+    preHandler: server.authenticate,
+    handler: authController.logout
+  })
+  server.route({
     method: "POST",
     url: "/signup",
     handler: authController.signup,

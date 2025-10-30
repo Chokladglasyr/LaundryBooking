@@ -3,16 +3,17 @@ import axios from "axios";
 import { useState } from "react";
 import type { LoginProps } from "../store/types";
 
-function Login({ setLoggedIn }: LoginProps) {
+function Login({ setLoggedIn, setAdmin }: LoginProps) {
   const [formData, setFormData] = useState({});
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post(
+      const res = await axios.post(
         "http://localhost:3000/login",
         { ...formData },
         { withCredentials: true }
       );
+      if (res.data.user.role === "admin") setAdmin(true);
       setLoggedIn(true);
     } catch (err) {
       console.error("Something went wrong when loggin in: ", err);

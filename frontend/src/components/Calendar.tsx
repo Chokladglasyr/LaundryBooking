@@ -28,7 +28,7 @@ function Calendar({ room_id }: CalendarProps) {
   const [selectedTime, setSelectedTime] = useState(0);
   const user = useLoaderData<User>();
   const [bookings, setBookings] = useState<BookingType[] | null>(null);
-
+  console.log(user)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 

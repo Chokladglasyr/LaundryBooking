@@ -31,7 +31,11 @@ export type User = {
 };
 export type LoginProps = {
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  setAdmin: React.Dispatch<React.SetStateAction<boolean>>
 };
 export type CalendarProps = {
   room_id: string | null
+}
+export type LogoProps = {
+  path: string
 }
