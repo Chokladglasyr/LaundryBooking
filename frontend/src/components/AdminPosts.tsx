@@ -65,10 +65,25 @@ function AdminPosts() {
         withCredentials: true,
       });
       console.log(res.data);
-
     } catch (err) {
       if (err instanceof Error) {
         console.error("Error when updating post as admin: ", err);
+      }
+    }
+  };
+  const deletePost = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    try {
+      const res = await axios.delete(`post?id=${id}`, {
+        withCredentials: true,
+      });
+      console.log(res);
+      setPosts((prev) => prev?.filter((post) => id !== post.id) || null);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to delete post as admin: ", err);
       }
     }
   };
@@ -125,7 +140,12 @@ function AdminPosts() {
               <button id={`edit-msg-${index}`} className="primary-btn-green">
                 SPARA
               </button>
-              <button id={`delete-msg-${index}`} className="primary-btn-red">
+              <button
+                type="button"
+                onClick={(e) => deletePost(e, post.id)}
+                id={`delete-msg-${index}`}
+                className="primary-btn-red"
+              >
                 RADERA
               </button>
             </div>
