@@ -75,6 +75,7 @@ function AdminPosts() {
     e: React.MouseEvent<HTMLButtonElement>,
     id: string
   ) => {
+    e.preventDefault()
     try {
       const res = await axios.delete(`post?id=${id}`, {
         withCredentials: true,
