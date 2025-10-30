@@ -32,4 +32,5 @@ export type User = {
     email: string
     apt_nr: string
     password: string
+    role: string
 }

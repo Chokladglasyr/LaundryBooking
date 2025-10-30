@@ -137,6 +137,7 @@ export async function login(
         name: user[0].name,
         email: user[0].email,
         apt_nr: user[0].apt_nr,
+        role: user[0].role
       },
     });
   } catch (err) {
