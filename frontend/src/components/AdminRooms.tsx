@@ -3,12 +3,21 @@ import type { RoomType } from "../store/types";
 import axios from "axios";
 
 function AdminRooms() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ name: "", description: "" });
   const [rooms, setRooms] = useState<RoomType[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     let cancel = false;
+    if (message) {
+      const messageTimer = setTimeout(() => {
+        setMessage(null);
+      }, 4000);
+      return () => {
+        clearTimeout(messageTimer);
+      };
+    }
     async function getRooms() {
       try {
         const res = await axios.get("/rooms", { withCredentials: true });
@@ -27,13 +36,15 @@ function AdminRooms() {
     return () => {
       cancel = true;
     };
-  }, []);
+  }, [message]);
+
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
@@ -49,21 +60,55 @@ function AdminRooms() {
     );
     setFormData({ ...formData, [name]: value });
   };
+
   const createRoom = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const res = await axios.post("/room", formData, {
         withCredentials: true,
       });
-      console.log(res.data);
-      // setRooms((prev) => (prev ? [res.data.room, ...prev] : [res.data.room]));
-      setFormData({});
+      setRooms((prev) =>
+        prev ? [res.data.room[0], ...prev] : [res.data.room[0]]
+      );
+      setFormData({ name: "", description: "" });
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to create new room as admin: ", err);
       }
     }
   };
+  const updateRoom = async (
+    e: React.FormEvent<HTMLFormElement>,
+    room_id: string
+  ) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(`/room?id=${room_id}`, formData, {
+        withCredentials: true,
+      });
+      setMessage(res.data.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to update room as an admin: ", err);
+      }
+    }
+  };
+
+  const deleteRoom = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    room_id: string
+  ) => {
+    e.preventDefault();
+    try {
+      await axios.delete(`room?id=${room_id}`, { withCredentials: true });
+      setRooms((prev) => prev?.filter((room) => room_id !== room.id) || null);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to delete room as an admin: ", err);
+      }
+    }
+  };
+
   return (
     <>
       <article>
@@ -74,6 +119,7 @@ function AdminRooms() {
             type="text"
             name="name"
             id="name"
+            value={formData.name}
             placeholder="Namn"
             onChange={handleInput}
           />
@@ -82,6 +128,7 @@ function AdminRooms() {
             id="description"
             rows={8}
             onChange={handleInput}
+            value={formData.description}
           ></textarea>
           <button id="create-room" className="primary-btn-green">
             SPARA
@@ -90,10 +137,15 @@ function AdminRooms() {
       </article>
       <article className="edit-container">
         {loading && <p>Hämtar tvättstugor...</p>}
+        {message && <p>{message}</p>}
         {rooms &&
           rooms.map((room, index) => (
-            <form key={index} id="edit-room-form" action="">
-              <label htmlFor="edit-room-form">{`Redigera ${room.name}`} </label>
+            <form
+              key={index}
+              id="edit-room-form"
+              onSubmit={(e) => updateRoom(e, room.id)}
+            >
+              <label>{`Redigera ${room.name}`} </label>
               <input
                 className="input-admin"
                 type="text"
@@ -113,7 +165,12 @@ function AdminRooms() {
                 <button id={`edit-room-${index}`} className="primary-btn-green">
                   SPARA
                 </button>
-                <button id={`delete-room-${index}`} className="primary-btn-red">
+                <button
+                  type="button"
+                  onClick={(e) => deleteRoom(e, room.id)}
+                  id={`delete-room-${index}`}
+                  className="primary-btn-red"
+                >
                   RADERA
                 </button>
               </div>
