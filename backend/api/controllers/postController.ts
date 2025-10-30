@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { idRequest, rulesAndPostsRequest } from "../types/requestTypes";
 import { insertPost, updatePost } from "../repository";
 import postgresConnection from "../db";
+import PostgresConnection from "../db";
+import { PostDatabaseModel } from "../types/databaseModelTypes";
 
 export async function getAllPosts(req: FastifyRequest, reply: FastifyReply) {
   try {
@@ -71,15 +73,25 @@ export async function updateOnePost(
 ) {
   try {
     const { id } = req.query;
+    let {title, description } = req.body
     if (!id) {
       reply.status(400).send({ message: "Missing parameters." });
     }
-    if (!req.body.title || !req.body.description) {
+    if (!title && !description) {
       reply.status(400).send({ message: "Missing required fields." });
     }
+    const text1 = `SELECT * FROM posts WHERE id=$1`
+    const values1 = [id]
+    const res = await PostgresConnection.runQuery(text1, values1)
+    const untouchedPost = res[0] as PostDatabaseModel;
+    if(!title) {
+      title = untouchedPost.title
+    } else if(!description) {
+      title = untouchedPost.description
+    }
     const postToUpdate = {
-      title: req.body.title,
-      description: req.body.description,
+      title: title,
+      description: description,
       updated_at: new Date().toISOString(),
     };
     await updatePost(postToUpdate, id);

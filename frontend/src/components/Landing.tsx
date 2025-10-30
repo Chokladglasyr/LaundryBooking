@@ -22,7 +22,6 @@ function Landing() {
     const logout = async () => {
     try {
       await axios.get('/logout', {withCredentials: true})
-      // setLoggedIn(false);
       navigate('/')
     }catch(err) {
       if(err instanceof Error) {
