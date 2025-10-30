@@ -34,13 +34,18 @@ function App() {
         }
       }
     };
-    console.log(admin)
-    if (loggedIn && admin) navigate("/admin");
-    if (loggedIn) navigate("/home");
+    console.log(admin);
+    if (loggedIn && admin) {
+      navigate("/admin");
+    } else if (loggedIn) {
+      navigate("/home");
+    }
     ifLoggedIn();
   }, [admin, loggedIn, navigate]);
 
-  return <>{!loggedIn && <Login setLoggedIn={setLoggedIn} />}</>;
+  return (
+    <>{!loggedIn && <Login setAdmin={setAdmin} setLoggedIn={setLoggedIn} />}</>
+  );
 }
 
 export default App;
