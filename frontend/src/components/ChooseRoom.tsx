@@ -4,11 +4,6 @@ import type { RoomType } from "../store/types";
 import axios from "axios";
 
 function ChooseRoom() {
-//   const rooms = [
-//     { name: "Tvättstuga 1", id: "1" },
-//     { name: "Tvättstuga 2", id: "2" },
-//     { name: "Tvättstuga 3", id: "3" },
-//   ];
   const [rooms, setRooms] = useState<RoomType []>([])
   const [formData, setFormData] = useState({});
 
@@ -28,8 +23,8 @@ function ChooseRoom() {
 
   const goToBooking = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate(`/booking?id=${formData}`);
-    // location.reload()
+    navigate(`/home/booking?id=${formData}`);
+
 };
 
   const handleInput = (e: React.ChangeEvent<HTMLSelectElement>) => {

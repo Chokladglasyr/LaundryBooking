@@ -11,35 +11,54 @@ import AdminUsers from "./components/AdminUsers.tsx";
 import AdminRooms from "./components/AdminRooms.tsx";
 import AdminPosts from "./components/AdminPosts.tsx";
 import { authLoader, authMiddleware } from "./store/authMiddleware.ts";
+import Landing from "./components/Landing.tsx";
 
-const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/home",
+    middleware: [authMiddleware],
+    loader: authLoader,
+    element: <Landing />,
     children: [
-      { path: "rules", middleware: [authMiddleware], loader: authLoader, element: <Rules /> },
-      { path: "booking", middleware: [authMiddleware], loader: authLoader, element: <Booking /> },
       {
-        path: "admin",
-        element: <Admin />,
-        children: [
-          {
-            path: "rules",
-            element: <AdminRules />,
-          },
-          {
-            path: "messages",
-            element: <AdminPosts />
-          },
-          {
-            path: "users",
-            element: <AdminUsers />
-          },
-          {
-            path: "rooms",
-            element: <AdminRooms />
-          }
-        ],
+        path: "rules",
+        middleware: [authMiddleware],
+        loader: authLoader,
+        element: <Rules />,
+      },
+      {
+        path: "booking",
+        middleware: [authMiddleware],
+        loader: authLoader,
+        element: <Booking />,
+      },
+    ],
+  },
+  {
+    path: "admin",
+    middleware: [authMiddleware],
+    loader: authLoader,
+    element: <Admin />,
+    children: [
+      {
+        path: "rules",
+        element: <AdminRules />,
+      },
+      {
+        path: "messages",
+        element: <AdminPosts />,
+      },
+      {
+        path: "users",
+        element: <AdminUsers />,
+      },
+      {
+        path: "rooms",
+        element: <AdminRooms />,
       },
     ],
   },

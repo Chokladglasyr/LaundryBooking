@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import styrelseLogo from "../assets/forening.png";
-function CompanyLogo() {
+import type { LogoProps } from "../store/types";
+function CompanyLogo({path}: LogoProps) {
     return(
         <>
-        <Link to={'/'}><img className="company-logo" src={styrelseLogo} alt="styrelsens logo" /></Link>
+        <Link to={`/${path}`}><img className="company-logo" src={styrelseLogo} alt="styrelsens logo" /></Link>
         </>
     )
 }

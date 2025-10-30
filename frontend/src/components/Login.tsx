@@ -8,11 +8,12 @@ function Login({ setLoggedIn }: LoginProps) {
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post(
+
+      console.log(      await axios.post(
         "http://localhost:3000/login",
         { ...formData },
         { withCredentials: true }
-      );
+      ))
       setLoggedIn(true);
     } catch (err) {
       console.error("Something went wrong when loggin in: ", err);

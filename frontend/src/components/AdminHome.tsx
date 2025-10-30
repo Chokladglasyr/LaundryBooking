@@ -1,25 +1,36 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
 import { useEffect, useState } from "react";
 import AdminPosts from "./AdminPosts";
-import AdminRooms from "./AdminRooms";
-import AdminRules from "./AdminRules";
+import axios from "axios";
 
 function Admin() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [pathName, setPathName] = useState(location.pathname);
   const destinations = [
-    { name: "Regler", path: "admin/rules" },
-    { name: "Boende", path: "admin/users" },
-    { name: "Tvättstugor", path: "admin/rooms" },
+    { name: "Regler", path: "rules" },
+    { name: "Boende", path: "users" },
+    { name: "Tvättstugor", path: "rooms" },
   ];
   useEffect(() => {
-    setPathName(location.pathname.replace('/', ''));
+    setPathName(location.pathname.replace("/", ""));
   }, [location]);
 
+  const logout = async () => {
+    try {
+      await axios.get('http://localhost:3000/logout', {withCredentials: true})
+      // setLoggedIn(false);
+      navigate('/')
+    }catch(err) {
+      if(err instanceof Error) {
+        console.error("Failed to logout: ", err)
+      }
+    }
+  };
   return (
     <>
-      <CompanyLogo />
+      <CompanyLogo path="/admin" />
       <div className="landing" id="admin">
         <nav id="nav-admin">
           {destinations.map((d) =>
@@ -35,9 +46,10 @@ function Admin() {
             <Link to={"/admin"}>Meddelande</Link>
           )}
         </nav>
-        {location.pathname === "/admin" ? <AdminPosts /> : location.pathname === "/admin/rules" ? <AdminRules />: <AdminRooms />}
-        {/* <Outlet /> */}
+        {location.pathname === "/admin" && <AdminPosts />}
+        <Outlet />
       </div>
+      <button onClick={logout}>Logout</button>
     </>
   );
 }

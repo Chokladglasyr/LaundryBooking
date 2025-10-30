@@ -35,3 +35,6 @@ export type LoginProps = {
 export type CalendarProps = {
   room_id: string | null
 }
+export type LogoProps = {
+  path: string
+}
