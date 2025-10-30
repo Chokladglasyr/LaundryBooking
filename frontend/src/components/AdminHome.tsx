@@ -20,7 +20,6 @@ function Admin() {
   const logout = async () => {
     try {
       await axios.get('http://localhost:3000/logout', {withCredentials: true})
-      // setLoggedIn(false);
       navigate('/')
     }catch(err) {
       if(err instanceof Error) {
@@ -30,11 +29,11 @@ function Admin() {
   };
   return (
     <>
-      <CompanyLogo path="/admin" />
+      <CompanyLogo path="admin" />
       <div className="landing" id="admin">
         <nav id="nav-admin">
           {destinations.map((d) =>
-            pathName === d.path ? (
+            pathName.includes(d.path) ? (
               ""
             ) : (
               <Link key={d.path} to={`${d.path}`}>
