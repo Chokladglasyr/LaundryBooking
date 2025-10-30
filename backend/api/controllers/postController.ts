@@ -7,7 +7,7 @@ import { PostDatabaseModel } from "../types/databaseModelTypes";
 
 export async function getAllPosts(req: FastifyRequest, reply: FastifyReply) {
   try {
-    const text = `SELECT * FROM posts ORDER BY created_at DESC`;
+    const text = `SELECT * FROM posts ORDER BY updated_at DESC`;
     const allPosts = await postgresConnection.runQuery(text);
     if (!allPosts || allPosts.length === 0) {
       reply.status(404).send({ message: "No posts found." });
@@ -86,8 +86,9 @@ export async function updateOnePost(
     const untouchedPost = res[0] as PostDatabaseModel;
     if(!title) {
       title = untouchedPost.title
-    } else if(!description) {
-      title = untouchedPost.description
+    }
+    if(!description) {
+      description = untouchedPost.description
     }
     const postToUpdate = {
       title: title,

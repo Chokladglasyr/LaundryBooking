@@ -39,7 +39,7 @@ function AdminPosts() {
           )
         : null
     );
-    setFormData({...formData, [name]: value})
+    setFormData({ ...formData, [name]: value });
   };
   const createPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,8 +61,11 @@ function AdminPosts() {
   ) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`/post?id=${post_id}`, formData, {withCredentials: true});
+      const res = await axios.put(`/post?id=${post_id}`, formData, {
+        withCredentials: true,
+      });
       console.log(res.data);
+
     } catch (err) {
       if (err instanceof Error) {
         console.error("Error when updating post as admin: ", err);
