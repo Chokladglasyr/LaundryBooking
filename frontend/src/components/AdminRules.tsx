@@ -4,10 +4,20 @@ import axios from "axios";
 
 function AdminRules() {
   const [formData, setFormData] = useState({ title: "", description: "" });
+  const [createFormData, setCreateFormData] = useState({title: '', description: ''})
   const [rules, setRules] = useState<RuleType[] | null>(null);
+  const [message, setMessage] = useState<string | null>(null)
 
   useEffect(() => {
     let cancel = false;
+    if(message) {
+      const messageTimer = setTimeout(() => {
+        setMessage(null)
+      }, 4000)
+      return () =>{
+        clearTimeout(messageTimer)
+      }
+    }
     async function fetchRules() {
       try {
         const res = await axios.get("/rules", { withCredentials: true });
@@ -22,20 +32,21 @@ function AdminRules() {
       }
     }
     fetchRules();
+
     return () => {
       cancel = true;
     };
-  }, []);
+  }, [message]);
 
   const createRule = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/rule", formData, {
+      const res = await axios.post("/rule", createFormData, {
         withCredentials: true,
       });
       console.log(res.data);
       setRules((prev) => (prev ? [res.data.rule, ...prev] : [res.data.rule]));
-      setFormData({ title: "", description: "" });
+      setCreateFormData({ title: "", description: "" });
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to create new rule as an admin: ", err);
@@ -43,11 +54,40 @@ function AdminRules() {
     }
   };
 
+  const updateRule = async (
+    e: React.FormEvent<HTMLFormElement>,
+    rule_id: string
+  ) => {
+    e.preventDefault();
+    try{
+      const res = await axios.put(`/rule?id=${rule_id}`, formData, {withCredentials: true})
+      if(!res.data) return
+      setMessage(res.data.message)
+    
+    } catch(err) {
+      if(err instanceof Error) {
+        console.error("Failed to update rule as an admin: ", err)
+      }
+    }
+  };
+
+  const deletedRule = async (e: React.MouseEvent<HTMLButtonElement>, rule_id: string) => {
+    e.preventDefault()
+    try{
+      await axios.delete(`/rule?id=${rule_id}`, {withCredentials: true})
+      setRules((prev) => prev?.filter((rule) => rule_id !== rule.id) || null)
+    }catch(err) {
+      if(err instanceof Error) {
+        console.error("Failed to delete rule as an admin: ", err)
+      }
+    }
+  }
+
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setCreateFormData({ ...createFormData, [name]: value });
   };
 
   const handleInputChange = (
@@ -64,6 +104,7 @@ function AdminRules() {
     );
     setFormData({ ...formData, [name]: value });
   };
+  console.log(createFormData)
   return (
     <>
       <article>
@@ -74,7 +115,7 @@ function AdminRules() {
             type="text"
             name="title"
             id="title"
-            value={formData.title}
+            value={createFormData.title}
             placeholder="Rubrik"
             onChange={handleInput}
           />
@@ -82,7 +123,7 @@ function AdminRules() {
             name="description"
             id="description"
             rows={8}
-            value={formData.description}
+            value={createFormData.description}
             onChange={handleInput}
           ></textarea>
           <button id="create-rule" className="primary-btn-green">
@@ -91,9 +132,10 @@ function AdminRules() {
         </form>
       </article>
       <article className="edit-container">
+        {message && <p>Regel uppdaterad!</p>}
         {rules &&
           rules.map((rule, index) => (
-            <form key={index} id="edit-rule-form" action="">
+            <form key={index} id="edit-rule-form" onSubmit={(e) =>updateRule(e, rule.id)}>
               <label htmlFor="edit-msg-form">
                 {`Redigera regel ${index + 1}`}
               </label>
@@ -116,7 +158,7 @@ function AdminRules() {
                 <button id={`edit-rule-${index}`} className="primary-btn-green">
                   SPARA
                 </button>
-                <button id={`delete-rule-${index}`} className="primary-btn-red">
+                <button onClick={(e) => deletedRule(e, rule.id)} type="button" id={`delete-rule-${index}`} className="primary-btn-red">
                   RADERA
                 </button>
               </div>
