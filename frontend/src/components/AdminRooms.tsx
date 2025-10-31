@@ -4,6 +4,10 @@ import axios from "axios";
 
 function AdminRooms() {
   const [formData, setFormData] = useState({ name: "", description: "" });
+  const [createFormData, setCreateFormData] = useState({
+    name: "",
+    description: "",
+  });
   const [rooms, setRooms] = useState<RoomType[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
@@ -42,7 +46,7 @@ function AdminRooms() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setCreateFormData({ ...createFormData, [name]: value });
   };
 
   const handleInputChange = (
@@ -64,13 +68,13 @@ function AdminRooms() {
   const createRoom = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/room", formData, {
+      const res = await axios.post("/room", createFormData, {
         withCredentials: true,
       });
       setRooms((prev) =>
         prev ? [res.data.room[0], ...prev] : [res.data.room[0]]
       );
-      setFormData({ name: "", description: "" });
+      setCreateFormData({ name: "", description: "" });
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to create new room as admin: ", err);
@@ -119,7 +123,7 @@ function AdminRooms() {
             type="text"
             name="name"
             id="name"
-            value={formData.name}
+            value={createFormData.name}
             placeholder="Namn"
             onChange={handleInput}
           />
@@ -128,7 +132,7 @@ function AdminRooms() {
             id="description"
             rows={8}
             onChange={handleInput}
-            value={formData.description}
+            value={createFormData.description}
           ></textarea>
           <button id="create-room" className="primary-btn-green">
             SPARA

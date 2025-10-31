@@ -4,19 +4,22 @@ import axios from "axios";
 
 function AdminRules() {
   const [formData, setFormData] = useState({ title: "", description: "" });
-  const [createFormData, setCreateFormData] = useState({title: '', description: ''})
+  const [createFormData, setCreateFormData] = useState({
+    title: "",
+    description: "",
+  });
   const [rules, setRules] = useState<RuleType[] | null>(null);
-  const [message, setMessage] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     let cancel = false;
-    if(message) {
+    if (message) {
       const messageTimer = setTimeout(() => {
-        setMessage(null)
-      }, 4000)
-      return () =>{
-        clearTimeout(messageTimer)
-      }
+        setMessage(null);
+      }, 4000);
+      return () => {
+        clearTimeout(messageTimer);
+      };
     }
     async function fetchRules() {
       try {
@@ -59,29 +62,33 @@ function AdminRules() {
     rule_id: string
   ) => {
     e.preventDefault();
-    try{
-      const res = await axios.put(`/rule?id=${rule_id}`, formData, {withCredentials: true})
-      if(!res.data) return
-      setMessage(res.data.message)
-    
-    } catch(err) {
-      if(err instanceof Error) {
-        console.error("Failed to update rule as an admin: ", err)
+    try {
+      const res = await axios.put(`/rule?id=${rule_id}`, formData, {
+        withCredentials: true,
+      });
+      if (!res.data) return;
+      setMessage(res.data.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to update rule as an admin: ", err);
       }
     }
   };
 
-  const deletedRule = async (e: React.MouseEvent<HTMLButtonElement>, rule_id: string) => {
-    e.preventDefault()
-    try{
-      await axios.delete(`/rule?id=${rule_id}`, {withCredentials: true})
-      setRules((prev) => prev?.filter((rule) => rule_id !== rule.id) || null)
-    }catch(err) {
-      if(err instanceof Error) {
-        console.error("Failed to delete rule as an admin: ", err)
+  const deletedRule = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    rule_id: string
+  ) => {
+    e.preventDefault();
+    try {
+      await axios.delete(`/rule?id=${rule_id}`, { withCredentials: true });
+      setRules((prev) => prev?.filter((rule) => rule_id !== rule.id) || null);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to delete rule as an admin: ", err);
       }
     }
-  }
+  };
 
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -104,7 +111,6 @@ function AdminRules() {
     );
     setFormData({ ...formData, [name]: value });
   };
-  console.log(createFormData)
   return (
     <>
       <article>
@@ -135,7 +141,11 @@ function AdminRules() {
         {message && <p>Regel uppdaterad!</p>}
         {rules &&
           rules.map((rule, index) => (
-            <form key={index} id="edit-rule-form" onSubmit={(e) =>updateRule(e, rule.id)}>
+            <form
+              key={index}
+              id="edit-rule-form"
+              onSubmit={(e) => updateRule(e, rule.id)}
+            >
               <label htmlFor="edit-msg-form">
                 {`Redigera regel ${index + 1}`}
               </label>
@@ -158,7 +168,12 @@ function AdminRules() {
                 <button id={`edit-rule-${index}`} className="primary-btn-green">
                   SPARA
                 </button>
-                <button onClick={(e) => deletedRule(e, rule.id)} type="button" id={`delete-rule-${index}`} className="primary-btn-red">
+                <button
+                  onClick={(e) => deletedRule(e, rule.id)}
+                  type="button"
+                  id={`delete-rule-${index}`}
+                  className="primary-btn-red"
+                >
                   RADERA
                 </button>
               </div>
