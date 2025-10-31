@@ -1,52 +1,40 @@
+import axios from "axios";
 import { useState } from "react";
+import type { User } from "../store/types";
 
 function AdminUsers() {
   const [searchType, setSearchType] = useState("");
-  const [formData, setFormData] = useState({});
-  const users = [
-    {
-      id: "1",
-      name: "Ida",
-      email: "ida@ida.com",
-      apt_nr: "1205",
-    },
-    {
-      id: "2",
-      name: "Aras",
-      email: "ida@ida.com",
-      apt_nr: "1205",
-    },
-    {
-      id: "3",
-      name: "Aylin",
-      email: "ida@ida.com",
-      apt_nr: "1205",
-    },
-    {
-      id: "4",
-      name: "Cassandra",
-      email: "ida@ida.com",
-      apt_nr: "1205",
-    },
-    {
-      id: "5",
-      name: "Andrea",
-      email: "ida@ida.com",
-      apt_nr: "1205",
-    },
-    {
-      id: "6",
-      name: "Sara",
-      email: "ida@ida.com",
-      apt_nr: "1205",
-    },
-  ];
+  const [searchWord, setSearchWord] = useState("");
+  const [createFormData, setCreateFormData] = useState({});
+  const [users, setUsers] = useState<User[] | null>(null)
+
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setCreateFormData({ ...createFormData, [name]: value });
   };
+  const fetchUsers = async (
+    e: React.FormEvent<HTMLFormElement>,
+    search: string,
+    column: string
+  ) => {
+    e.preventDefault();
+    try {
+      const res = await axios.get(`/search?name=${search}&column=${column}`, {
+        withCredentials: true,
+      });
+      console.log(res.data.users);
+      setUsers(res.data.users)
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to fetch users for admin: ", err);
+      }
+    }
+  };
+  console.log("search:", searchWord);
+  console.log("column:", searchType);
+
   return (
     <>
       <article>
@@ -91,29 +79,33 @@ function AdminUsers() {
         </form>
       </article>
       <article className="edit-container">
-      <form id="search-user" action="">
         <div>
-
-        <label htmlFor="users">Sök efter:</label>
-        <select
-          name="users"
-          id="users"
-          onChange={(e) => setSearchType(e.target.value)}
-        >
-          <option value="">Välj</option>
-          <option value="name">Namn</option>
-          <option value="email">Email</option>
-          <option value="apt_nr">Lägenhetsnummer</option>
-        </select>
+          <p>Sök efter:</p>
+          <select
+            name="users"
+            id="users"
+            onChange={(e) => setSearchType(e.target.value)}
+          >
+            <option value="">Välj</option>
+            <option value="name">Namn</option>
+            <option value="email">Email</option>
+            <option value="apt_nr">Lägenhetsnummer</option>
+          </select>
         </div>
+        <form onSubmit={(e) => fetchUsers(e, searchWord, searchType)}>
         <input
-          type={searchType === "email" ? "email" : "text"}
+          type="text"
           placeholder="Sökterm"
-          onChange={handleInput}
+          onChange={(e) => setSearchWord(e.target.value)}
         />
-        <button className="primary-btn-booking">SÖK</button>
-      </form>
-        {users.map((user, index) => (
+        <button
+          className="primary-btn-booking"
+        >
+          SÖK
+        </button>
+        </form>
+
+        {users && users.map((user, index) => (
           <form key={index} id={`edit-user-form-${index}`} action="">
             <label htmlFor="edit-user-form">
               {`Redigera boende ${index + 1}`}
