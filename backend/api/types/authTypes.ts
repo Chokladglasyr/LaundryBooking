@@ -14,7 +14,7 @@ export type UserDatabaseModel = {
 export type UserUpdateModel = {
   name: string;
   email: string;
-  password: string;
+  apt_nr: string
   updated_at: string;
 };
 export type SignupRequest = {

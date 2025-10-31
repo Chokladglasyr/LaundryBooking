@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import PostgresConnection from "../db";
 import { idRequest, searchRequest, userRequest } from "../types/requestTypes";
-import { TokenPayload, UserUpdateModel } from "../types/authTypes";
+import { TokenPayload, User, UserUpdateModel } from "../types/authTypes";
 import { saveUser, updateUser } from "../repository";
 
 export async function getAllUsers(req: FastifyRequest, reply: FastifyReply) {
@@ -73,17 +73,15 @@ export async function createUser(
     if (!created || created.length === 0) {
       return reply.status(404).send({ message: "Error fetching new user" });
     }
-    reply
-      .status(201)
-      .send({
-        message: "New user created",
-        user: {
-          name: created[0].name,
-          email: created[0].email,
-          apt_nr: created[0].apt_nr,
-          role: created[0].role,
-        },
-      });
+    reply.status(201).send({
+      message: "New user created",
+      user: {
+        name: created[0].name,
+        email: created[0].email,
+        apt_nr: created[0].apt_nr,
+        role: created[0].role,
+      },
+    });
   } catch (err) {
     console.error("Error inserting new user: ", err);
   }
@@ -95,19 +93,27 @@ export async function updateOneUser(
 ) {
   try {
     const { id } = req.query;
+    let { name, email, apt_nr } = req.body;
     if (!id) {
       return reply.status(400).send({ message: "Missing parameters." });
     }
-    if (!req.body.email || !req.body.name || !req.body.password) {
+    if (!email && !name && !apt_nr) {
       return reply.status(400).send({ message: "Missing required fields" });
     }
+    const text1 = `SELECT * FROM users WHERE id=$1`;
+    const values1 = [id];
+    const res = await PostgresConnection.runQuery(text1, values1);
+    if (!res) throw new Error("User not found");
+    const untouchedUser = res[0] as UserUpdateModel;
+
+    if (!name) name = untouchedUser.name;
+    if (!email) email = untouchedUser.email;
+    if (!apt_nr) apt_nr = untouchedUser.apt_nr;
+
     const userToUpdate = {
-      name: req.body.name,
-      email: req.body.email,
-      password: await Bun.password.hash(req.body.password, {
-        algorithm: "bcrypt",
-        cost: 10,
-      }),
+      name: name,
+      email: email,
+      apt_nr: apt_nr,
       updated_at: new Date().toISOString(),
     };
     await updateUser(userToUpdate, id);

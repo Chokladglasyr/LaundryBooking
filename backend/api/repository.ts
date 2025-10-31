@@ -29,9 +29,9 @@ export async function saveUser(user: UserDatabaseModel) {
 }
 export async function updateUser(user: UserUpdateModel, id: string) {
   try {
-    const { name, email, password, updated_at } = user;
-    const text = `UPDATE users SET name = $1, email = $2, password = $3, updated_at = $4 WHERE id = $5`;
-    const values = [name, email, password, updated_at, id];
+    const { name, email, apt_nr, updated_at } = user;
+    const text = `UPDATE users SET name = $1, email = $2, apt_nr = $3, updated_at = $4 WHERE id = $5`;
+    const values = [name, email, apt_nr, updated_at, id];
     await PostgresConnection.runQuery(text, values);
   } catch (err) {
     console.error("Error while updating user: ", err);
