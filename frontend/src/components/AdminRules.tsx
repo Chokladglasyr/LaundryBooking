@@ -1,68 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { RuleType } from "../store/types";
+import axios from "axios";
 
 function AdminRules() {
   const [formData, setFormData] = useState({});
-  const rules = [
-    {
-      id: "1",
-      title: "Nycklar",
-      description:
-        "Nycklar till tvättrum och tork finns hängande utanför respektive dörr. Efter tvättpassets slut skall nycklarna hängas upp på sina krokar, så att nycklarna finns tillgängliga till nästa pass.",
-    },
-    {
-      id: "2",
-      title: "Bokningsregler",
-      description:
-        "Varje lägenhet har möjlighet att boka en tvättid åt gången. Först när den bokade tvättiden är avslutad kan en ny tecknas. Tvättpass som ej har påbörjats inom en timme får användas av annan. Om man har för avsikt att börja tvätta senare skall detta anges på tvättlistan.",
-    },
-    {
-      id: "3",
-      title: "Städning",
-      description:
-        "Efter tvättpasset skall var och en städa efter sig genom att torka av golvet och maskinerna. Lämna tvättstugan i det skicka som du själv önskar finna den.",
-    },
-    {
-      id: "1",
-      title: "Nycklar",
-      description:
-        "Nycklar till tvättrum och tork finns hängande utanför respektive dörr. Efter tvättpassets slut skall nycklarna hängas upp på sina krokar, så att nycklarna finns tillgängliga till nästa pass.",
-    },
-    {
-      id: "2",
-      title: "Bokningsregler",
-      description:
-        "Varje lägenhet har möjlighet att boka en tvättid åt gången. Först när den bokade tvättiden är avslutad kan en ny tecknas. Tvättpass som ej har påbörjats inom en timme får användas av annan. Om man har för avsikt att börja tvätta senare skall detta anges på tvättlistan.",
-    },
-    {
-      id: "3",
-      title: "Städning",
-      description:
-        "Efter tvättpasset skall var och en städa efter sig genom att torka av golvet och maskinerna. Lämna tvättstugan i det skicka som du själv önskar finna den.",
-    },
-    {
-      id: "1",
-      title: "Nycklar",
-      description:
-        "Nycklar till tvättrum och tork finns hängande utanför respektive dörr. Efter tvättpassets slut skall nycklarna hängas upp på sina krokar, så att nycklarna finns tillgängliga till nästa pass.",
-    },
-    {
-      id: "2",
-      title: "Bokningsregler",
-      description:
-        "Varje lägenhet har möjlighet att boka en tvättid åt gången. Först när den bokade tvättiden är avslutad kan en ny tecknas. Tvättpass som ej har påbörjats inom en timme får användas av annan. Om man har för avsikt att börja tvätta senare skall detta anges på tvättlistan.",
-    },
-    {
-      id: "3",
-      title: "Städning",
-      description:
-        "Efter tvättpasset skall var och en städa efter sig genom att torka av golvet och maskinerna. Lämna tvättstugan i det skicka som du själv önskar finna den.",
-    },
-  ];
+  const [rules, setRules] = useState<RuleType[] | null>(null);
+
+  useEffect(() => {
+    let cancel = false
+    async function fetchRules() {
+      try {
+        const res = await axios.get('/rules', {withCredentials: true})
+        console.log(res.data.rules)
+        if(!cancel){
+          setRules(res.data.rules)
+        }
+      }catch(err) {
+        if(err instanceof Error){
+          console.error("Failed to fetch rules for admin: ", err)
+        }
+      }
+    }
+    fetchRules()
+    return () => {
+      cancel = true
+    }
+  },[])
+
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    index: number
+  ) => {
+    const { name, value } = e.target;
+    setRules((prev) =>
+      prev
+        ? prev.map((rule, i) =>
+            i === index ? { ...rule, [name]: value } : rule
+          )
+        : null
+    );
+    setFormData({...formData, [name]: value})
   };
   return (
     <>
@@ -89,7 +73,7 @@ function AdminRules() {
         </form>
       </article>
       <article className="edit-container">
-        {rules.map((rule, index) => (
+        {rules && rules.map((rule, index) => (
           <form key={index} id="edit-rule-form" action="">
             <label htmlFor="edit-msg-form">
               {`Redigera regel ${index + 1}`}
@@ -100,13 +84,13 @@ function AdminRules() {
               name="title"
               id={`title-${index}`}
               value={rule.title}
-              onChange={handleInput}
+              onChange={(e) => handleInputChange(e, index)}
             />
             <textarea
               name="description"
               id={`description-${index}`}
               rows={8}
-              onChange={handleInput}
+              onChange={(e) => handleInputChange(e, index)}
               value={rule.description}
             ></textarea>
             <div className="btn-container">

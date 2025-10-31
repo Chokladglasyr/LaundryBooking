@@ -36,7 +36,6 @@ function AdminPosts() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
-    e.preventDefault();
     const { name, value } = e.target;
     setPosts((prev) =>
       prev
