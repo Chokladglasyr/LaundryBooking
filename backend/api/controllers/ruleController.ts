@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { idRequest, rulesAndMsgsRequest } from "../types/requestTypes";
+import { idRequest, rulesAndPostsRequest } from "../types/requestTypes";
 import PostgresConnection from "../db";
 import { insertRule, updateRule } from "../repository";
 
 export async function getAllRules(req: FastifyRequest, reply: FastifyReply) {
   try {
-    const text = `SELECT * FROM rules`;
+    const text = `SELECT * FROM rules ORDER BY updated_at DESC`;
     const allRules = await PostgresConnection.runQuery(text);
     if (!allRules || allRules.length === 0) {
       return reply.status(404).send({ message: "No rules found." });
@@ -38,7 +38,7 @@ export async function getOneRule(
 }
 
 export async function createRule(
-  req: FastifyRequest<{ Body: rulesAndMsgsRequest }>,
+  req: FastifyRequest<{ Body: rulesAndPostsRequest }>,
   reply: FastifyReply
 ) {
   try {
@@ -59,14 +59,14 @@ export async function createRule(
     }
     reply
       .status(201)
-      .send({ message: "New rule created", created_rule: created[0] });
+      .send({ message: "New rule created", rule: created[0] });
   } catch (err) {
     console.error("Error inserting new rule: ", err);
   }
 }
 
 export async function updateOneRule(
-  req: FastifyRequest<{ Body: rulesAndMsgsRequest; Querystring: idRequest }>,
+  req: FastifyRequest<{ Body: rulesAndPostsRequest; Querystring: idRequest }>,
   reply: FastifyReply
 ) {
   try {
