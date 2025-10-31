@@ -29,6 +29,11 @@ export type User = {
   email: string;
   apt_nr: string;
 };
+export type userForm = {
+  name: string
+  email: string
+  apt_nr: string
+}
 export type LoginProps = {
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   setAdmin: React.Dispatch<React.SetStateAction<boolean>>

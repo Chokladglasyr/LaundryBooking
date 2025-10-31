@@ -13,19 +13,25 @@ import {
 
 export async function saveUser(user: UserDatabaseModel) {
   try {
-    const { id, name, email, password, apt_nr } = user;
-    const text = `INSERT INTO users (id, name, email, password, apt_nr) VALUES ($1, $2, $3, $4, $5)`;
-    const values = [id, name, email, password, apt_nr];
-    await PostgresConnection.runQuery(text, values);
+    const { id, name, email, password, apt_nr, role } = user;
+    if (!role) {
+      const text = `INSERT INTO users (id, name, email, password, apt_nr) VALUES ($1, $2, $3, $4, $5)`;
+      const values = [id, name, email, password, apt_nr];
+      await PostgresConnection.runQuery(text, values);
+    } else {
+      const text = `INSERT INTO users (id, name, email, password, apt_nr, role) VALUES ($1, $2, $3, $4, $5, $6)`;
+      const values = [id, name, email, password, apt_nr, role];
+      await PostgresConnection.runQuery(text, values);
+    }
   } catch (err) {
     console.error("Error while inserting user: ", err);
   }
 }
 export async function updateUser(user: UserUpdateModel, id: string) {
   try {
-    const { name, email, password, updated_at } = user;
-    const text = `UPDATE users SET name = $1, email = $2, password = $3, updated_at = $4 WHERE id = $5`;
-    const values = [name, email, password, updated_at, id];
+    const { name, email, apt_nr, updated_at } = user;
+    const text = `UPDATE users SET name = $1, email = $2, apt_nr = $3, updated_at = $4 WHERE id = $5`;
+    const values = [name, email, apt_nr, updated_at, id];
     await PostgresConnection.runQuery(text, values);
   } catch (err) {
     console.error("Error while updating user: ", err);

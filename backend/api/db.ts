@@ -23,7 +23,8 @@ class PostgresConnection {
     password TEXT NOT NULL,
     apt_nr TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'user',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     CREATE TABLE IF NOT EXISTS rooms (
     id TEXT PRIMARY KEY,

@@ -22,11 +22,11 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     handler: authController.login,
   });
   server.route({
-    method: 'GET',
+    method: "GET",
     url: "/logout",
     preHandler: server.authenticate,
-    handler: authController.logout
-  })
+    handler: authController.logout,
+  });
   server.route({
     method: "POST",
     url: "/signup",
@@ -36,8 +36,8 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     method: "GET",
     url: "/me",
     preHandler: server.authenticate,
-    handler: userController.getLoggedIn
-  })
+    handler: userController.getLoggedIn,
+  });
   server.route({
     method: "GET",
     url: "/users",
@@ -49,6 +49,12 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     url: "/user",
     preHandler: server.authenticate,
     handler: userController.getOneUser,
+  });
+  server.route({
+    method: "POST",
+    url: "/user",
+    preHandler: server.authenticate,
+    handler: userController.createUser,
   });
   server.route({
     method: "PUT",
@@ -64,10 +70,10 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
   });
   server.route({
     method: "GET",
-    url: '/search',
+    url: "/search",
     preHandler: server.authenticate,
-    handler: userController.searchUser
-  })
+    handler: userController.searchUser,
+  });
 
   server.route({
     method: "GET",
@@ -185,11 +191,11 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     handler: bookingController.deleteBooking,
   });
   server.route({
-    method: 'GET',
-    url: '/booking/health',
+    method: "GET",
+    url: "/booking/health",
     preHandler: server.authenticate,
-    handler: bookingController.hasBooking
-  })
+    handler: bookingController.hasBooking,
+  });
 }
 
 export default fp(routes, {

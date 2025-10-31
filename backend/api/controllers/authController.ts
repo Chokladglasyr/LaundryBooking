@@ -22,6 +22,7 @@ export async function signup(
     ) {
       return reply.status(400).send("Required fields missing input.");
     }
+
     const newUser: UserDatabaseModel = {
       id: crypto.randomUUID(),
       name: req.body.name,
