@@ -13,10 +13,16 @@ import {
 
 export async function saveUser(user: UserDatabaseModel) {
   try {
-    const { id, name, email, password, apt_nr } = user;
-    const text = `INSERT INTO users (id, name, email, password, apt_nr) VALUES ($1, $2, $3, $4, $5)`;
-    const values = [id, name, email, password, apt_nr];
-    await PostgresConnection.runQuery(text, values);
+    const { id, name, email, password, apt_nr, role } = user;
+    if (!role) {
+      const text = `INSERT INTO users (id, name, email, password, apt_nr) VALUES ($1, $2, $3, $4, $5)`;
+      const values = [id, name, email, password, apt_nr];
+      await PostgresConnection.runQuery(text, values);
+    } else {
+      const text = `INSERT INTO users (id, name, email, password, apt_nr, role) VALUES ($1, $2, $3, $4, $5, $6)`;
+      const values = [id, name, email, password, apt_nr, role];
+      await PostgresConnection.runQuery(text, values);
+    }
   } catch (err) {
     console.error("Error while inserting user: ", err);
   }

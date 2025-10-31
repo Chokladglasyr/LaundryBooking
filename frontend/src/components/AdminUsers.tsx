@@ -1,39 +1,69 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { User } from "../store/types";
 
 function AdminUsers() {
   const [searchType, setSearchType] = useState("");
   const [searchWord, setSearchWord] = useState("");
   const [createFormData, setCreateFormData] = useState({});
-  const [users, setUsers] = useState<User[] | null>(null)
+  const [users, setUsers] = useState<User[] | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (message) {
+      const messageTimer = setTimeout(() => {
+        setMessage(null);
+      }, 4000);
+      return () => {
+        clearTimeout(messageTimer);
+      };
+    }
+  }, [message]);
 
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    if(type === "checkbox" && e.target instanceof HTMLInputElement){
+      setCreateFormData({...createFormData, [name]: e.target.checked})
+    }
     setCreateFormData({ ...createFormData, [name]: value });
   };
+
   const fetchUsers = async (
     e: React.FormEvent<HTMLFormElement>,
     search: string,
     column: string
   ) => {
     e.preventDefault();
+    if (column === "") {
+      setMessage("Du behöver välja namn, email eller lägenhetesnummer.");
+    }
     try {
       const res = await axios.get(`/search?name=${search}&column=${column}`, {
         withCredentials: true,
       });
-      console.log(res.data.users);
-      setUsers(res.data.users)
+      console.log(res.data);
+      setUsers(res.data.users);
     } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status === 404) {
+        setMessage("Hittade inga boende.");
+      }
       if (err instanceof Error) {
         console.error("Failed to fetch users for admin: ", err);
       }
     }
   };
-  console.log("search:", searchWord);
-  console.log("column:", searchType);
+
+  const createUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    try{
+
+    } catch(err) {
+      if (err instanceof Error) {
+        console.error("Failed to create new user as an admin: ", err)
+      }
+    }
+  }
 
   return (
     <>
@@ -72,7 +102,11 @@ function AdminUsers() {
             placeholder="Lösenord"
             onChange={handleInput}
           />
+          <div>
+          <label htmlFor="checkbox">är en admin</label>
+          <input type="checkbox" name="role" id="role" onChange={handleInput}/> 
 
+          </div>
           <button id="create-user" className="primary-btn-green">
             SPARA
           </button>
@@ -93,58 +127,56 @@ function AdminUsers() {
           </select>
         </div>
         <form onSubmit={(e) => fetchUsers(e, searchWord, searchType)}>
-        <input
-          type="text"
-          placeholder="Sökterm"
-          onChange={(e) => setSearchWord(e.target.value)}
-        />
-        <button
-          className="primary-btn-booking"
-        >
-          SÖK
-        </button>
+          <input
+            type="text"
+            placeholder="Sökterm"
+            onChange={(e) => setSearchWord(e.target.value)}
+            required
+          />
+          <button className="primary-btn-booking">SÖK</button>
         </form>
+        {message && <p>{message}</p>}
+        {users &&
+          users.map((user, index) => (
+            <form key={index} id={`edit-user-form-${index}`} action="">
+              <label htmlFor="edit-user-form">
+                {`Redigera boende ${index + 1}`}
+              </label>
+              <input
+                className="input-admin"
+                type="text"
+                name="name"
+                id={`name-${index}`}
+                value={user.name}
+                onChange={handleInput}
+              />
+              <input
+                className="input-admin"
+                type="email"
+                name="email"
+                id={`email-${index}`}
+                value={user.email}
+                onChange={handleInput}
+              />
+              <input
+                className="input-admin"
+                type="text"
+                name="apt_nr"
+                id={`apt_nr-${index}`}
+                value={user.apt_nr}
+                onChange={handleInput}
+              />
 
-        {users && users.map((user, index) => (
-          <form key={index} id={`edit-user-form-${index}`} action="">
-            <label htmlFor="edit-user-form">
-              {`Redigera boende ${index + 1}`}
-            </label>
-            <input
-              className="input-admin"
-              type="text"
-              name="name"
-              id={`name-${index}`}
-              value={user.name}
-              onChange={handleInput}
-            />
-            <input
-              className="input-admin"
-              type="email"
-              name="email"
-              id={`email-${index}`}
-              value={user.email}
-              onChange={handleInput}
-            />
-            <input
-              className="input-admin"
-              type="text"
-              name="apt_nr"
-              id={`apt_nr-${index}`}
-              value={user.apt_nr}
-              onChange={handleInput}
-            />
-
-            <div className="btn-container">
-              <button id={`edit-user-${index}`} className="primary-btn-green">
-                SPARA
-              </button>
-              <button id={`delete-user-${index}`} className="primary-btn-red">
-                RADERA
-              </button>
-            </div>
-          </form>
-        ))}
+              <div className="btn-container">
+                <button id={`edit-user-${index}`} className="primary-btn-green">
+                  SPARA
+                </button>
+                <button id={`delete-user-${index}`} className="primary-btn-red">
+                  RADERA
+                </button>
+              </div>
+            </form>
+          ))}
       </article>
     </>
   );
