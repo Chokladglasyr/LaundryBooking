@@ -4,6 +4,10 @@ import axios from "axios";
 
 function AdminPosts() {
   const [formData, setFormData] = useState({ title: "", description: "" });
+  const [createFormData, setCreateFormData] = useState({
+    title: "",
+    description: "",
+  });
   const [posts, setPosts] = useState<PostType[] | null>(null);
 
   useEffect(() => {
@@ -30,13 +34,12 @@ function AdminPosts() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setCreateFormData({ ...createFormData, [name]: value });
   };
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
-    e.preventDefault();
     const { name, value } = e.target;
     setPosts((prev) =>
       prev
@@ -51,11 +54,11 @@ function AdminPosts() {
   const createPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/post", formData, {
+      const res = await axios.post("/post", createFormData, {
         withCredentials: true,
       });
       setPosts((prev) => (prev ? [res.data.post, ...prev] : [res.data.post]));
-      setFormData({ title: "", description: "" });
+      setCreateFormData({ title: "", description: "" });
     } catch (err) {
       if (err instanceof Error) {
         console.error("Error creating new post in admin: ", err);
@@ -106,7 +109,7 @@ function AdminPosts() {
             type="text"
             name="title"
             id="title"
-            value={formData.title}
+            value={createFormData.title}
             placeholder="Rubrik"
             onChange={handleInput}
           />
@@ -114,7 +117,7 @@ function AdminPosts() {
             name="description"
             id="description"
             rows={8}
-            value={formData.description}
+            value={createFormData.description}
             onChange={handleInput}
           ></textarea>
           <button id="create-msg" className="primary-btn-green">
