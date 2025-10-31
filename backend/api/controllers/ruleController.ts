@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { idRequest, rulesAndPostsRequest } from "../types/requestTypes";
 import PostgresConnection from "../db";
 import { insertRule, updateRule } from "../repository";
+import { RuleDatabaseModel } from "../types/databaseModelTypes";
 
 export async function getAllRules(req: FastifyRequest, reply: FastifyReply) {
   try {
@@ -71,15 +72,26 @@ export async function updateOneRule(
 ) {
   try {
     const { id } = req.query;
+    let {title, description} = req.body
     if (!id) {
       return reply.status(400).send({ message: "Missing parameters." });
     }
-    if (!req.body.description || !req.body.title) {
+    if (!description && !title) {
       return reply.status(400).send({ message: "Missing required fields." });
     }
+    const text1 = `SELECT * FROM rules WHERE id= $1`
+    const values1 = [id]
+    const res = await PostgresConnection.runQuery(text1, values1)
+    const untouchedRule = res[0] as RuleDatabaseModel 
+    if(!title) {
+      title = untouchedRule.title
+    }
+    if(!description) {
+      description = untouchedRule.description
+    }
     const ruleToUpdate = {
-      title: req.body.title,
-      description: req.body.description,
+      title: title,
+      description: description,
       updated_at: new Date().toISOString(),
     };
     await updateRule(ruleToUpdate, id);
