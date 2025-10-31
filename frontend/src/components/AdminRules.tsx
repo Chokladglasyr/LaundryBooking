@@ -3,29 +3,45 @@ import type { RuleType } from "../store/types";
 import axios from "axios";
 
 function AdminRules() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ title: "", description: "" });
   const [rules, setRules] = useState<RuleType[] | null>(null);
 
   useEffect(() => {
-    let cancel = false
+    let cancel = false;
     async function fetchRules() {
       try {
-        const res = await axios.get('/rules', {withCredentials: true})
-        console.log(res.data.rules)
-        if(!cancel){
-          setRules(res.data.rules)
+        const res = await axios.get("/rules", { withCredentials: true });
+        console.log(res.data.rules);
+        if (!cancel) {
+          setRules(res.data.rules);
         }
-      }catch(err) {
-        if(err instanceof Error){
-          console.error("Failed to fetch rules for admin: ", err)
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error("Failed to fetch rules for admin: ", err);
         }
       }
     }
-    fetchRules()
+    fetchRules();
     return () => {
-      cancel = true
+      cancel = true;
+    };
+  }, []);
+
+  const createRule = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("/rule", formData, {
+        withCredentials: true,
+      });
+      console.log(res.data);
+      setRules((prev) => (prev ? [res.data.rule, ...prev] : [res.data.rule]));
+      setFormData({ title: "", description: "" });
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to create new rule as an admin: ", err);
+      }
     }
-  },[])
+  };
 
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -46,18 +62,19 @@ function AdminRules() {
           )
         : null
     );
-    setFormData({...formData, [name]: value})
+    setFormData({ ...formData, [name]: value });
   };
   return (
     <>
       <article>
-        <form action="" id="rules-form">
+        <form onSubmit={createRule} id="rules-form">
           <label htmlFor="rules-form">Ny regel: </label>
           <input
             className="input-admin"
             type="text"
             name="title"
             id="title"
+            value={formData.title}
             placeholder="Rubrik"
             onChange={handleInput}
           />
@@ -65,6 +82,7 @@ function AdminRules() {
             name="description"
             id="description"
             rows={8}
+            value={formData.description}
             onChange={handleInput}
           ></textarea>
           <button id="create-rule" className="primary-btn-green">
@@ -73,36 +91,37 @@ function AdminRules() {
         </form>
       </article>
       <article className="edit-container">
-        {rules && rules.map((rule, index) => (
-          <form key={index} id="edit-rule-form" action="">
-            <label htmlFor="edit-msg-form">
-              {`Redigera regel ${index + 1}`}
-            </label>
-            <input
-              className="input-admin"
-              type="text"
-              name="title"
-              id={`title-${index}`}
-              value={rule.title}
-              onChange={(e) => handleInputChange(e, index)}
-            />
-            <textarea
-              name="description"
-              id={`description-${index}`}
-              rows={8}
-              onChange={(e) => handleInputChange(e, index)}
-              value={rule.description}
-            ></textarea>
-            <div className="btn-container">
-              <button id={`edit-rule-${index}`} className="primary-btn-green">
-                SPARA
-              </button>
-              <button id={`delete-rule-${index}`} className="primary-btn-red">
-                RADERA
-              </button>
-            </div>
-          </form>
-        ))}
+        {rules &&
+          rules.map((rule, index) => (
+            <form key={index} id="edit-rule-form" action="">
+              <label htmlFor="edit-msg-form">
+                {`Redigera regel ${index + 1}`}
+              </label>
+              <input
+                className="input-admin"
+                type="text"
+                name="title"
+                id={`title-${index}`}
+                value={rule.title}
+                onChange={(e) => handleInputChange(e, index)}
+              />
+              <textarea
+                name="description"
+                id={`description-${index}`}
+                rows={8}
+                onChange={(e) => handleInputChange(e, index)}
+                value={rule.description}
+              ></textarea>
+              <div className="btn-container">
+                <button id={`edit-rule-${index}`} className="primary-btn-green">
+                  SPARA
+                </button>
+                <button id={`delete-rule-${index}`} className="primary-btn-red">
+                  RADERA
+                </button>
+              </div>
+            </form>
+          ))}
       </article>
     </>
   );
