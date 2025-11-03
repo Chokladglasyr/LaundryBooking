@@ -4,12 +4,14 @@ import { useState } from "react";
 import type { LoginProps } from "../store/types";
 
 function Login({ setLoggedIn, setAdmin }: LoginProps) {
+  // const API_URL = "http://localhost:3000"
+  const API_URL = "https://laundrybooking.onrender.com"
   const [formData, setFormData] = useState({});
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:3000/login",
+        `${API_URL}/login`,
         { ...formData },
         { withCredentials: true }
       );
