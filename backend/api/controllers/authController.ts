@@ -124,12 +124,14 @@ export async function login(
       secure: true,
       sameSite: "strict",
       path: "/",
+      maxAge: 60*60
     });
     reply.setCookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
       path: "/",
+      maxAge: 30*24*60*60
     });
     reply.status(200).send({
       message: "Logged in",
