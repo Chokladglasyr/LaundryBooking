@@ -119,16 +119,16 @@ export async function login(
       }
     );
     reply.setCookie("accessToken", newAccessToken, {
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
-      sameSite: "lax",
+      sameSite: "none",
       path: "/",
       maxAge: 60*60
     });
     reply.setCookie("refreshToken", newRefreshToken, {
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
-      sameSite: "lax",
+      sameSite: "none",
       path: "/",
       maxAge: 30*24*60*60
     });
