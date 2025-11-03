@@ -111,22 +111,20 @@ function Calendar({ room_id }: CalendarProps) {
     }
   };
   const classnameForTimeslot = (timeslot: number) => {
+    const bookedStatus = isTimeslotBooked(timeslot.toString())
     if (
-      selectedTime === timeslot &&
-      isTimeslotBooked(timeslot.toString()) === 1
+      selectedTime === timeslot && bookedStatus === 1
     ) {
       return "timeslot-invalid-selected";
     } else if (selectedTime === timeslot) {
       return "timeslot-selected";
-    } else if (
-      isTimeslotBooked(timeslot.toString()) &&
-      isTimeslotBooked(timeslot.toString()) !== 1
-    ) {
-      return "timeslot-invalid";
+    } else if(bookedStatus) {
+        return "timeslot-invalid";
     } else {
-      return "timeslot";
+        return "timeslot";
     }
-  };
+    }
+
   return (
     <>
       <div className="calendar-app">
