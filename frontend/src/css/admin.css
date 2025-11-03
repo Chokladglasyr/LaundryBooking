@@ -19,11 +19,13 @@
   .edit-container {
     @media (min-width: 500px) {
       overflow: scroll;
-      /* position: relative; */
     }
   }
   article {
     padding: 1rem;
+    @media (min-width: 500px) {
+      padding: 2rem;
+    }
   }
   input,
   textarea {

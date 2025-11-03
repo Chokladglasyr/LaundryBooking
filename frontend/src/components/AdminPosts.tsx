@@ -69,7 +69,7 @@ function AdminPosts() {
       setPosts((prev) => (prev ? [res.data.post, ...prev] : [res.data.post]));
       console.log(res.data.message)
       if(res.data.message.includes('created')) {
-        setMessage('Sparat!')
+        setMessage('Ny meddelande skapad.')
       }
       setCreateFormData({ title: "", description: "" });
     } catch (err) {
@@ -90,7 +90,7 @@ function AdminPosts() {
       });
       if(!res.data) return;
       if(res.data.message.includes('updated')) {
-        setMessage('Sparad! Listan uppdateras...')
+        setMessage('Sparad, listan uppdateras...')
 
       }
     } catch (err) {
@@ -111,7 +111,7 @@ function AdminPosts() {
       });
       setPosts((prev) => prev?.filter((post) => id !== post.id) || null);
       if(res.data.message.includes('deleted')) {
-        setMessage('Borttagen!')
+        setMessage('Meddelande borttagen.')
       }
     } catch (err) {
       if (err instanceof Error) {
