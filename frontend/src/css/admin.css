@@ -19,6 +19,7 @@
   .edit-container {
     @media (min-width: 500px) {
       overflow: scroll;
+      /* position: relative; */
     }
   }
   article {
