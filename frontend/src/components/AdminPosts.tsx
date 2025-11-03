@@ -9,9 +9,18 @@ function AdminPosts() {
     description: "",
   });
   const [posts, setPosts] = useState<PostType[] | null>(null);
+  const [message, setMessage] = useState<string | null>(null)
 
   useEffect(() => {
     let cancel = false;
+    if(message) {
+      const messageTimer = setTimeout(() => {
+        setMessage(null)
+      }, 1500)
+      return () => {
+        clearTimeout(messageTimer)
+      }
+    }
     async function getPosts() {
       try {
         const res = await axios.get("/posts", { withCredentials: true });
@@ -28,7 +37,7 @@ function AdminPosts() {
     return () => {
       cancel = true;
     };
-  }, []);
+  }, [message]);
 
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -58,6 +67,10 @@ function AdminPosts() {
         withCredentials: true,
       });
       setPosts((prev) => (prev ? [res.data.post, ...prev] : [res.data.post]));
+      console.log(res.data.message)
+      if(res.data.message.includes('created')) {
+        setMessage('Ny meddelande skapad.')
+      }
       setCreateFormData({ title: "", description: "" });
     } catch (err) {
       if (err instanceof Error) {
@@ -72,9 +85,14 @@ function AdminPosts() {
   ) => {
     e.preventDefault();
     try {
-      await axios.put(`/post?id=${post_id}`, formData, {
+      const res = await axios.put(`/post?id=${post_id}`, formData, {
         withCredentials: true,
       });
+      if(!res.data) return;
+      if(res.data.message.includes('updated')) {
+        setMessage('Sparad, listan uppdateras...')
+
+      }
     } catch (err) {
       if (err instanceof Error) {
         console.error("Error when updating post as admin: ", err);
@@ -88,10 +106,13 @@ function AdminPosts() {
   ) => {
     e.preventDefault();
     try {
-      await axios.delete(`post?id=${id}`, {
+      const res = await axios.delete(`post?id=${id}`, {
         withCredentials: true,
       });
       setPosts((prev) => prev?.filter((post) => id !== post.id) || null);
+      if(res.data.message.includes('deleted')) {
+        setMessage('Meddelande borttagen.')
+      }
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to delete post as admin: ", err);
@@ -126,6 +147,7 @@ function AdminPosts() {
         </form>
       </article>
       <article className="edit-container">
+        {message && <p className="message">{message}</p>}
         {posts &&
           posts.map((post, index) => (
             <form

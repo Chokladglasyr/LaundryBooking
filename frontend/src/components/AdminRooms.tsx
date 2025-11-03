@@ -17,7 +17,7 @@ function AdminRooms() {
     if (message) {
       const messageTimer = setTimeout(() => {
         setMessage(null);
-      }, 4000);
+      }, 1000);
       return () => {
         clearTimeout(messageTimer);
       };
@@ -71,6 +71,9 @@ function AdminRooms() {
       const res = await axios.post("/room", createFormData, {
         withCredentials: true,
       });
+      if(res.data.message.includes('created')) {
+        setMessage('Ny tvättstuga skapad.')
+      }
       setRooms((prev) =>
         prev ? [res.data.room[0], ...prev] : [res.data.room[0]]
       );
@@ -90,7 +93,9 @@ function AdminRooms() {
       const res = await axios.put(`/room?id=${room_id}`, formData, {
         withCredentials: true,
       });
-      setMessage(res.data.message);
+      if(res.data.message.includes('updated')) {
+        setMessage('Sparad, listan uppdateras...')
+      }
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to update room as an admin: ", err);
@@ -104,7 +109,11 @@ function AdminRooms() {
   ) => {
     e.preventDefault();
     try {
-      await axios.delete(`room?id=${room_id}`, { withCredentials: true });
+      const res = await axios.delete(`room?id=${room_id}`, { withCredentials: true });
+      
+      if(res.data.message.includes('Deleted')) {
+        setMessage('Tvättstuga borttagen.')
+      }
       setRooms((prev) => prev?.filter((room) => room_id !== room.id) || null);
     } catch (err) {
       if (err instanceof Error) {
@@ -141,7 +150,7 @@ function AdminRooms() {
       </article>
       <article className="edit-container">
         {loading && <p>Hämtar tvättstugor...</p>}
-        {message && <p>{message}</p>}
+        {message && <p className="message">{message}</p>}
         {rooms &&
           rooms.map((room, index) => (
             <form

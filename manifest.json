@@ -1,0 +1,20 @@
+{
+    "name": "Tvättstuga",
+    "short_name": "Tvättstuga",
+    "description": "Boka din tvättid nu!",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#2c9ce2",
+    "theme_color": "#C8C6D7",
+    "categories": ["lifestyle", "utilities"],
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "sv",
+    "icons": [
+        {
+            "src": "assets/logo.png",
+            "type": "image/png",
+            "sizes": "256x256"
+        }
+    ]
+}

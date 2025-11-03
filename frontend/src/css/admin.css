@@ -23,6 +23,9 @@
   }
   article {
     padding: 1rem;
+    @media (min-width: 500px) {
+      padding: 2rem;
+    }
   }
   input,
   textarea {

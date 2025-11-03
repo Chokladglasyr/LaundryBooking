@@ -3,10 +3,11 @@ import CompanyLogo from "./CompanyLogo";
 import { useEffect, useState } from "react";
 import AdminPosts from "./AdminPosts";
 import axios from "axios";
+import Logout from "../assets/logout.png";
 
 function Admin() {
-  // axios.defaults.baseURL ="http://localhost:3000"
-  axios.defaults.baseURL ="https://laundrybooking.onrender.com"
+  axios.defaults.baseURL ="http://localhost:3000"
+  // axios.defaults.baseURL ="https://laundrybooking.onrender.com"
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ function Admin() {
         {location.pathname === "/admin" && <AdminPosts />}
         <Outlet />
       </div>
-      <button onClick={logout}>Logout</button>
+      <button className="logout" onClick={logout}><img src={Logout}/></button>
     </>
   );
 }
