@@ -18,6 +18,7 @@ async function auth(app: FastifyInstance, options: FastifyPluginOptions) {
   if (!process.env.MY_SECRET_KEY) {
     throw new Error("secret key for jwt is undefined");
   }
+  
   await app.register(fastifyJwt, {
     secret: process.env.MY_SECRET_KEY,
     cookie: {
@@ -29,6 +30,7 @@ async function auth(app: FastifyInstance, options: FastifyPluginOptions) {
     "authenticate",
     async (req: FastifyRequest, reply: FastifyReply) => {
       try {
+        console.log(req)
         await req.jwtVerify()
       } catch (err) {
         return reply.status(401).send({ message: "Not authorized" });
