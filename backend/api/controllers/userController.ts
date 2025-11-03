@@ -6,7 +6,7 @@ import { saveUser, updateUser } from "../repository";
 
 export async function getAllUsers(req: FastifyRequest, reply: FastifyReply) {
   try {
-    const text = `SELECT * FROM users`;
+    const text = `SELECT * FROM users ORDER BY updated_at DESC`;
     const allUsers = await PostgresConnection.runQuery(text);
     reply.status(200).send({ message: "Users fetched", users: allUsers });
   } catch (err) {

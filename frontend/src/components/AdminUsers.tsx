@@ -20,7 +20,7 @@ function AdminUsers() {
     if (message) {
       const messageTimer = setTimeout(() => {
         setMessage(null);
-      }, 4000);
+      }, 1000);
       return () => {
         clearTimeout(messageTimer);
       };
@@ -99,11 +99,11 @@ function AdminUsers() {
       const res = await axios.post("/user", createFormData, {
         withCredentials: true,
       });
-      console.log(res.data)
       if (res.status === 201) {
         setMessage("Ny användare skapad!");
       }
       setCreateFormData({ name: "", email: "", apt_nr: "", password: "", role: false });
+      setUsers(null)
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to create new user as an admin: ", err);
@@ -120,7 +120,11 @@ function AdminUsers() {
       const res = await axios.put(`/user?id=${user_id}`, formData, {
         withCredentials: true,
       });
-      setMessage(res.data.message);
+
+      if(res.data.message.includes('updated')) {
+        setMessage('Sparad, listan är uppdaterad, sök på nytt.')
+      }
+      setUsers(null)
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to update user as an admin: ", err);
@@ -138,7 +142,9 @@ function AdminUsers() {
         withCredentials: true,
       });
       setUsers((prev) => prev?.filter((user) => user_id !== user.id) || null)
-      console.log(res)
+      if(res.data.message.includes('deleted')) {
+        setMessage('Användare borttagen.')
+      }
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to delete user as an admin: ", err);
@@ -235,6 +241,7 @@ function AdminUsers() {
           >
             VISA ALLA
           </button>
+          {message && <p className="message">{message}</p>}
         </form>
         {message && <p>{message}</p>}
         {users &&
