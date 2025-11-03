@@ -128,16 +128,16 @@
 }
 .timeslot,
 .timeslot-selected,
-.timeslot-invalid {
+.timeslot-invalid, .timeslot-invalid-selected {
   width: 100px;
   padding: 1rem;
   border-radius: 10px;
   border: none;
   background-color: var(--secondary-green-color);
 }
-.timeslot-selected {
+.timeslot-selected, .timeslot-invalid-selected {
   border: dashed 2px var(--tertiary-green-color);
 }
-.timeslot-invalid {
+.timeslot-invalid, .timeslot-invalid-selected {
   background-color: var(--primary-red-color);
 }

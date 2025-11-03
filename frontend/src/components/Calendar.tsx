@@ -58,8 +58,11 @@ function Calendar({ room_id }: CalendarProps) {
         setBookings(res.data.bookings);
       } catch (err) {
         if (err instanceof Error) {
-          if(axios.isAxiosError(err) && err.response?.data.message === "No bookings found.") {
-            console.error("Hittade inga bokningar i db.")
+          if (
+            axios.isAxiosError(err) &&
+            err.response?.data.message === "No bookings found."
+          ) {
+            console.error("Hittade inga bokningar i db.");
             // console.error("Error fetching bookings: ", err);
           }
         }
@@ -67,7 +70,7 @@ function Calendar({ room_id }: CalendarProps) {
     };
     fetchBookings();
   }, []);
-console.log(bookings)
+  console.log(bookings);
   if (!bookings) {
     console.log("Error");
   }
@@ -78,11 +81,10 @@ console.log(bookings)
   const roomBookings = bookings?.filter(
     (booking) => booking.room_id === room_id
   );
-  // console.log("room", roomBookings);
 
   const handleDatePick = (day: number) => {
     const pickedDate = new Date(currentYear, currentMonth, day);
-    
+
     if (pickedDate >= today) {
       setSelectedDate(pickedDate);
     }
@@ -90,9 +92,25 @@ console.log(bookings)
   const handleTimePick = (time: number) => {
     setSelectedTime(time);
   };
-  const isTimeslotBooked = (timeslot: string) =>{
-    return roomBookings.some((booking) => new Date(booking.booking_date).toLocaleDateString() === selectedDate.toLocaleDateString() && booking.booking_timeslot === timeslot)
-  }
+  const isTimeslotBooked = (timeslot: string) => {
+    const timeslotBooked = roomBookings.filter(
+      (booking) =>
+        new Date(booking.booking_date).toLocaleDateString() ===
+          selectedDate.toLocaleDateString() &&
+        booking.booking_timeslot === timeslot
+    );
+    if (!timeslotBooked || timeslotBooked.length === 0) {
+      return false;
+    } else {
+      const usersBooking = timeslotBooked[0] as BookingType;
+      if (usersBooking.user_id === user.id) {
+        return 1;
+      } else {
+        return 2;
+      }
+    }
+  };
+
   return (
     <>
       <div className="calendar-app">
@@ -148,25 +166,57 @@ console.log(bookings)
         <div className="timeslots-container">
           <button
             onClick={() => handleTimePick(1)}
-            className={selectedTime === 1 ? "timeslot-selected" : isTimeslotBooked("1") ? "timeslot-invalid" : "timeslot"}
+            className={
+              !isTimeslotBooked('1') ? 'timeslot' : selectedTime === 1 && isTimeslotBooked('1') === 1 ? 'timeslot-invalid-selected' : selectedTime === 1 ? 'timeslot-selected' : 'timeslot-invalid'
+            }
             value={1}
-            disabled = {isTimeslotBooked("1")}
+            disabled={
+              !isTimeslotBooked("1")
+                ? false
+                : isTimeslotBooked("1") === 1
+                  ? false
+                  : true
+            }
           >
             8-12
           </button>
           <button
             onClick={() => handleTimePick(2)}
-            className={selectedTime === 2 ? "timeslot-selected" : isTimeslotBooked("2") ? "timeslot-invalid" :  "timeslot"}
+            className={
+              selectedTime === 2
+                ? "timeslot-selected"
+                : isTimeslotBooked("2")
+                  ? "timeslot-invalid"
+                  : "timeslot"
+            }
             value={2}
-            disabled = {isTimeslotBooked("2")}
+            disabled={
+              !isTimeslotBooked("2")
+                ? false
+                : isTimeslotBooked("2") === 1
+                  ? false
+                  : true
+            }
           >
             12-17
           </button>
           <button
             onClick={() => handleTimePick(3)}
-            className={selectedTime === 3 ? "timeslot-selected" : isTimeslotBooked("3") ? "timeslot-invalid" : "timeslot"}
+            className={
+              selectedTime === 3
+                ? "timeslot-selected"
+                : isTimeslotBooked("3")
+                  ? "timeslot-invalid"
+                  : "timeslot"
+            }
             value={3}
-            disabled={isTimeslotBooked("3")}
+            disabled={
+              !isTimeslotBooked("3")
+                ? false
+                : isTimeslotBooked("3") === 1
+                  ? false
+                  : true
+            }
           >
             17-21
           </button>
