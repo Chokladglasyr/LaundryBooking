@@ -41,7 +41,7 @@ function Landing() {
       </nav>
       <Outlet />
       {location.pathname === "/home" && <Home />}
-      <button onClick={logout}>Logout</button>
+      <button className="primary-btn" id="logout" onClick={logout}>Logout</button>
     </>
   );
 }

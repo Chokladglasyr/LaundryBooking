@@ -126,3 +126,10 @@ select {
   right: 1rem;
   top: 1rem;
 }
+.logout{
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
