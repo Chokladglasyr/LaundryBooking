@@ -70,14 +70,10 @@ function Calendar({ room_id }: CalendarProps) {
     };
     fetchBookings();
   }, []);
-  // console.log(bookings);
   if (!bookings) {
     console.log("Error");
   }
-  // const userBookings = bookings.filter(
-  //   (booking) => booking.user_id === user.id && booking.room_id === room_id
-  // );
-  // console.log("user", userBookings);
+
   const roomBookings = bookings?.filter(
     (booking) => booking.room_id === room_id
   );
@@ -124,7 +120,7 @@ function Calendar({ room_id }: CalendarProps) {
         return "timeslot";
     }
     }
-
+    const selectedTimeslotIsUsers = selectedTime !== 0 && isTimeslotBooked(selectedTime.toString()) === 1
   return (
     <>
       <div className="calendar-app">
@@ -222,7 +218,7 @@ function Calendar({ room_id }: CalendarProps) {
           </button>
         </div>
         <button className="primary-btn-booking" id="book-time">
-          BOKA
+          {selectedTimeslotIsUsers ? 'AVBOKA' : 'BOKA' }
         </button>
       </div>
     </>
