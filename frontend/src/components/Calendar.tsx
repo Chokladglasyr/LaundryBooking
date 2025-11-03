@@ -71,10 +71,10 @@ console.log(bookings)
   if (!bookings) {
     console.log("Error");
   }
-  // const userBookings = bookings.filter(
-  //   (booking) => booking.user_id === user.id && booking.room_id === room_id
-  // );
-  // console.log("user", userBookings);
+  const userBookings = bookings.filter(
+    (booking) => booking.user_id === user.id && booking.room_id === room_id
+  );
+  console.log("user", userBookings);
   const roomBookings = bookings?.filter(
     (booking) => booking.room_id === room_id
   );
