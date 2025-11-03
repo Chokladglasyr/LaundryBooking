@@ -5,7 +5,6 @@ import {
   FastifyReply,
   FastifyRequest,
 } from "fastify";
-import { TokenPayload } from "./types/authTypes";
 import fp from "fastify-plugin";
 
 declare module "fastify" {

@@ -5,8 +5,8 @@ import CompanyLogo from "./CompanyLogo";
 import axios from "axios";
 
 function Landing() {
-  // axios.defaults.baseURL = "http://localhost:3000";
-  axios.defaults.baseURL = "https://laundrybooking.onrender.com";
+  axios.defaults.baseURL = "http://localhost:3000";
+  // axios.defaults.baseURL = "https://laundrybooking.onrender.com";
   const [rules, setRules] = useState(false);
   const navigate = useNavigate();
   const goToRules = (e: MouseEvent<HTMLAnchorElement>) => {
