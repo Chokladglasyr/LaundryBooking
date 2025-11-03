@@ -27,8 +27,9 @@ function Calendar({ room_id }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [selectedTime, setSelectedTime] = useState(0);
   const user = useLoaderData<User>();
-  const [bookings, setBookings] = useState<BookingType[] | null>(null);
-  console.log(user)
+  const [bookings, setBookings] = useState<BookingType[]>([]);
+  // const [message, setMessage] = useState<string | null>(null)
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -57,25 +58,27 @@ function Calendar({ room_id }: CalendarProps) {
         setBookings(res.data.bookings);
       } catch (err) {
         if (err instanceof Error) {
-          console.error("Error fetching bookings: ", err);
+          if(axios.isAxiosError(err) && err.response?.data.message === "No bookings found.") {
+            console.error("Hittade inga bokningar i db.")
+            // console.error("Error fetching bookings: ", err);
+          }
         }
       }
     };
     fetchBookings();
   }, []);
-
+console.log(bookings)
   if (!bookings) {
     console.log("Error");
-    return;
   }
-  const userBookings = bookings.filter(
-    (booking) => booking.user_id === user.id && booking.room_id === room_id
-  );
-  console.log("user", userBookings);
-  const roomBookings = bookings.filter(
+  // const userBookings = bookings.filter(
+  //   (booking) => booking.user_id === user.id && booking.room_id === room_id
+  // );
+  // console.log("user", userBookings);
+  const roomBookings = bookings?.filter(
     (booking) => booking.room_id === room_id
   );
-  console.log("room", roomBookings);
+  // console.log("room", roomBookings);
 
   const handleDatePick = (day: number) => {
     const pickedDate = new Date(currentYear, currentMonth, day);
