@@ -6,7 +6,7 @@ import { saveUser, updateUser } from "../repository";
 
 export async function getAllUsers(req: FastifyRequest, reply: FastifyReply) {
   try {
-    const text = `SELECT * FROM users`;
+    const text = `SELECT * FROM users ORDER BY updated_at DESC`;
     const allUsers = await PostgresConnection.runQuery(text);
     reply.status(200).send({ message: "Users fetched", users: allUsers });
   } catch (err) {
@@ -54,7 +54,9 @@ export async function createUser(
         .status(400)
         .send({ message: "User with email already exists" });
     }
-    const { name, email, apt_nr, password, role } = req.body;
+    const { name, email, apt_nr, password} = req.body;
+    let {role } = req.body
+    if(role) role = 'admin'
     const newUser = {
       id: crypto.randomUUID(),
       name: name,

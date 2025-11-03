@@ -10,6 +10,7 @@ function AdminUsers() {
     email: "",
     apt_nr: "",
     password: "",
+    role: false
   });
   const [formData, setFormData] = useState({});
   const [users, setUsers] = useState<User[] | null>(null);
@@ -19,7 +20,7 @@ function AdminUsers() {
     if (message) {
       const messageTimer = setTimeout(() => {
         setMessage(null);
-      }, 4000);
+      }, 1000);
       return () => {
         clearTimeout(messageTimer);
       };
@@ -32,8 +33,10 @@ function AdminUsers() {
     const { name, value, type } = e.target;
     if (type === "checkbox" && e.target instanceof HTMLInputElement) {
       setCreateFormData({ ...createFormData, [name]: e.target.checked });
+    }else {
+      setCreateFormData({ ...createFormData, [name]: value });
+
     }
-    setCreateFormData({ ...createFormData, [name]: value });
   };
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -99,7 +102,8 @@ function AdminUsers() {
       if (res.status === 201) {
         setMessage("Ny användare skapad!");
       }
-      setCreateFormData({ name: "", email: "", apt_nr: "", password: "" });
+      setCreateFormData({ name: "", email: "", apt_nr: "", password: "", role: false });
+      setUsers(null)
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to create new user as an admin: ", err);
@@ -116,7 +120,11 @@ function AdminUsers() {
       const res = await axios.put(`/user?id=${user_id}`, formData, {
         withCredentials: true,
       });
-      setMessage(res.data.message);
+
+      if(res.data.message.includes('updated')) {
+        setMessage('Sparad, listan är uppdaterad, sök på nytt.')
+      }
+      setUsers(null)
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to update user as an admin: ", err);
@@ -134,7 +142,9 @@ function AdminUsers() {
         withCredentials: true,
       });
       setUsers((prev) => prev?.filter((user) => user_id !== user.id) || null)
-      console.log(res)
+      if(res.data.message.includes('deleted')) {
+        setMessage('Användare borttagen.')
+      }
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to delete user as an admin: ", err);
@@ -188,11 +198,12 @@ function AdminUsers() {
             onChange={handleInput}
           />
           <div>
-            <label htmlFor="checkbox">är en admin</label>
+            <p>är en admin</p>
             <input
               type="checkbox"
               name="role"
               id="role"
+              checked={createFormData.role}
               onChange={handleInput}
             />
           </div>
@@ -230,6 +241,7 @@ function AdminUsers() {
           >
             VISA ALLA
           </button>
+          {message && <p className="message">{message}</p>}
         </form>
         {message && <p>{message}</p>}
         {users &&
