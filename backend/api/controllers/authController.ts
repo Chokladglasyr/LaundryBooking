@@ -118,7 +118,6 @@ export async function login(
         expiresIn: "30d",
       }
     );
-    const isSecure = process.env.NODE_ENV === "production" ? "Secure" : "";
     reply.setCookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: true,
