@@ -70,14 +70,14 @@ function Calendar({ room_id }: CalendarProps) {
     };
     fetchBookings();
   }, []);
-  console.log(bookings);
+  // console.log(bookings);
   if (!bookings) {
     console.log("Error");
   }
-  const userBookings = bookings.filter(
-    (booking) => booking.user_id === user.id && booking.room_id === room_id
-  );
-  console.log("user", userBookings);
+  // const userBookings = bookings.filter(
+  //   (booking) => booking.user_id === user.id && booking.room_id === room_id
+  // );
+  // console.log("user", userBookings);
   const roomBookings = bookings?.filter(
     (booking) => booking.room_id === room_id
   );
@@ -110,7 +110,23 @@ function Calendar({ room_id }: CalendarProps) {
       }
     }
   };
-
+  const classnameForTimeslot = (timeslot: number) => {
+    if (
+      selectedTime === timeslot &&
+      isTimeslotBooked(timeslot.toString()) === 1
+    ) {
+      return "timeslot-invalid-selected";
+    } else if (selectedTime === timeslot) {
+      return "timeslot-selected";
+    } else if (
+      isTimeslotBooked(timeslot.toString()) &&
+      isTimeslotBooked(timeslot.toString()) !== 1
+    ) {
+      return "timeslot-invalid";
+    } else {
+      return "timeslot";
+    }
+  };
   return (
     <>
       <div className="calendar-app">
@@ -166,9 +182,7 @@ function Calendar({ room_id }: CalendarProps) {
         <div className="timeslots-container">
           <button
             onClick={() => handleTimePick(1)}
-            className={
-              !isTimeslotBooked('1') ? 'timeslot' : selectedTime === 1 && isTimeslotBooked('1') === 1 ? 'timeslot-invalid-selected' : selectedTime === 1 ? 'timeslot-selected' : 'timeslot-invalid'
-            }
+            className={classnameForTimeslot(1)}
             value={1}
             disabled={
               !isTimeslotBooked("1")
@@ -182,13 +196,7 @@ function Calendar({ room_id }: CalendarProps) {
           </button>
           <button
             onClick={() => handleTimePick(2)}
-            className={
-              selectedTime === 2
-                ? "timeslot-selected"
-                : isTimeslotBooked("2")
-                  ? "timeslot-invalid"
-                  : "timeslot"
-            }
+            className={classnameForTimeslot(2)}
             value={2}
             disabled={
               !isTimeslotBooked("2")
@@ -202,13 +210,7 @@ function Calendar({ room_id }: CalendarProps) {
           </button>
           <button
             onClick={() => handleTimePick(3)}
-            className={
-              selectedTime === 3
-                ? "timeslot-selected"
-                : isTimeslotBooked("3")
-                  ? "timeslot-invalid"
-                  : "timeslot"
-            }
+            className={classnameForTimeslot(3)}
             value={3}
             disabled={
               !isTimeslotBooked("3")
