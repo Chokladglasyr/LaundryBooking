@@ -3,6 +3,7 @@ import Home from "./Home";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
 import axios from "axios";
+import Logout from "../assets/logout.svg";
 
 function Landing() {
   axios.defaults.baseURL = "http://localhost:3000";
@@ -41,7 +42,7 @@ function Landing() {
       </nav>
       <Outlet />
       {location.pathname === "/home" && <Home />}
-      <button className="primary-btn" id="logout" onClick={logout}>Logout</button>
+      <button className="logout" onClick={logout}><img src={Logout} alt="exit" /></button>
     </>
   );
 }
