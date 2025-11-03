@@ -119,14 +119,14 @@ export async function login(
       }
     );
     reply.setCookie("accessToken", newAccessToken, {
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
       sameSite: "none",
       path: "/",
       maxAge: 60*60
     });
     reply.setCookie("refreshToken", newRefreshToken, {
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
       sameSite: "none",
       path: "/",
@@ -151,8 +151,8 @@ export async function login(
 }
 export async function logout(req: FastifyRequest, reply: FastifyReply) {
   try {
-    reply.clearCookie("accessToken");
-    reply.clearCookie("refreshToken");
+    reply.clearCookie("accessToken", {httpOnly: true, secure: true, sameSite: "none", path: "/"});
+    reply.clearCookie("refreshToken", {httpOnly: true, secure: true, sameSite: "none", path: "/"});
     return reply.status(200).send({ message: "Succesfully logged out." });
   } catch (err) {
     console.error("Something went wrong logging out, ", err);
