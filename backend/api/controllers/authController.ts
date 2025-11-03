@@ -121,14 +121,14 @@ export async function login(
     const isSecure = process.env.NODE_ENV === "production" ? "Secure" : "";
     reply.setCookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "strict",
       path: "/",
     });
     reply.setCookie("refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "strict",
       path: "/",
     });
     reply.status(200).send({
