@@ -10,6 +10,7 @@ function AdminUsers() {
     email: "",
     apt_nr: "",
     password: "",
+    role: false
   });
   const [formData, setFormData] = useState({});
   const [users, setUsers] = useState<User[] | null>(null);
@@ -32,8 +33,10 @@ function AdminUsers() {
     const { name, value, type } = e.target;
     if (type === "checkbox" && e.target instanceof HTMLInputElement) {
       setCreateFormData({ ...createFormData, [name]: e.target.checked });
+    }else {
+      setCreateFormData({ ...createFormData, [name]: value });
+
     }
-    setCreateFormData({ ...createFormData, [name]: value });
   };
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -96,10 +99,11 @@ function AdminUsers() {
       const res = await axios.post("/user", createFormData, {
         withCredentials: true,
       });
+      console.log(res.data)
       if (res.status === 201) {
         setMessage("Ny användare skapad!");
       }
-      setCreateFormData({ name: "", email: "", apt_nr: "", password: "" });
+      setCreateFormData({ name: "", email: "", apt_nr: "", password: "", role: false });
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to create new user as an admin: ", err);
@@ -188,7 +192,7 @@ function AdminUsers() {
             onChange={handleInput}
           />
           <div>
-            <label htmlFor="checkbox">är en admin</label>
+            <p>är en admin</p>
             <input
               type="checkbox"
               name="role"

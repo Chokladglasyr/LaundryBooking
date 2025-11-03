@@ -54,7 +54,9 @@ export async function createUser(
         .status(400)
         .send({ message: "User with email already exists" });
     }
-    const { name, email, apt_nr, password, role } = req.body;
+    const { name, email, apt_nr, password} = req.body;
+    let {role } = req.body
+    if(role) role = 'admin'
     const newUser = {
       id: crypto.randomUUID(),
       name: name,
