@@ -106,10 +106,13 @@ function AdminPosts() {
   ) => {
     e.preventDefault();
     try {
-      await axios.delete(`post?id=${id}`, {
+      const res = await axios.delete(`post?id=${id}`, {
         withCredentials: true,
       });
       setPosts((prev) => prev?.filter((post) => id !== post.id) || null);
+      if(res.data.message.includes('deleted')) {
+        setMessage('Borttagen!')
+      }
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to delete post as admin: ", err);
