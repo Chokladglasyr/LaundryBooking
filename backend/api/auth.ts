@@ -30,7 +30,6 @@ async function auth(app: FastifyInstance, options: FastifyPluginOptions) {
     "authenticate",
     async (req: FastifyRequest, reply: FastifyReply) => {
       try {
-        console.log(req)
         await req.jwtVerify()
       } catch (err) {
         return reply.status(401).send({ message: "Not authorized" });
