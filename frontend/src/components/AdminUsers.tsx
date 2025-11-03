@@ -197,6 +197,7 @@ function AdminUsers() {
               type="checkbox"
               name="role"
               id="role"
+              checked={createFormData.role}
               onChange={handleInput}
             />
           </div>
