@@ -18,6 +18,7 @@ async function auth(app: FastifyInstance, options: FastifyPluginOptions) {
   if (!process.env.MY_SECRET_KEY) {
     throw new Error("secret key for jwt is undefined");
   }
+  
   await app.register(fastifyJwt, {
     secret: process.env.MY_SECRET_KEY,
     cookie: {

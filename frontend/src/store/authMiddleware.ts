@@ -3,8 +3,10 @@ import { redirect, type LoaderFunctionArgs } from "react-router-dom";
 import { userContext } from "./UserContext";
 
 export async function authMiddleware({ context }: LoaderFunctionArgs) {
+    // const API_URL = "http://localhost:3000"
+    const API_URL = "https://laundrybooking.onrender.com"
   try {
-    const res = await axios.get("http://localhost:3000/me", {
+    const res = await axios.get(`${API_URL}/me`, {
       withCredentials: true,
     });
 

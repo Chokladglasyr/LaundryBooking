@@ -118,18 +118,19 @@ export async function login(
         expiresIn: "30d",
       }
     );
-    const isSecure = process.env.NODE_ENV === "production" ? "Secure" : "";
     reply.setCookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       path: "/",
+      maxAge: 60*60
     });
     reply.setCookie("refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       path: "/",
+      maxAge: 30*24*60*60
     });
     reply.status(200).send({
       message: "Logged in",
@@ -150,8 +151,8 @@ export async function login(
 }
 export async function logout(req: FastifyRequest, reply: FastifyReply) {
   try {
-    reply.clearCookie("accessToken");
-    reply.clearCookie("refreshToken");
+    reply.clearCookie("accessToken", {httpOnly: true, secure: true, sameSite: "none", path: "/"});
+    reply.clearCookie("refreshToken", {httpOnly: true, secure: true, sameSite: "none", path: "/"});
     return reply.status(200).send({ message: "Succesfully logged out." });
   } catch (err) {
     console.error("Something went wrong logging out, ", err);

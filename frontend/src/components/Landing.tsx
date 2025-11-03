@@ -5,7 +5,8 @@ import CompanyLogo from "./CompanyLogo";
 import axios from "axios";
 
 function Landing() {
-  axios.defaults.baseURL = "http://localhost:3000";
+  // axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.baseURL = "https://laundrybooking.onrender.com";
   const [rules, setRules] = useState(false);
   const navigate = useNavigate();
   const goToRules = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -19,13 +20,13 @@ function Landing() {
     }
   };
   const location = useLocation();
-    const logout = async () => {
+  const logout = async () => {
     try {
-      await axios.get('/logout', {withCredentials: true})
-      navigate('/')
-    }catch(err) {
-      if(err instanceof Error) {
-        console.error("Failed to logout: ", err)
+      await axios.get("/logout", { withCredentials: true });
+      navigate("/");
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to logout: ", err);
       }
     }
   };
@@ -40,7 +41,7 @@ function Landing() {
       </nav>
       <Outlet />
       {location.pathname === "/home" && <Home />}
-            <button onClick={logout}>Logout</button>
+      <button onClick={logout}>Logout</button>
     </>
   );
 }
