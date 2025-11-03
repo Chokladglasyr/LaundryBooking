@@ -22,7 +22,7 @@ async function auth(app: FastifyInstance, options: FastifyPluginOptions) {
   await app.register(fastifyJwt, {
     secret: process.env.MY_SECRET_KEY,
     cookie: {
-      cookieName: "accessToken",
+      cookieName: "refreshToken",
       signed: false
     }
   });

@@ -8,7 +8,7 @@ import fastifyCookie, { FastifyCookieOptions } from "@fastify/cookie";
 const app = fastify({});
 
 await app.register(fastifyCors, {
-  origin: ["https://laundry-booking-gamma.vercel.app", "http://localhost:5173"],
+  origin: ["https://laundry-booking-gamma.vercel.app", "http://localhost:5173", "https://fantastic-dragon-d3d623.netlify.app"],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE']
 });
