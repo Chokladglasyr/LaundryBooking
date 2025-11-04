@@ -1,6 +1,5 @@
 import { useState, type MouseEvent } from "react";
-import Home from "./Home";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import CompanyLogo from "./CompanyLogo";
 import axios from "axios";
 import Logout from "../assets/logout.svg";
@@ -20,7 +19,7 @@ function Landing() {
       setRules(true);
     }
   };
-  const location = useLocation();
+
   const logout = async () => {
     try {
       await axios.get("/logout", { withCredentials: true });
@@ -41,8 +40,9 @@ function Landing() {
         </Link>
       </nav>
       <Outlet />
-      {location.pathname === "/home" && <Home />}
-      <button className="logout" onClick={logout}><img src={Logout} alt="exit" /></button>
+      <button className="logout" onClick={logout}>
+        <img src={Logout} alt="exit" />
+      </button>
     </>
   );
 }
