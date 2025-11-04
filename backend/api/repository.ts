@@ -126,10 +126,10 @@ export async function checkForBooking(
     if (!user_id) {
       throw new Error("Missing user_id.");
     }
-    const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= CURRENT_DATE`;
+    const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= (CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Stockholm')::date`;
     const values = [user_id];
     const existingBooking = await PostgresConnection.runQuery(text, values);
-
+    console.log(existingBooking)
     if (!existingBooking || existingBooking.length === 0) {
       const text2 = `SELECT * FROM bookings WHERE room_id = $1 AND booking_timeslot = $2 AND booking_date = $3`;
       const values2 = [room_id, booking_timeslot, new Date(booking_date)];
