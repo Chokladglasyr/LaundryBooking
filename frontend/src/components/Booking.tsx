@@ -7,7 +7,6 @@ import { useLoaderData, useSearchParams } from "react-router-dom";
 
 function Booking() {
   const [room, setRoom] = useState<RoomType | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [activeBooking, setActiveBooking] = useState({date: '', timeslot: '', room: ''});
   const [params] = useSearchParams();
   const user = useLoaderData();
@@ -47,7 +46,7 @@ function Booking() {
           if (err.name === "AbortError") {
             console.log("Fetch was aborted.");
           } else if (!axios.isCancel(err)) {
-            setError(err.message);
+            console.error("Error: ", err)
           }
         }
       }
@@ -60,7 +59,6 @@ function Booking() {
 
   return (
     <>
-      {error && <p>Error: {error}</p>}
       <div className="landing" id="booking">
         <div className="description-container">
           <article className="room-details">
@@ -68,8 +66,8 @@ function Booking() {
             <p>{room?.description}</p>
           </article>
           <ChooseRoom />
-          <div>
-          {activeBooking.date ? (<><p>Din nästa tid är</p> <div><p>Datum: {activeBooking.date}</p> <p>Tid: {activeBooking.timeslot}</p> <p>Vart: {activeBooking.room}</p></div></>) : (<p>Du har ingen aktiv bokning.</p>)}
+          <div className="active-booking">
+          {activeBooking.date ? (<><p><strong>Din nästa tid är</strong></p> <div className="booking-data"><p><strong>Datum:</strong> {activeBooking.date}</p> <p><strong>Tid:</strong> {activeBooking.timeslot}</p> <p><strong>Vart:</strong> {activeBooking.room}</p></div></>) : (<p>Du har ingen aktiv bokning.</p>)}
           </div>
         </div>
         <Calendar room_id={room_id} />

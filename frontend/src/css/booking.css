@@ -128,16 +128,38 @@
 }
 .timeslot,
 .timeslot-selected,
-.timeslot-invalid, .timeslot-invalid-selected {
+.timeslot-invalid,
+.timeslot-invalid-selected {
   width: 100px;
   padding: 1rem;
   border-radius: 10px;
   border: none;
   background-color: var(--secondary-green-color);
 }
-.timeslot-selected, .timeslot-invalid-selected {
+.timeslot-selected,
+.timeslot-invalid-selected {
   border: dashed 2px var(--tertiary-green-color);
 }
-.timeslot-invalid, .timeslot-invalid-selected {
+.timeslot-invalid,
+.timeslot-invalid-selected {
   background-color: var(--primary-red-color);
+}
+.active-booking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  margin: 0 auto;
+  gap: 0.5rem;
+  p strong {
+    font-weight: bold;
+  }
+  .booking-data {
+    display: flex;
+    gap: 2rem;
+    @media (max-width: 500px){
+      gap: 1rem;
+      flex-direction: column;
+    }
+  }
 }

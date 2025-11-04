@@ -78,6 +78,7 @@ function Calendar({ room_id }: CalendarProps) {
         }
       }
     };
+    
     fetchBookings();
     return () => {
       cancel = true;
@@ -152,6 +153,7 @@ function Calendar({ room_id }: CalendarProps) {
       });
       if(res.status === 201) {
         setMessage('Du har bokat en ny tid!')
+        location.reload()
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -173,6 +175,7 @@ function Calendar({ room_id }: CalendarProps) {
       const res = await axios.delete('/booking', {data: deleteBooking ,withCredentials: true})
       if(res.status === 200) {
         setMessage('Du har nu avbokat din tid.')
+        location.reload()
       }
     } catch(err){
       if(err instanceof Error) {
