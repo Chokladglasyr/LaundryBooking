@@ -13,12 +13,34 @@
   }
 }
 #admin {
+  .input-admin {
+    width: 100%;
+  }
   @media (max-width: 500px) {
     overflow: scroll;
   }
   .edit-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    form {
+      gap: 0.5rem;
+      input {
+        height: 38px;
+      }
+      .input-admin {
+        width: 100%;
+
+      }
+    }
     @media (min-width: 500px) {
       overflow: scroll;
+    }
+  }
+  #edit-container-user {
+    @media (min-width: 500px) {
+      align-items: center;
+
     }
   }
   article {
@@ -46,6 +68,18 @@
     }
   }
 }
+.btn-container-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  @media (min-width: 500px) {
+    button:first-child {
+      margin-right: 1rem;
+    }
+    display: unset;
+  }
+}
 #create-msg,
 #create-room,
 #create-rule,
@@ -64,4 +98,23 @@
 #search-user {
   align-items: center;
   margin: 2rem 0;
+}
+#user-form {
+  div {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 10px;
+    justify-content: center;
+    @media (min-width: 500px) {
+      justify-content: flex-end;
+    }
+  }
+  #role {
+    width: 2rem;
+  }
+}
+.input-label {
+  font-size: 14px;
+  font-weight: bold;
 }

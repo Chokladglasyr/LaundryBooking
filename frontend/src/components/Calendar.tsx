@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LeftArrow from "../assets/left.png";
 import RightArrow from "../assets/right.png";
 import type { BookingType, CalendarProps, User } from "../store/types";
@@ -29,6 +29,8 @@ function Calendar({ room_id }: CalendarProps) {
   const [message, setMessage] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState(0);
   const user = useLoaderData<User>();
+
+  const timeslotRef = useRef<HTMLDivElement>(null)
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -77,12 +79,24 @@ function Calendar({ room_id }: CalendarProps) {
         }
       }
     };
-    
     fetchBookings();
+
     return () => {
       cancel = true;
     };
   }, [message]);
+
+  useEffect(() => {
+    const resetSelectedTime = (e: MouseEvent) => {
+      if (timeslotRef.current && !timeslotRef.current.contains(e.target as Node)) {
+        setSelectedTime(0);
+      }
+    };
+    document.addEventListener("mousedown", resetSelectedTime);
+    return () => {
+      document.removeEventListener("mousedown", resetSelectedTime);
+    };
+  }, []);
 
   if (!bookings) {
     console.log("Error, no bookings found.");
@@ -91,7 +105,17 @@ function Calendar({ room_id }: CalendarProps) {
   const roomBookings = bookings?.filter(
     (booking) => booking.room_id === room_id
   );
-
+  const dates = roomBookings.map((booking) => booking.booking_date);
+  const isDayBooked = (day: number) => {
+    return dates.some((date) => {
+      const d = new Date(date);
+      return (
+        d.getFullYear() === currentYear &&
+        d.getMonth() === currentMonth &&
+        d.getDate() === day + 1
+      );
+    });
+  };
   const handleDatePick = (day: number) => {
     const pickedDate = new Date(currentYear, currentMonth, day);
 
@@ -150,41 +174,47 @@ function Calendar({ room_id }: CalendarProps) {
       const res = await axios.post("/booking", newBooking, {
         withCredentials: true,
       });
-      if(res.status === 201) {
-        setMessage('Du har bokat en ny tid!')
-        setTimeout(()=>{
-          location.reload()
-        }, 1000)
+      if (res.status === 201) {
+        setMessage("Ny tid bokad!");
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
       }
     } catch (err) {
       if (err instanceof Error) {
         if (axios.isAxiosError(err) && err.response?.status === 409) {
-          setMessage("Du har redan en aktiv bokning.");
+          setMessage("Du har en aktiv bokning.");
         }
+        console.error("fel,", err)
       }
     }
   };
   const deleteBooking = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    try{
+    e.preventDefault();
+    try {
       const deleteBooking = {
         user_id: user.id,
         room_id: room_id,
-        booking_date: new Date(selectedDate).toLocaleDateString('sv-SE', {timeZone: 'Europe/Stockholm'}),
-        booking_timeslot: selectedTime
+        booking_date: new Date(selectedDate).toLocaleDateString("sv-SE", {
+          timeZone: "Europe/Stockholm",
+        }),
+        booking_timeslot: selectedTime,
+      };
+      const res = await axios.delete("/booking", {
+        data: deleteBooking,
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        setMessage("Du har avbokat din tid.");
+        location.reload();
       }
-      const res = await axios.delete('/booking', {data: deleteBooking ,withCredentials: true})
-      if(res.status === 200) {
-        setMessage('Du har nu avbokat din tid.')
-        location.reload()
-      }
-    } catch(err){
-      if(err instanceof Error) {
-        console.error("Error deleting booking: ", err)
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error deleting booking: ", err);
       }
     }
-
-  }
+  };
+console.log(selectedTime)
   return (
     <>
       <div className="calendar-app">
@@ -217,9 +247,11 @@ function Calendar({ room_id }: CalendarProps) {
                   new Date(currentYear, currentMonth, day + 1).getTime() ===
                   selectedDate.getTime()
                     ? "valid-days-selected"
-                    : new Date(currentYear, currentMonth, day + 1) >= today
-                      ? "valid-days"
-                      : "invalid-days"
+                    : new Date(currentYear, currentMonth, day + 1) < today
+                      ? "invalid-days"
+                      : isDayBooked(day)
+                        ? "valid-days-with-booking"
+                        : "valid-days"
                 }
                 id={
                   day + 1 === currentDate.getDate() &&
@@ -236,8 +268,8 @@ function Calendar({ room_id }: CalendarProps) {
           </div>
         </div>
       </div>
-      <div className="booking-container">
-        <div className="timeslots-container">
+      <div ref={timeslotRef} className="booking-container">
+        <div  className="timeslots-container">
           <button
             onClick={() => handleTimePick(1)}
             className={classnameForTimeslot(1)}
@@ -281,8 +313,9 @@ function Calendar({ room_id }: CalendarProps) {
             17-21
           </button>
         </div>
-        <div>
+        <div className="booking-btn-container">
           {message && <p className="booking-msg">{message}</p>}
+          {/* <p className="booking-msg">Du har en aktiv bokning.</p> */}
           <button
             type="button"
             onClick={(e) => {

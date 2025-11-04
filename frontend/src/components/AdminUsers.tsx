@@ -20,7 +20,7 @@ function AdminUsers() {
     if (message) {
       const messageTimer = setTimeout(() => {
         setMessage(null);
-      }, 1000);
+      }, 2000);
       return () => {
         clearTimeout(messageTimer);
       };
@@ -71,6 +71,9 @@ function AdminUsers() {
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
         setMessage("Hittade inga boende.");
+        setUsers(null)
+        setSearchWord('')
+        setSearchType('')
       }
       if (err instanceof Error) {
         console.error("Failed to fetch users for admin: ", err);
@@ -84,6 +87,8 @@ function AdminUsers() {
       const res = await axios.get("/users", { withCredentials: true });
       if (!res.data.users) throw new Error("No users found");
       setUsers(res.data.users);
+      setSearchWord('')
+      setSearchType('')
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to fetch all users: ", err);
@@ -196,7 +201,7 @@ function AdminUsers() {
             onChange={handleInput}
           />
           <div>
-            <p>är en admin</p>
+            <p>Ska vara admin</p>
             <input
               type="checkbox"
               name="role"
@@ -210,28 +215,35 @@ function AdminUsers() {
           </button>
         </form>
       </article>
-      <article className="edit-container">
+      <article className="edit-container" id="edit-container-user">
+        <form onSubmit={(e) => fetchUsers(e, searchWord, searchType)}>
         <div>
           <p>Sök efter:</p>
           <select
             name="users"
             id="users"
+            required
+            value={searchType}
             onChange={(e) => setSearchType(e.target.value)}
           >
-            <option value="">Välj</option>
+            <option value="" style={{display: 'none'}}>Välj</option>
             <option value="name">Namn</option>
             <option value="email">Email</option>
             <option value="apt_nr">Lägenhetsnummer</option>
           </select>
         </div>
-        <form onSubmit={(e) => fetchUsers(e, searchWord, searchType)}>
           <input
             type="text"
             placeholder="Sökterm"
+            id="search"
+            name="search"
+            value={searchWord}
             onChange={(e) => setSearchWord(e.target.value)}
             required
           />
-          <button className="primary-btn-booking">SÖK</button>
+          {message && <p className="message">{message}</p>}
+          <div className="btn-container-search">
+          <button className="primary-btn-green">SÖK</button>
           <button
             onClick={fetchAllUsers}
             type="button"
@@ -239,7 +251,7 @@ function AdminUsers() {
           >
             VISA ALLA
           </button>
-          {message && <p className="message">{message}</p>}
+          </div>
         </form>
         {message && <p>{message}</p>}
         {users &&
@@ -250,8 +262,9 @@ function AdminUsers() {
               onSubmit={(e) => updateUser(e, user.id)}
             >
               <label htmlFor="edit-user-form">
-                {`Redigera boende ${index + 1}`}
+                {user.role === 'admin' ? `Redigera boende ${index + 1} - Admin` :`Redigera boende ${index + 1}`}
               </label>
+              <label className="input-label" htmlFor="name">Namn:</label>
               <input
                 className="input-admin"
                 type="text"
@@ -260,6 +273,7 @@ function AdminUsers() {
                 value={user.name}
                 onChange={(e) => handleInputChange(e, index)}
               />
+              <label className="input-label" htmlFor="email">Email:</label>
               <input
                 className="input-admin"
                 type="email"
@@ -268,6 +282,7 @@ function AdminUsers() {
                 value={user.email}
                 onChange={(e) => handleInputChange(e, index)}
               />
+              <label className="input-label" htmlFor="apt_nr">Lägenhetsnummer:</label>
               <input
                 className="input-admin"
                 type="text"

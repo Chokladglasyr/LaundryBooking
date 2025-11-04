@@ -7,7 +7,6 @@ import axios from "axios";
 function Home() {
   const [posts, setPosts] = useState<PostType[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     async function getPosts() {
       try {
