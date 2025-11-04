@@ -4,8 +4,8 @@ import { useState } from "react";
 import type { LoginProps } from "../store/types";
 
 function Login({ setLoggedIn, setAdmin }: LoginProps) {
-  const API_URL = "http://localhost:3000"
-  // const API_URL = "https://laundrybooking.onrender.com"
+  // const API_URL = "http://localhost:3000"
+  const API_URL = "https://laundrybooking.onrender.com"
   const [formData, setFormData] = useState({});
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
