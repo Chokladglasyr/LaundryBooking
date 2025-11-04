@@ -118,7 +118,7 @@ export async function hasBooking(
     if (!id) {
       return reply.status(400).send({ message: "Missing parameters." });
     }
-    const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= CURRENT_DATE`;
+    const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= (CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Stockholm')::date`;
     const values = [id];
     const existingBooking = (await PostgresConnection.runQuery(text, values)) as BookingDatabaseModel[]
     if(!existingBooking || existingBooking.length === 0) {

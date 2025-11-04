@@ -76,3 +76,10 @@ createRoot(document.getElementById("root") as HTMLElement).render(
     <RouterProvider router={router} />
   </StrictMode>
 );
+
+if ("serviceWorker" in navigator) {
+  const registration = await navigator.serviceWorker.register("/sw.js");
+  console.log("Registered SW: ", registration);
+
+  registration.addEventListener("updatefound", () => {});
+}
