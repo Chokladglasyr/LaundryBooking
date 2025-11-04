@@ -213,7 +213,7 @@ function Calendar({ room_id }: CalendarProps) {
       }
     }
   };
-  console.log(selectedTime);
+  
   return (
     <>
       <div className="calendar-app">

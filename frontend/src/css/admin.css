@@ -22,27 +22,25 @@
   .edit-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 1.5rem;
-    form{
+    form {
       gap: 0.5rem;
       input {
         height: 38px;
       }
       .input-admin {
         width: 100%;
-        @media (min-width: 500px) {
-          width: 70%;
-        }
-      }
 
+      }
     }
     @media (min-width: 500px) {
       overflow: scroll;
-      align-items: unset;
-      form {
-        align-items: center;
-      }
+    }
+  }
+  #edit-container-user {
+    @media (min-width: 500px) {
+      align-items: center;
+
     }
   }
   article {
@@ -110,10 +108,13 @@
     justify-content: center;
     @media (min-width: 500px) {
       justify-content: flex-end;
-
     }
   }
   #role {
     width: 2rem;
   }
+}
+.input-label {
+  font-size: 14px;
+  font-weight: bold;
 }

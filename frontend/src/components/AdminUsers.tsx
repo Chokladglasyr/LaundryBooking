@@ -20,7 +20,7 @@ function AdminUsers() {
     if (message) {
       const messageTimer = setTimeout(() => {
         setMessage(null);
-      }, 3000);
+      }, 2000);
       return () => {
         clearTimeout(messageTimer);
       };
@@ -68,7 +68,6 @@ function AdminUsers() {
         withCredentials: true,
       });
       setUsers(res.data.users);
-      setSearchWord('')
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
         setMessage("Hittade inga boende.");
@@ -216,7 +215,7 @@ function AdminUsers() {
           </button>
         </form>
       </article>
-      <article className="edit-container">
+      <article className="edit-container" id="edit-container-user">
         <form onSubmit={(e) => fetchUsers(e, searchWord, searchType)}>
         <div>
           <p>Sök efter:</p>
@@ -265,6 +264,7 @@ function AdminUsers() {
               <label htmlFor="edit-user-form">
                 {user.role === 'admin' ? `Redigera boende ${index + 1} - Admin` :`Redigera boende ${index + 1}`}
               </label>
+              <label className="input-label" htmlFor="name">Namn:</label>
               <input
                 className="input-admin"
                 type="text"
@@ -273,6 +273,7 @@ function AdminUsers() {
                 value={user.name}
                 onChange={(e) => handleInputChange(e, index)}
               />
+              <label className="input-label" htmlFor="email">Email:</label>
               <input
                 className="input-admin"
                 type="email"
@@ -281,6 +282,7 @@ function AdminUsers() {
                 value={user.email}
                 onChange={(e) => handleInputChange(e, index)}
               />
+              <label className="input-label" htmlFor="apt_nr">Lägenhetsnummer:</label>
               <input
                 className="input-admin"
                 type="text"
