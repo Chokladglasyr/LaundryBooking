@@ -25,16 +25,15 @@ function Calendar({ room_id }: CalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
   const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
   const [selectedDate, setSelectedDate] = useState(currentDate);
+  const [bookings, setBookings] = useState<BookingType[]>([]);
+  const [message, setMessage] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState(0);
   const user = useLoaderData<User>();
-  const [bookings, setBookings] = useState<BookingType[]>([]);
-  // const [message, setMessage] = useState<string | null>(null)
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
   const sweFirstDayOfMonth = (firstDayOfMonth + 6) % 7;
 
@@ -52,10 +51,22 @@ function Calendar({ room_id }: CalendarProps) {
   };
 
   useEffect(() => {
+    let cancel = false
+    if(message) {
+      const messageTimer = setTimeout(() => {
+        setMessage(null)
+      }, 1000)
+      return () => {
+
+        clearTimeout(messageTimer)
+      }
+    }
     const fetchBookings = async () => {
       try {
         const res = await axios.get("/bookings", { withCredentials: true });
-        setBookings(res.data.bookings);
+        if(!cancel) {
+          setBookings(res.data.bookings);
+        }
       } catch (err) {
         if (err instanceof Error) {
           if (
@@ -69,9 +80,13 @@ function Calendar({ room_id }: CalendarProps) {
       }
     };
     fetchBookings();
-  }, []);
+    return () => {
+      cancel = true
+    }
+  }, [message]);
+
   if (!bookings) {
-    console.log("Error");
+    console.log("Error, no bookings found.");
   }
 
   const roomBookings = bookings?.filter(
@@ -88,6 +103,7 @@ function Calendar({ room_id }: CalendarProps) {
   const handleTimePick = (time: number) => {
     setSelectedTime(time);
   };
+
   const isTimeslotBooked = (timeslot: string) => {
     const timeslotBooked = roomBookings.filter(
       (booking) =>
@@ -106,21 +122,42 @@ function Calendar({ room_id }: CalendarProps) {
       }
     }
   };
+
   const classnameForTimeslot = (timeslot: number) => {
-    const bookedStatus = isTimeslotBooked(timeslot.toString())
-    if (
-      selectedTime === timeslot && bookedStatus === 1
-    ) {
+    const bookedStatus = isTimeslotBooked(timeslot.toString());
+    if (selectedTime === timeslot && bookedStatus === 1) {
       return "timeslot-invalid-selected";
     } else if (selectedTime === timeslot) {
       return "timeslot-selected";
-    } else if(bookedStatus) {
-        return "timeslot-invalid";
+    } else if (bookedStatus) {
+      return "timeslot-invalid";
     } else {
-        return "timeslot";
+      return "timeslot";
+    }
+  };
+
+  const selectedTimeslotIsUsers =
+    selectedTime !== 0 && isTimeslotBooked(selectedTime.toString()) === 1;
+
+    const createBooking = async(e: React.MouseEvent<HTMLButtonElement>) => {
+ try{      e.preventDefault()
+      const newBooking = {
+        user_id: user.id,
+        room_id: room_id,
+        booking_date: selectedDate,
+        booking_timeslot: selectedTime
+      }
+      const res = await axios.post('/booking', newBooking, {withCredentials: true})
+
+      console.log(res.status)
+    } catch(err){
+      if(err instanceof Error){
+        if(axios.isAxiosError(err) && err.response?.status === 409){
+          setMessage('Du har redan en aktiv bokning.')
+        }
+      }
     }
     }
-    const selectedTimeslotIsUsers = selectedTime !== 0 && isTimeslotBooked(selectedTime.toString()) === 1
   return (
     <>
       <div className="calendar-app">
@@ -217,9 +254,13 @@ function Calendar({ room_id }: CalendarProps) {
             17-21
           </button>
         </div>
-        <button className="primary-btn-booking" id="book-time">
-          {selectedTimeslotIsUsers ? 'AVBOKA' : 'BOKA' }
+        <div>
+        {message && <p>{message}</p>}
+        <button type="button" onClick={(e)=> {if(!selectedTimeslotIsUsers) {createBooking(e)}}} className="primary-btn-booking" id="book-time">
+          {selectedTimeslotIsUsers ? "AVBOKA" : "BOKA"}
         </button>
+
+        </div>
       </div>
     </>
   );
