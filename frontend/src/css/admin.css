@@ -26,11 +26,16 @@
       input {
         height: 38px;
       }
+      .input-admin {
+        width: 100%;
+        @media (min-width: 500px) {
+          width: 70%;
+        }
+      }
 
     }
     @media (min-width: 500px) {
       overflow: scroll;
-      flex-direction: row;
       align-items: unset;
       form {
         margin-top: 22px;

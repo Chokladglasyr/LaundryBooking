@@ -211,20 +211,21 @@ function AdminUsers() {
         </form>
       </article>
       <article className="edit-container">
+        <form onSubmit={(e) => fetchUsers(e, searchWord, searchType)}>
         <div>
           <p>Sök efter:</p>
           <select
             name="users"
             id="users"
+            required
             onChange={(e) => setSearchType(e.target.value)}
           >
-            <option value="">Välj</option>
+            <option value="" style={{display: 'none'}}>Välj</option>
             <option value="name">Namn</option>
             <option value="email">Email</option>
             <option value="apt_nr">Lägenhetsnummer</option>
           </select>
         </div>
-        <form onSubmit={(e) => fetchUsers(e, searchWord, searchType)}>
           <input
             type="text"
             placeholder="Sökterm"
