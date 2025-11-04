@@ -157,9 +157,14 @@
   .booking-data {
     display: flex;
     gap: 2rem;
-    @media (max-width: 500px){
+    @media (max-width: 500px) {
       gap: 1rem;
       flex-direction: column;
     }
   }
+}
+.booking-msg {
+  position: absolute;
+  bottom: 172px;
+  right: 30px
 }

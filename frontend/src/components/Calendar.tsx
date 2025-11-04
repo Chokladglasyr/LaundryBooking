@@ -73,7 +73,6 @@ function Calendar({ room_id }: CalendarProps) {
             err.response?.data.message === "No bookings found."
           ) {
             console.error("Hittade inga bokningar i db.");
-            // console.error("Error fetching bookings: ", err);
           }
         }
       }
@@ -153,7 +152,9 @@ function Calendar({ room_id }: CalendarProps) {
       });
       if(res.status === 201) {
         setMessage('Du har bokat en ny tid!')
-        location.reload()
+        setTimeout(()=>{
+          location.reload()
+        }, 1000)
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -281,7 +282,7 @@ function Calendar({ room_id }: CalendarProps) {
           </button>
         </div>
         <div>
-          {message && <p>{message}</p>}
+          {message && <p className="booking-msg">{message}</p>}
           <button
             type="button"
             onClick={(e) => {
