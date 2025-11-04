@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { type RoomType } from "../store/types";
+import { type BookingType, type RoomType } from "../store/types";
 import Calendar from "./Calendar";
 import ChooseRoom from "./ChooseRoom";
 import axios from "axios";
@@ -12,7 +12,6 @@ function Booking() {
   const [params] = useSearchParams();
   const user = useLoaderData()
   const room_id = params.get("id");
-console.log(user)
   useEffect(() => {
     const controller = new AbortController();
     if (!room_id) return;
@@ -24,7 +23,19 @@ console.log(user)
           signal: controller.signal,
         });
         setRoom(res.data.room[0]);
-
+        const checkForBooking = await axios.get(`booking/health?id=${user.id}`, {withCredentials: true, signal:controller.signal})
+        if(checkForBooking.status === 409) return;
+        const existingBooking = checkForBooking.data.booking[0] as BookingType
+        const bookingRoom = checkForBooking.data.room[0] as RoomType
+        let timeslot = ''
+        if(existingBooking.booking_timeslot === '1') {
+          timeslot = '8-12'
+        } else if(existingBooking.booking_timeslot === '2') {
+          timeslot = '12-17'
+        } else {
+          timeslot = '17-21'
+        }
+        setActiveBooking(`Din nästa tid är: Datum: ${new Date(existingBooking.booking_date).toLocaleDateString('sv-SE')} Tid: ${timeslot} Vart: ${bookingRoom.name}`)
       } catch (err) {
         console.log(err);
         if (err instanceof Error) {

@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import PostgresConnection from "../db";
 import { bookingRequest, idRequest } from "../types/requestTypes";
 import { checkForBooking, insertBooking } from "../repository";
+import { BookingDatabaseModel } from "../types/databaseModelTypes";
 
 export async function getAllBookings(req: FastifyRequest, reply: FastifyReply) {
   try {
@@ -119,13 +120,16 @@ export async function hasBooking(
     }
     const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= CURRENT_DATE`;
     const values = [id];
-    const existingBooking = await PostgresConnection.runQuery(text, values);
+    const existingBooking = (await PostgresConnection.runQuery(text, values)) as BookingDatabaseModel[]
     if (existingBooking) {
+      const text = `SELECT * FROM rooms WHERE id=$1`
+      const values = [existingBooking[0].room_id]
+      const room = await PostgresConnection.runQuery(text, values)
       return reply
-        .status(409)
-        .send({ message: "User already has an active booking.", booking: existingBooking });
+        .status(200)
+        .send({ message: "User already has an active booking.", booking: existingBooking, room: room });
     }
-    reply.status(200).send({ message: "User has no active bookings." });
+    reply.status(409).send({ message: "User has no active bookings." });
   } catch (err) {
     console.error("Error fetching an ongoing booking, ", err);
   }
