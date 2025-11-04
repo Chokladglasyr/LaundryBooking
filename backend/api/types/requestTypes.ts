@@ -26,3 +26,9 @@ export type userRequest = {
   apt_nr: string;
   role?: string;
 };
+export type deleteRequest = {
+    user_id: string
+    room_id: string
+    booking_date: string
+    booking_timeslot: string
+}

@@ -14,7 +14,6 @@ export type BookingType = {
   room_id: string
   booking_date: Date
   booking_timeslot: string
-
 }
 export type PostType = {
   id: string;

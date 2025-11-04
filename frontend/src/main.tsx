@@ -12,6 +12,7 @@ import AdminRooms from "./components/AdminRooms.tsx";
 import AdminPosts from "./components/AdminPosts.tsx";
 import { authLoader, authMiddleware } from "./store/authMiddleware.ts";
 import Landing from "./components/Landing.tsx";
+import Home from "./components/Home.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,12 @@ export const router = createBrowserRouter([
     loader: authLoader,
     element: <Landing />,
     children: [
+      {
+        path: "",
+        middleware: [authMiddleware],
+        loader: authLoader,
+        element: <Home />,
+      },
       {
         path: "rules",
         middleware: [authMiddleware],

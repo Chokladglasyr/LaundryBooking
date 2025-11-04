@@ -25,15 +25,15 @@ function Calendar({ room_id }: CalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
   const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
   const [selectedDate, setSelectedDate] = useState(currentDate);
+  const [bookings, setBookings] = useState<BookingType[]>([]);
+  const [message, setMessage] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState(0);
   const user = useLoaderData<User>();
-  const [bookings, setBookings] = useState<BookingType[] | null>(null);
-  console.log(user)
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
   const sweFirstDayOfMonth = (firstDayOfMonth + 6) % 7;
 
@@ -51,35 +51,50 @@ function Calendar({ room_id }: CalendarProps) {
   };
 
   useEffect(() => {
+    let cancel = false;
+    if (message) {
+      const messageTimer = setTimeout(() => {
+        setMessage(null);
+      }, 1000);
+      return () => {
+        clearTimeout(messageTimer);
+      };
+    }
     const fetchBookings = async () => {
       try {
         const res = await axios.get("/bookings", { withCredentials: true });
-        setBookings(res.data.bookings);
+        if (!cancel) {
+          setBookings(res.data.bookings);
+        }
       } catch (err) {
         if (err instanceof Error) {
-          console.error("Error fetching bookings: ", err);
+          if (
+            axios.isAxiosError(err) &&
+            err.response?.data.message === "No bookings found."
+          ) {
+            console.error("Hittade inga bokningar i db.");
+          }
         }
       }
     };
+    
     fetchBookings();
-  }, []);
+    return () => {
+      cancel = true;
+    };
+  }, [message]);
 
   if (!bookings) {
-    console.log("Error");
-    return;
+    console.log("Error, no bookings found.");
   }
-  const userBookings = bookings.filter(
-    (booking) => booking.user_id === user.id && booking.room_id === room_id
-  );
-  console.log("user", userBookings);
-  const roomBookings = bookings.filter(
+
+  const roomBookings = bookings?.filter(
     (booking) => booking.room_id === room_id
   );
-  console.log("room", roomBookings);
 
   const handleDatePick = (day: number) => {
     const pickedDate = new Date(currentYear, currentMonth, day);
-    
+
     if (pickedDate >= today) {
       setSelectedDate(pickedDate);
     }
@@ -87,8 +102,88 @@ function Calendar({ room_id }: CalendarProps) {
   const handleTimePick = (time: number) => {
     setSelectedTime(time);
   };
-  const isTimeslotBooked = (timeslot: string) =>{
-    return roomBookings.some((booking) => new Date(booking.booking_date).toLocaleDateString() === selectedDate.toLocaleDateString() && booking.booking_timeslot === timeslot)
+
+  const isTimeslotBooked = (timeslot: string) => {
+    const timeslotBooked = roomBookings.filter(
+      (booking) =>
+        new Date(booking.booking_date).toLocaleDateString() ===
+          selectedDate.toLocaleDateString() &&
+        booking.booking_timeslot === timeslot
+    );
+    if (!timeslotBooked || timeslotBooked.length === 0) {
+      return false;
+    } else {
+      const usersBooking = timeslotBooked[0] as BookingType;
+      if (usersBooking.user_id === user.id) {
+        return 1;
+      } else {
+        return 2;
+      }
+    }
+  };
+
+  const classnameForTimeslot = (timeslot: number) => {
+    const bookedStatus = isTimeslotBooked(timeslot.toString());
+    if (selectedTime === timeslot && bookedStatus === 1) {
+      return "timeslot-invalid-selected";
+    } else if (selectedTime === timeslot) {
+      return "timeslot-selected";
+    } else if (bookedStatus) {
+      return "timeslot-invalid";
+    } else {
+      return "timeslot";
+    }
+  };
+
+  const selectedTimeslotIsUsers =
+    selectedTime !== 0 && isTimeslotBooked(selectedTime.toString()) === 1;
+
+  const createBooking = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      e.preventDefault();
+      const newBooking = {
+        user_id: user.id,
+        room_id: room_id,
+        booking_date: selectedDate,
+        booking_timeslot: selectedTime,
+      };
+      const res = await axios.post("/booking", newBooking, {
+        withCredentials: true,
+      });
+      if(res.status === 201) {
+        setMessage('Du har bokat en ny tid!')
+        setTimeout(()=>{
+          location.reload()
+        }, 1000)
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        if (axios.isAxiosError(err) && err.response?.status === 409) {
+          setMessage("Du har redan en aktiv bokning.");
+        }
+      }
+    }
+  };
+  const deleteBooking = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    try{
+      const deleteBooking = {
+        user_id: user.id,
+        room_id: room_id,
+        booking_date: new Date(selectedDate).toLocaleDateString('sv-SE', {timeZone: 'Europe/Stockholm'}),
+        booking_timeslot: selectedTime
+      }
+      const res = await axios.delete('/booking', {data: deleteBooking ,withCredentials: true})
+      if(res.status === 200) {
+        setMessage('Du har nu avbokat din tid.')
+        location.reload()
+      }
+    } catch(err){
+      if(err instanceof Error) {
+        console.error("Error deleting booking: ", err)
+      }
+    }
+
   }
   return (
     <>
@@ -145,32 +240,64 @@ function Calendar({ room_id }: CalendarProps) {
         <div className="timeslots-container">
           <button
             onClick={() => handleTimePick(1)}
-            className={selectedTime === 1 ? "timeslot-selected" : isTimeslotBooked("1") ? "timeslot-invalid" : "timeslot"}
+            className={classnameForTimeslot(1)}
             value={1}
-            disabled = {isTimeslotBooked("1")}
+            disabled={
+              !isTimeslotBooked("1")
+                ? false
+                : isTimeslotBooked("1") === 1
+                  ? false
+                  : true
+            }
           >
             8-12
           </button>
           <button
             onClick={() => handleTimePick(2)}
-            className={selectedTime === 2 ? "timeslot-selected" : isTimeslotBooked("2") ? "timeslot-invalid" :  "timeslot"}
+            className={classnameForTimeslot(2)}
             value={2}
-            disabled = {isTimeslotBooked("2")}
+            disabled={
+              !isTimeslotBooked("2")
+                ? false
+                : isTimeslotBooked("2") === 1
+                  ? false
+                  : true
+            }
           >
             12-17
           </button>
           <button
             onClick={() => handleTimePick(3)}
-            className={selectedTime === 3 ? "timeslot-selected" : isTimeslotBooked("3") ? "timeslot-invalid" : "timeslot"}
+            className={classnameForTimeslot(3)}
             value={3}
-            disabled={isTimeslotBooked("3")}
+            disabled={
+              !isTimeslotBooked("3")
+                ? false
+                : isTimeslotBooked("3") === 1
+                  ? false
+                  : true
+            }
           >
             17-21
           </button>
         </div>
-        <button className="primary-btn-booking" id="book-time">
-          BOKA
-        </button>
+        <div>
+          {message && <p className="booking-msg">{message}</p>}
+          <button
+            type="button"
+            onClick={(e) => {
+              if (!selectedTimeslotIsUsers) {
+                createBooking(e);
+              } else {
+                deleteBooking(e);
+              }
+            }}
+            className="primary-btn-booking"
+            id="book-time"
+          >
+            {selectedTimeslotIsUsers ? "AVBOKA" : "BOKA"}
+          </button>
+        </div>
       </div>
     </>
   );

@@ -34,7 +34,6 @@ function App() {
         }
       }
     };
-    console.log(admin);
     if (loggedIn && admin) {
       navigate("/admin");
     } else if (loggedIn) {

@@ -67,7 +67,6 @@ function AdminPosts() {
         withCredentials: true,
       });
       setPosts((prev) => (prev ? [res.data.post, ...prev] : [res.data.post]));
-      console.log(res.data.message)
       if(res.data.message.includes('created')) {
         setMessage('Ny meddelande skapad.')
       }
