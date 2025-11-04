@@ -3,14 +3,16 @@ import { type RoomType } from "../store/types";
 import Calendar from "./Calendar";
 import ChooseRoom from "./ChooseRoom";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 
 function Booking() {
   const [room, setRoom] = useState<RoomType | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [activeBooking, setActiveBooking] = useState<string>('Du har ingen aktiv bokning.')
   const [params] = useSearchParams();
+  const user = useLoaderData()
   const room_id = params.get("id");
-
+console.log(user)
   useEffect(() => {
     const controller = new AbortController();
     if (!room_id) return;
@@ -22,6 +24,7 @@ function Booking() {
           signal: controller.signal,
         });
         setRoom(res.data.room[0]);
+
       } catch (err) {
         console.log(err);
         if (err instanceof Error) {
@@ -49,6 +52,7 @@ function Booking() {
             <p>{room?.description}</p>
           </article>
           <ChooseRoom />
+          <p>{activeBooking}</p>
         </div>
         <Calendar room_id={room_id} />
       </div>

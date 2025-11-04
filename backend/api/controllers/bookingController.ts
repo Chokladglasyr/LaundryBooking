@@ -123,7 +123,7 @@ export async function hasBooking(
     if (existingBooking) {
       return reply
         .status(409)
-        .send({ message: "User already has an active booking." });
+        .send({ message: "User already has an active booking.", booking: existingBooking });
     }
     reply.status(200).send({ message: "User has no active bookings." });
   } catch (err) {
