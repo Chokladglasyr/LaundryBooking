@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LeftArrow from "../assets/left.png";
 import RightArrow from "../assets/right.png";
 import type { BookingType, CalendarProps, User } from "../store/types";
@@ -29,6 +29,8 @@ function Calendar({ room_id }: CalendarProps) {
   const [message, setMessage] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState(0);
   const user = useLoaderData<User>();
+
+  const timeslotRef = useRef<HTMLDivElement>(null)
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -78,10 +80,23 @@ function Calendar({ room_id }: CalendarProps) {
       }
     };
     fetchBookings();
+
     return () => {
       cancel = true;
     };
   }, [message]);
+
+  useEffect(() => {
+    const resetSelectedTime = (e: MouseEvent) => {
+      if (timeslotRef.current && !timeslotRef.current.contains(e.target as Node)) {
+        setSelectedTime(0);
+      }
+    };
+    document.addEventListener("mousedown", resetSelectedTime);
+    return () => {
+      document.removeEventListener("mousedown", resetSelectedTime);
+    };
+  }, []);
 
   if (!bookings) {
     console.log("Error, no bookings found.");
@@ -198,6 +213,7 @@ function Calendar({ room_id }: CalendarProps) {
       }
     }
   };
+  console.log(selectedTime);
   return (
     <>
       <div className="calendar-app">
@@ -231,10 +247,10 @@ function Calendar({ room_id }: CalendarProps) {
                   selectedDate.getTime()
                     ? "valid-days-selected"
                     : new Date(currentYear, currentMonth, day + 1) < today
-                    ? "invalid-days"
-                    :isDayBooked(day)
-                      ? "valid-days-with-booking"
-                      : "valid-days"
+                      ? "invalid-days"
+                      : isDayBooked(day)
+                        ? "valid-days-with-booking"
+                        : "valid-days"
                 }
                 id={
                   day + 1 === currentDate.getDate() &&
@@ -252,7 +268,7 @@ function Calendar({ room_id }: CalendarProps) {
         </div>
       </div>
       <div className="booking-container">
-        <div className="timeslots-container">
+        <div ref={timeslotRef} className="timeslots-container">
           <button
             onClick={() => handleTimePick(1)}
             className={classnameForTimeslot(1)}
