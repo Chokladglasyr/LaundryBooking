@@ -13,6 +13,9 @@
   }
 }
 #admin {
+  .input-admin {
+    width: 100%;
+  }
   @media (max-width: 500px) {
     overflow: scroll;
   }
@@ -20,7 +23,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1.5rem;
     form{
       gap: 0.5rem;
       input {
@@ -38,7 +41,6 @@
       overflow: scroll;
       align-items: unset;
       form {
-        margin-top: 22px;
         align-items: center;
       }
     }
@@ -98,4 +100,20 @@
 #search-user {
   align-items: center;
   margin: 2rem 0;
+}
+#user-form {
+  div {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 10px;
+    justify-content: center;
+    @media (min-width: 500px) {
+      justify-content: flex-end;
+
+    }
+  }
+  #role {
+    width: 2rem;
+  }
 }

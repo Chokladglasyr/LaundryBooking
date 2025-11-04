@@ -104,8 +104,8 @@
   background-color: var(--primary-grey-color);
   border-radius: 10px;
 }
-.booked-days {
-  background-color: var(--primary-red-color);
+.valid-days-with-booking {
+  background: linear-gradient(140deg, var(--primary-red-color) 50%, var(--secondary-green-color) 50%);
   border-radius: 10px;
 }
 #current-day {

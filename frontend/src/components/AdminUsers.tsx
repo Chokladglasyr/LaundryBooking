@@ -20,7 +20,7 @@ function AdminUsers() {
     if (message) {
       const messageTimer = setTimeout(() => {
         setMessage(null);
-      }, 1000);
+      }, 3000);
       return () => {
         clearTimeout(messageTimer);
       };
@@ -68,9 +68,13 @@ function AdminUsers() {
         withCredentials: true,
       });
       setUsers(res.data.users);
+      setSearchWord('')
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
         setMessage("Hittade inga boende.");
+        setUsers(null)
+        setSearchWord('')
+        setSearchType('')
       }
       if (err instanceof Error) {
         console.error("Failed to fetch users for admin: ", err);
@@ -84,6 +88,8 @@ function AdminUsers() {
       const res = await axios.get("/users", { withCredentials: true });
       if (!res.data.users) throw new Error("No users found");
       setUsers(res.data.users);
+      setSearchWord('')
+      setSearchType('')
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to fetch all users: ", err);
@@ -196,7 +202,7 @@ function AdminUsers() {
             onChange={handleInput}
           />
           <div>
-            <p>är en admin</p>
+            <p>Ska vara admin</p>
             <input
               type="checkbox"
               name="role"
@@ -218,6 +224,7 @@ function AdminUsers() {
             name="users"
             id="users"
             required
+            value={searchType}
             onChange={(e) => setSearchType(e.target.value)}
           >
             <option value="" style={{display: 'none'}}>Välj</option>
@@ -231,12 +238,13 @@ function AdminUsers() {
             placeholder="Sökterm"
             id="search"
             name="search"
+            value={searchWord}
             onChange={(e) => setSearchWord(e.target.value)}
             required
           />
           {message && <p className="message">{message}</p>}
           <div className="btn-container-search">
-          <button className="primary-btn-booking">SÖK</button>
+          <button className="primary-btn-green">SÖK</button>
           <button
             onClick={fetchAllUsers}
             type="button"
@@ -255,7 +263,7 @@ function AdminUsers() {
               onSubmit={(e) => updateUser(e, user.id)}
             >
               <label htmlFor="edit-user-form">
-                {`Redigera boende ${index + 1}`}
+                {user.role === 'admin' ? `Redigera boende ${index + 1} - Admin` :`Redigera boende ${index + 1}`}
               </label>
               <input
                 className="input-admin"
