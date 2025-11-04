@@ -5,8 +5,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function App() {
-  axios.defaults.baseURL = "http://localhost:3000";
-  // axios.defaults.baseURL = "https://laundrybooking.onrender.com";
+  // axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.baseURL = "https://laundrybooking.onrender.com";
   const [loggedIn, setLoggedIn] = useState(false);
   const [admin, setAdmin] = useState(false);
   const navigate = useNavigate();
