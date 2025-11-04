@@ -4,16 +4,10 @@ import { useState } from "react";
 import type { LoginProps } from "../store/types";
 
 function Login({ setLoggedIn, setAdmin }: LoginProps) {
-<<<<<<< HEAD
+  const [message, setMessage] = useState<string | null>(null)
   // const API_URL = "http://localhost:3000"
   const API_URL = "https://laundrybooking.onrender.com"
-  const [formData, setFormData] = useState({});
-=======
-  const [message, setMessage] = useState<string | null>(null)
-  const API_URL = "http://localhost:3000"
-  // const API_URL = "https://laundrybooking.onrender.com"
   const [formData, setFormData] = useState({email: '', password: ''});
->>>>>>> main
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
