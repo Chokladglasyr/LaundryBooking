@@ -105,7 +105,11 @@
   border-radius: 10px;
 }
 .valid-days-with-booking {
-  background: linear-gradient(140deg, var(--primary-red-color) 50%, var(--secondary-green-color) 50%);
+  background: linear-gradient(
+    140deg,
+    var(--primary-red-color) 50%,
+    var(--secondary-green-color) 50%
+  );
   border-radius: 10px;
 }
 #current-day {
@@ -164,7 +168,14 @@
   }
 }
 .booking-msg {
-  position: absolute;
-  bottom: 172px;
-  right: 30px
+    position: absolute;
+    bottom: 120%;
+    left: -28%;
+    width: fit-content;
+    @media (min-width: 500px) {
+      left: -162%
+    }
+}
+.booking-btn-container {
+  position: relative;
 }

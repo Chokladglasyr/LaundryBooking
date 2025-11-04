@@ -175,7 +175,7 @@ function Calendar({ room_id }: CalendarProps) {
         withCredentials: true,
       });
       if (res.status === 201) {
-        setMessage("Du har bokat en ny tid!");
+        setMessage("Ny tid bokad!");
         setTimeout(() => {
           location.reload();
         }, 1000);
@@ -185,6 +185,7 @@ function Calendar({ room_id }: CalendarProps) {
         if (axios.isAxiosError(err) && err.response?.status === 409) {
           setMessage("Du har en aktiv bokning.");
         }
+        console.error("fel,", err)
       }
     }
   };
@@ -204,7 +205,7 @@ function Calendar({ room_id }: CalendarProps) {
         withCredentials: true,
       });
       if (res.status === 200) {
-        setMessage("Du har nu avbokat din tid.");
+        setMessage("Du har avbokat din tid.");
         location.reload();
       }
     } catch (err) {
@@ -213,7 +214,7 @@ function Calendar({ room_id }: CalendarProps) {
       }
     }
   };
-  
+console.log(selectedTime)
   return (
     <>
       <div className="calendar-app">
@@ -267,8 +268,8 @@ function Calendar({ room_id }: CalendarProps) {
           </div>
         </div>
       </div>
-      <div className="booking-container">
-        <div ref={timeslotRef} className="timeslots-container">
+      <div ref={timeslotRef} className="booking-container">
+        <div  className="timeslots-container">
           <button
             onClick={() => handleTimePick(1)}
             className={classnameForTimeslot(1)}
@@ -312,8 +313,9 @@ function Calendar({ room_id }: CalendarProps) {
             17-21
           </button>
         </div>
-        <div>
+        <div className="booking-btn-container">
           {message && <p className="booking-msg">{message}</p>}
+          {/* <p className="booking-msg">Du har en aktiv bokning.</p> */}
           <button
             type="button"
             onClick={(e) => {
