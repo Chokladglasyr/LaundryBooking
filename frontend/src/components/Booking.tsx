@@ -8,10 +8,11 @@ import { useLoaderData, useSearchParams } from "react-router-dom";
 function Booking() {
   const [room, setRoom] = useState<RoomType | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeBooking, setActiveBooking] = useState<string>('Du har ingen aktiv bokning.')
+  const [activeBooking, setActiveBooking] = useState({date: '', timeslot: '', room: ''});
   const [params] = useSearchParams();
-  const user = useLoaderData()
+  const user = useLoaderData();
   const room_id = params.get("id");
+
   useEffect(() => {
     const controller = new AbortController();
     if (!room_id) return;
@@ -23,19 +24,22 @@ function Booking() {
           signal: controller.signal,
         });
         setRoom(res.data.room[0]);
-        const checkForBooking = await axios.get(`booking/health?id=${user.id}`, {withCredentials: true, signal:controller.signal})
-        if(checkForBooking.status === 409) return;
-        const existingBooking = checkForBooking.data.booking[0] as BookingType
-        const bookingRoom = checkForBooking.data.room[0] as RoomType
-        let timeslot = ''
-        if(existingBooking.booking_timeslot === '1') {
-          timeslot = '8-12'
-        } else if(existingBooking.booking_timeslot === '2') {
-          timeslot = '12-17'
+        const checkForBooking = await axios.get(
+          `booking/health?id=${user.id}`,
+          { withCredentials: true, signal: controller.signal }
+        );
+        if (checkForBooking.status === 409) return;
+        const existingBooking = checkForBooking.data.booking[0] as BookingType;
+        const bookingRoom = checkForBooking.data.room[0] as RoomType;
+        let timeslot = "";
+        if (existingBooking.booking_timeslot === "1") {
+          timeslot = "8-12";
+        } else if (existingBooking.booking_timeslot === "2") {
+          timeslot = "12-17";
         } else {
-          timeslot = '17-21'
+          timeslot = "17-21";
         }
-        setActiveBooking(`Din nästa tid är: Datum: ${new Date(existingBooking.booking_date).toLocaleDateString('sv-SE')} Tid: ${timeslot} Vart: ${bookingRoom.name}`)
+        setActiveBooking({date: new Date(existingBooking.booking_date).toLocaleDateString('sv-SE'), timeslot: timeslot, room: bookingRoom.name});
       } catch (err) {
         console.log(err);
         if (err instanceof Error) {
@@ -51,7 +55,7 @@ function Booking() {
     return () => {
       controller.abort();
     };
-  }, [room_id]);
+  }, [room_id, user.id]);
 
   return (
     <>
@@ -63,7 +67,9 @@ function Booking() {
             <p>{room?.description}</p>
           </article>
           <ChooseRoom />
-          <p>{activeBooking}</p>
+          <div>
+          {activeBooking.date ? (<><p>Din nästa tid är</p> <div><p>Datum: {activeBooking.date}</p> <p>Tid: {activeBooking.timeslot}</p> <p>Vart: {activeBooking.room}</p></div></>) : (<p>Du har ingen aktiv bokning.</p>)}
+          </div>
         </div>
         <Calendar room_id={room_id} />
       </div>

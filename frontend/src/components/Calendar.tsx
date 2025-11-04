@@ -51,20 +51,19 @@ function Calendar({ room_id }: CalendarProps) {
   };
 
   useEffect(() => {
-    let cancel = false
-    if(message) {
+    let cancel = false;
+    if (message) {
       const messageTimer = setTimeout(() => {
-        setMessage(null)
-      }, 1000)
+        setMessage(null);
+      }, 1000);
       return () => {
-
-        clearTimeout(messageTimer)
-      }
+        clearTimeout(messageTimer);
+      };
     }
     const fetchBookings = async () => {
       try {
         const res = await axios.get("/bookings", { withCredentials: true });
-        if(!cancel) {
+        if (!cancel) {
           setBookings(res.data.bookings);
         }
       } catch (err) {
@@ -81,8 +80,8 @@ function Calendar({ room_id }: CalendarProps) {
     };
     fetchBookings();
     return () => {
-      cancel = true
-    }
+      cancel = true;
+    };
   }, [message]);
 
   if (!bookings) {
@@ -139,25 +138,32 @@ function Calendar({ room_id }: CalendarProps) {
   const selectedTimeslotIsUsers =
     selectedTime !== 0 && isTimeslotBooked(selectedTime.toString()) === 1;
 
-    const createBooking = async(e: React.MouseEvent<HTMLButtonElement>) => {
- try{      e.preventDefault()
+  const createBooking = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      e.preventDefault();
       const newBooking = {
         user_id: user.id,
         room_id: room_id,
         booking_date: selectedDate,
-        booking_timeslot: selectedTime
-      }
-      const res = await axios.post('/booking', newBooking, {withCredentials: true})
-
-      console.log(res.status)
-    } catch(err){
-      if(err instanceof Error){
-        if(axios.isAxiosError(err) && err.response?.status === 409){
-          setMessage('Du har redan en aktiv bokning.')
+        booking_timeslot: selectedTime,
+      };
+      const res = await axios.post("/booking", newBooking, {
+        withCredentials: true,
+      });
+      console.log(res.data)
+    } catch (err) {
+      if (err instanceof Error) {
+        if (axios.isAxiosError(err) && err.response?.status === 409) {
+          setMessage("Du har redan en aktiv bokning.");
         }
       }
     }
-    }
+  };
+  const deleteBooking = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    console.log("date:", selectedDate, "time:", selectedTime)
+
+  }
   return (
     <>
       <div className="calendar-app">
@@ -255,11 +261,21 @@ function Calendar({ room_id }: CalendarProps) {
           </button>
         </div>
         <div>
-        {message && <p>{message}</p>}
-        <button type="button" onClick={(e)=> {if(!selectedTimeslotIsUsers) {createBooking(e)}}} className="primary-btn-booking" id="book-time">
-          {selectedTimeslotIsUsers ? "AVBOKA" : "BOKA"}
-        </button>
-
+          {message && <p>{message}</p>}
+          <button
+            type="button"
+            onClick={(e) => {
+              if (!selectedTimeslotIsUsers) {
+                createBooking(e);
+              } else {
+                deleteBooking(e);
+              }
+            }}
+            className="primary-btn-booking"
+            id="book-time"
+          >
+            {selectedTimeslotIsUsers ? "AVBOKA" : "BOKA"}
+          </button>
         </div>
       </div>
     </>
