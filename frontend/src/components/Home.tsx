@@ -12,7 +12,6 @@ function Home() {
     async function getPosts() {
       try {
         const res = await axios.get("/posts", { withCredentials: true });
-        console.log(res)
         setPosts(res.data.posts);
         setLoading(false);
       } catch (err: unknown) {

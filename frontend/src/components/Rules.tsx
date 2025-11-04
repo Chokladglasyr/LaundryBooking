@@ -7,7 +7,6 @@ function Rules() {
   useEffect(() => {
     async function getRules() {
       const res = await axios.get("rules", { withCredentials: true });
-      console.log(res.data.rules);
       setRules(res.data.rules);
     }
     getRules();

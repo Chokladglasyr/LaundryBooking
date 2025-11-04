@@ -67,7 +67,6 @@ function AdminUsers() {
       const res = await axios.get(`/search?name=${search}&column=${column}`, {
         withCredentials: true,
       });
-      console.log(res.data);
       setUsers(res.data.users);
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
@@ -83,7 +82,6 @@ function AdminUsers() {
     try {
       e.preventDefault();
       const res = await axios.get("/users", { withCredentials: true });
-      console.log(res.data);
       if (!res.data.users) throw new Error("No users found");
       setUsers(res.data.users);
     } catch (err) {

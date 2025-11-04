@@ -150,7 +150,9 @@ function Calendar({ room_id }: CalendarProps) {
       const res = await axios.post("/booking", newBooking, {
         withCredentials: true,
       });
-      console.log(res.data)
+      if(res.status === 201) {
+        setMessage('Du har bokat en ny tid!')
+      }
     } catch (err) {
       if (err instanceof Error) {
         if (axios.isAxiosError(err) && err.response?.status === 409) {
@@ -159,9 +161,24 @@ function Calendar({ room_id }: CalendarProps) {
       }
     }
   };
-  const deleteBooking = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const deleteBooking = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    console.log("date:", selectedDate, "time:", selectedTime)
+    try{
+      const deleteBooking = {
+        user_id: user.id,
+        room_id: room_id,
+        booking_date: new Date(selectedDate).toLocaleDateString('sv-SE', {timeZone: 'Europe/Stockholm'}),
+        booking_timeslot: selectedTime
+      }
+      const res = await axios.delete('/booking', {data: deleteBooking ,withCredentials: true})
+      if(res.status === 200) {
+        setMessage('Du har nu avbokat din tid.')
+      }
+    } catch(err){
+      if(err instanceof Error) {
+        console.error("Error deleting booking: ", err)
+      }
+    }
 
   }
   return (

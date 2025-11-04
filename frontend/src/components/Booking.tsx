@@ -28,6 +28,7 @@ function Booking() {
           `booking/health?id=${user.id}`,
           { withCredentials: true, signal: controller.signal }
         );
+
         if (checkForBooking.status === 409) return;
         const existingBooking = checkForBooking.data.booking[0] as BookingType;
         const bookingRoom = checkForBooking.data.room[0] as RoomType;

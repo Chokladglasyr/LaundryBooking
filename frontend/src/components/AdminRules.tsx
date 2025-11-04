@@ -24,7 +24,6 @@ function AdminRules() {
     async function fetchRules() {
       try {
         const res = await axios.get("/rules", { withCredentials: true });
-        console.log(res.data.rules);
         if (!cancel) {
           setRules(res.data.rules);
         }

@@ -70,7 +70,7 @@ export async function createBooking(
         id: crypto.randomUUID(),
         user_id: req.body.user_id,
         room_id: req.body.room_id,
-        booking_date: new Date(req.body.booking_date),
+        booking_date: new Date(req.body.booking_date).toLocaleDateString('sv-SE'),
         booking_timeslot: req.body.booking_timeslot,
       };
       await insertBooking(newBooking);
@@ -97,7 +97,6 @@ export async function deleteBooking(
 ) {
   try {
     const { user_id, room_id, booking_date, booking_timeslot } = req.body;
-    console.log(req.body)
     if (!req.body) {
       return reply.status(400).send({ message: "Missing parameters." });
     }
@@ -122,6 +121,9 @@ export async function hasBooking(
     const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= CURRENT_DATE`;
     const values = [id];
     const existingBooking = (await PostgresConnection.runQuery(text, values)) as BookingDatabaseModel[]
+    if(!existingBooking || existingBooking.length === 0) {
+      return reply.status(409).send({ message: "User has no active bookings." });
+    }
     if (existingBooking) {
       const text = `SELECT * FROM rooms WHERE id=$1`
       const values = [existingBooking[0].room_id]
@@ -130,7 +132,6 @@ export async function hasBooking(
         .status(200)
         .send({ message: "User already has an active booking.", booking: existingBooking, room: room });
     }
-    reply.status(409).send({ message: "User has no active bookings." });
   } catch (err) {
     console.error("Error fetching an ongoing booking, ", err);
   }

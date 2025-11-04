@@ -105,7 +105,6 @@ export async function updateRoom(room: RoomUpdateModel, id: string) {
 
 export async function insertBooking(booking: BookingDatabaseModel) {
   try {
-    console.log(booking)
     if (!booking) {
       throw new Error("Missing booking.");
     }
