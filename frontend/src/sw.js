@@ -1,6 +1,6 @@
 const CACHE_NAME = "laundry-booking-v1"
 
-const CACHED_FILES = ["/index.html", "/manifest.json"]
+const CACHED_FILES = ["/frontend/index.html", "/manifest.json"]
 
 self.addEventListener('install', (e) => {
     e.waitUntil(caches.open(CACHE_NAME)).then((cache) => {
@@ -9,7 +9,7 @@ self.addEventListener('install', (e) => {
 })
 
 self.addEventListener('activate', (e) => {
-    cache.keys().then((cacheNames) => {
+    caches.keys().then((cacheNames) => {
         cacheNames.forEach((name) => {
             if(name !== CACHE_NAME) {
                 caches.delete(name)
@@ -33,4 +33,3 @@ self.addEventListener('fetch', async (e) => {
         }
     }
 })
-
