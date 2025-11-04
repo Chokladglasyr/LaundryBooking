@@ -159,7 +159,7 @@ function Calendar({ room_id }: CalendarProps) {
     } catch (err) {
       if (err instanceof Error) {
         if (axios.isAxiosError(err) && err.response?.status === 409) {
-          setMessage("Du har redan en aktiv bokning.");
+          setMessage("Du har en aktiv bokning.");
         }
       }
     }

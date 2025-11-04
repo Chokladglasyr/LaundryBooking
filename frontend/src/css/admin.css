@@ -17,8 +17,25 @@
     overflow: scroll;
   }
   .edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    form{
+      gap: 0.5rem;
+      input {
+        height: 38px;
+      }
+
+    }
     @media (min-width: 500px) {
       overflow: scroll;
+      flex-direction: row;
+      align-items: unset;
+      form {
+        margin-top: 22px;
+        align-items: center;
+      }
     }
   }
   article {
@@ -44,6 +61,18 @@
       justify-content: end;
       gap: 1rem;
     }
+  }
+}
+.btn-container-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  @media (min-width: 500px) {
+    button:first-child {
+      margin-right: 1rem;
+    }
+    display: unset;
   }
 }
 #create-msg,

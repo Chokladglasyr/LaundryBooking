@@ -228,9 +228,13 @@ function AdminUsers() {
           <input
             type="text"
             placeholder="Sökterm"
+            id="search"
+            name="search"
             onChange={(e) => setSearchWord(e.target.value)}
             required
           />
+          {message && <p className="message">{message}</p>}
+          <div className="btn-container-search">
           <button className="primary-btn-booking">SÖK</button>
           <button
             onClick={fetchAllUsers}
@@ -239,7 +243,7 @@ function AdminUsers() {
           >
             VISA ALLA
           </button>
-          {message && <p className="message">{message}</p>}
+          </div>
         </form>
         {message && <p>{message}</p>}
         {users &&
