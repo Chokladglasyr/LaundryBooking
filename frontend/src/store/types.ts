@@ -9,12 +9,12 @@ export type RuleType = {
   description: string;
 };
 export type BookingType = {
-  id: string
-  user_id: string
-  room_id: string
-  booking_date: Date
-  booking_timeslot: string
-}
+  id: string;
+  user_id: string;
+  room_id: string;
+  booking_date: Date;
+  booking_timeslot: string;
+};
 export type PostType = {
   id: string;
   title: string;
@@ -27,19 +27,20 @@ export type User = {
   name: string;
   email: string;
   apt_nr: string;
+  role: string;
 };
 export type userForm = {
-  name: string
-  email: string
-  apt_nr: string
-}
+  name: string;
+  email: string;
+  apt_nr: string;
+};
 export type LoginProps = {
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  setAdmin: React.Dispatch<React.SetStateAction<boolean>>
+  setAdmin: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export type CalendarProps = {
-  room_id: string | null
-}
+  room_id: string | null;
+};
 export type LogoProps = {
-  path: string
-}
+  path: string;
+};
