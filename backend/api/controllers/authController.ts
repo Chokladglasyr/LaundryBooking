@@ -189,10 +189,10 @@ export async function requestReset(req: FastifyRequest<{Querystring: idRequest}>
     return reply.status(500).send({message: "Something went wrong requestReset: ", error: err})
   }
 }
-export async function resetPassword(req: FastifyRequest<{Body: requestResetPassword, Querystring: idRequest}>, reply: FastifyReply) {
+export async function resetPassword(req: FastifyRequest<{Body: string, Querystring: idRequest}>, reply: FastifyReply) {
   try {
      const {id} = req.query
-     const {password} = req.body
+     const password = req.body
      const hashedPassword = await Bun.password.hash(password, {
         algorithm: "bcrypt",
         cost: 10,

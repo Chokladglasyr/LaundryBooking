@@ -197,7 +197,7 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     handler: bookingController.hasBooking,
   });
   server.route({
-    method: "POST",
+    method: "GET",
     url: "/getpasswordreset",
     handler: authController.requestReset
   })

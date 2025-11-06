@@ -155,6 +155,20 @@ function AdminUsers() {
     }
   };
 
+  const sendRequest = async (e: React.MouseEvent<HTMLButtonElement>, user_id: string) => {
+    e.preventDefault()
+    try{
+      const res = await axios.get(`/getpasswordreset?id=${user_id}`)
+      const requestId = res.data.request[0].id
+      console.log(requestId)
+      // send email with link /reset?id=${requestId}
+    } catch (err) {
+      if(err instanceof Error) {
+        console.error("Failed to send reset request: ", err)
+      }
+    }
+  }
+
   return (
     <>
       <article>
@@ -292,13 +306,17 @@ function AdminUsers() {
                 onChange={(e) => handleInputChange(e, index)}
               />
 
-              <div className="btn-container">
+              <div className="btn-container" >
+                <div className="save-delete">
                 <button id={`edit-user-${index}`} className="primary-btn-green">
                   SPARA
                 </button>
                 <button onClick={(e) =>deleteUser(e, user.id)} type="button" id={`delete-user-${index}`} className="primary-btn-red">
                   RADERA
                 </button>
+
+                </div>
+                <button onClick={(e) => sendRequest(e, user.id)} type="button" className="primary-btn-booking">Skicka lösenord</button>
               </div>
             </form>
           ))}
