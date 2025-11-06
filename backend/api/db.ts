@@ -55,6 +55,11 @@ class PostgresConnection {
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+    CREATE TABLE IF NOT EXISTS resets (
+    id TEXT PRIMARY KEY,
+    user_id TEXT REFERENCES users (id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
     `
     await dbClient.query(query)
     console.log("Tables initialized")

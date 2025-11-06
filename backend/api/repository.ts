@@ -37,6 +37,29 @@ export async function updateUser(user: UserUpdateModel, id: string) {
     console.error("Error while updating user: ", err);
   }
 }
+export async function updateUserPassword(password: string, id: string) {
+  try {
+    const text = `UPDATE users SET password = $1 WHERE id = $2`;
+    const values = [password, id];
+    await PostgresConnection.runQuery(text, values);
+    
+  } catch (err) {
+    console.error("Error updating user password: ", err);
+  }
+}
+export async function findUser(id: string) {
+  try {
+    const text = `SELECT * FROM users WHERE id = $1`;
+    const values = [id];
+    const res = await PostgresConnection.runQuery(text, values);
+    if(!res || res.length === 0) {
+      return {message: "No user found"}
+    }
+    return res[0]
+  } catch (err) {
+    console.error("Error trying to find user: ", err);
+  }
+}
 export async function insertRule(rule: RuleDatabaseModel) {
   try {
     const { id, title, description } = rule;
@@ -129,7 +152,7 @@ export async function checkForBooking(
     const text = `SELECT * FROM bookings WHERE user_id = $1 AND booking_date >= (CURRENT_TIMESTAMP AT TIME ZONE 'Europe/Stockholm')::date`;
     const values = [user_id];
     const existingBooking = await PostgresConnection.runQuery(text, values);
-    console.log(existingBooking)
+    console.log(existingBooking);
     if (!existingBooking || existingBooking.length === 0) {
       const text2 = `SELECT * FROM bookings WHERE room_id = $1 AND booking_timeslot = $2 AND booking_date = $3`;
       const values2 = [room_id, booking_timeslot, new Date(booking_date)];

@@ -6,8 +6,10 @@ import {
   User,
   UserDatabaseModel,
 } from "../types/authTypes";
-import { saveUser } from "../repository";
+import { findUser, saveUser, updateUserPassword } from "../repository";
 import PostgresConnection from "../db";
+import { idRequest, requestResetPassword } from "../types/requestTypes";
+import { resetPasswordDatabaseModel } from "../types/databaseModelTypes";
 
 export async function signup(
   req: FastifyRequest<{ Body: SignupRequest }>,
@@ -159,5 +161,54 @@ export async function logout(req: FastifyRequest, reply: FastifyReply) {
     return reply
       .status(500)
       .send({ message: "Something went wrong logging out, ", error: err });
+  }
+}
+export async function requestReset(req: FastifyRequest<{Querystring: idRequest}>, reply: FastifyReply) {
+  try {
+    const { id } = req.query
+    if(!id) {
+      return reply.status(400).send({message: "Missing parameters"})
+    }
+    const existingUser = await findUser(id)
+    if(existingUser.message) {
+      return reply.status(404).send({message: existingUser.message})
+    }
+    const newResetRequest = {
+      id: crypto.randomUUID(),
+      user_id: id,
+    }
+    const text = `INSERT INTO resets (id, user_id) VALUES ($1, $2)`
+    const values = [newResetRequest.id, newResetRequest.user_id]
+    await PostgresConnection.runQuery(text, values)
+    const text2 = `SELECT * FROM resets WHERE user_id =$1 ORDER BY created_at DESC LIMIT 1`
+    const values2 = [newResetRequest.user_id]
+    const resetRequest = await PostgresConnection.runQuery(text2, values2)
+    return reply.status(201).send({message: "New request to reset password created.", request: resetRequest})
+  } catch(err) {
+    console.error("Something went wrong with requestReset: ", err)
+    return reply.status(500).send({message: "Something went wrong requestReset: ", error: err})
+  }
+}
+export async function resetPassword(req: FastifyRequest<{Body: requestResetPassword, Querystring: idRequest}>, reply: FastifyReply) {
+  try {
+     const {id} = req.query
+     const {password} = req.body
+     const hashedPassword = await Bun.password.hash(password, {
+        algorithm: "bcrypt",
+        cost: 10,
+      })
+     const text = `SELECT * FROM resets WHERE id = $1 AND (created_at + INTERVAL '30 minutes') >= CURRENT_TIMESTAMP`
+     const values = [id]
+     const res = await PostgresConnection.runQuery(text, values)
+    if(!res || res.length === 0){
+      return reply.status(404).send({message: 'No active request found.'})
+    }
+    const user = res[0] as resetPasswordDatabaseModel
+
+    await updateUserPassword(hashedPassword, user.user_id)
+    return reply.status(200).send({message: "Password updated succesfully!"})
+  } catch(err) {
+    console.error("Something went wrong with resetPassword: ", err)
+    return reply.status(500).send({message: "Something went wrong with resetPassword: ", error: err})
   }
 }
