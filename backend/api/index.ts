@@ -8,9 +8,13 @@ import fastifyCookie, { FastifyCookieOptions } from "@fastify/cookie";
 const app = fastify({});
 
 await app.register(fastifyCors, {
-  origin: ["https://laundry-booking-gamma.vercel.app", "http://localhost:5173", "https://fantastic-dragon-d3d623.netlify.app"],
+  origin: [
+    "https://laundry-booking-gamma.vercel.app",
+    "http://localhost:5173",
+    "https://fantastic-dragon-d3d623.netlify.app",
+  ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE']
+  methods: ["GET", "POST", "PUT", "DELETE"],
 });
 
 const start = async () => {
@@ -34,6 +38,18 @@ const start = async () => {
     process.exit(1);
   }
 };
+
+setInterval(
+  async () => {
+    try {
+      const res = await fetch("https://laundrybooking.onrender.com");
+      console.log(`Self ping OK: ${res.status}`);
+    } catch (error) {
+      console.error("Could not self ping:", error);
+    }
+  },
+  14 * 60 * 1000
+);
 
 if (process.env.NODE_ENV !== "production") {
   start();
