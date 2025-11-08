@@ -36,3 +36,6 @@ export type User = {
   password: string;
   role: string;
 };
+export type Password = {
+  password: string
+}

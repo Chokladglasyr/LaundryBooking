@@ -42,9 +42,17 @@ export async function updateUserPassword(password: string, id: string) {
     const text = `UPDATE users SET password = $1 WHERE id = $2`;
     const values = [password, id];
     await PostgresConnection.runQuery(text, values);
-    
   } catch (err) {
     console.error("Error updating user password: ", err);
+  }
+}
+export async function deleteResetRequest(id: string) {
+  try {
+    const text = `DELETE FROM resets WHERE id = $1`;
+    const values = [id];
+    await PostgresConnection.runQuery(text, values);
+  } catch (err) {
+    console.error("Error deleting reset request: ", err);
   }
 }
 export async function findUser(id: string) {
@@ -52,10 +60,10 @@ export async function findUser(id: string) {
     const text = `SELECT * FROM users WHERE id = $1`;
     const values = [id];
     const res = await PostgresConnection.runQuery(text, values);
-    if(!res || res.length === 0) {
-      return {message: "No user found"}
+    if (!res || res.length === 0) {
+      return { message: "No user found" };
     }
-    return res[0]
+    return res[0];
   } catch (err) {
     console.error("Error trying to find user: ", err);
   }

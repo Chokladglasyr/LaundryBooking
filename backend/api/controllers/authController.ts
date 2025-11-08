@@ -1,12 +1,18 @@
 import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import {
   LoginRequest,
+  Password,
   SignupRequest,
   TokenPayload,
   User,
   UserDatabaseModel,
 } from "../types/authTypes";
-import { findUser, saveUser, updateUserPassword } from "../repository";
+import {
+  deleteResetRequest,
+  findUser,
+  saveUser,
+  updateUserPassword,
+} from "../repository";
 import PostgresConnection from "../db";
 import { idRequest, requestResetPassword } from "../types/requestTypes";
 import { resetPasswordDatabaseModel } from "../types/databaseModelTypes";
@@ -178,7 +184,7 @@ export async function requestReset(
   req: FastifyRequest<{ Querystring: idRequest }>,
   reply: FastifyReply
 ) {
-  const baseUrl = 'http://localhost:5173'
+  const baseUrl = "http://localhost:5173";
   // const baseUrl = 'https://fantastic-dragon-d3d623.netlify.app'
   try {
     const { id } = req.query;
@@ -190,7 +196,6 @@ export async function requestReset(
       return reply.status(404).send({ message: existingUser.message });
     }
     const user = existingUser as UserDatabaseModel;
-    console.log(existingUser);
     const newResetRequest = {
       id: crypto.randomUUID(),
       user_id: id,
@@ -207,7 +212,6 @@ export async function requestReset(
     const values2 = [newResetRequest.user_id];
     const res = await PostgresConnection.runQuery(text2, values2);
     const resetRequest = res[0] as resetPasswordDatabaseModel;
-    console.log(resetRequest);
     await sendEmail({
       to: resetRequest.user_email,
       subject: "Ditt konto för bokning av tvättstuga är skapad",
@@ -236,12 +240,10 @@ export async function requestReset(
     </div>
   </div>`,
     });
-    return reply
-      .status(201)
-      .send({
-        message: "New request to reset password created.",
-        request: resetRequest,
-      });
+    return reply.status(201).send({
+      message: "New request to reset password created.",
+      request: resetRequest,
+    });
   } catch (err) {
     console.error("Something went wrong with requestReset: ", err);
     return reply
@@ -250,12 +252,12 @@ export async function requestReset(
   }
 }
 export async function resetPassword(
-  req: FastifyRequest<{ Body: string; Querystring: idRequest }>,
+  req: FastifyRequest<{ Body: Password; Querystring: idRequest }>,
   reply: FastifyReply
 ) {
   try {
     const { id } = req.query;
-    const password = req.body;
+    const { password } = req.body;
     const hashedPassword = await Bun.password.hash(password, {
       algorithm: "bcrypt",
       cost: 10,
@@ -267,16 +269,14 @@ export async function resetPassword(
       return reply.status(404).send({ message: "No active request found." });
     }
     const user = res[0] as resetPasswordDatabaseModel;
-
     await updateUserPassword(hashedPassword, user.user_id);
+    await deleteResetRequest(id);
     return reply.status(200).send({ message: "Password updated succesfully!" });
   } catch (err) {
     console.error("Something went wrong with resetPassword: ", err);
-    return reply
-      .status(500)
-      .send({
-        message: "Something went wrong with resetPassword: ",
-        error: err,
-      });
+    return reply.status(500).send({
+      message: "Something went wrong with resetPassword: ",
+      error: err,
+    });
   }
 }
