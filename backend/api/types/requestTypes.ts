@@ -35,3 +35,9 @@ export type deleteRequest = {
 export type requestResetPassword = {
     password: string
 }
+export type Mail = {
+  to: string
+  subject: string
+  text: string
+
+}

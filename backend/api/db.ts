@@ -58,6 +58,7 @@ class PostgresConnection {
     CREATE TABLE IF NOT EXISTS resets (
     id TEXT PRIMARY KEY,
     user_id TEXT REFERENCES users (id) ON DELETE CASCADE,
+    user_email TEXT REFERENCES users (email) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     `
