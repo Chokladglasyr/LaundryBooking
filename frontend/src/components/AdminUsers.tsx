@@ -10,7 +10,7 @@ function AdminUsers() {
     email: "",
     apt_nr: "",
     password: "",
-    role: false
+    role: false,
   });
   const [formData, setFormData] = useState({});
   const [users, setUsers] = useState<User[] | null>(null);
@@ -33,9 +33,8 @@ function AdminUsers() {
     const { name, value, type } = e.target;
     if (type === "checkbox" && e.target instanceof HTMLInputElement) {
       setCreateFormData({ ...createFormData, [name]: e.target.checked });
-    }else {
+    } else {
       setCreateFormData({ ...createFormData, [name]: value });
-
     }
   };
   const handleInputChange = (
@@ -71,9 +70,9 @@ function AdminUsers() {
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
         setMessage("Hittade inga boende.");
-        setUsers(null)
-        setSearchWord('')
-        setSearchType('')
+        setUsers(null);
+        setSearchWord("");
+        setSearchType("");
       }
       if (err instanceof Error) {
         console.error("Failed to fetch users for admin: ", err);
@@ -87,8 +86,8 @@ function AdminUsers() {
       const res = await axios.get("/users", { withCredentials: true });
       if (!res.data.users) throw new Error("No users found");
       setUsers(res.data.users);
-      setSearchWord('')
-      setSearchType('')
+      setSearchWord("");
+      setSearchType("");
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to fetch all users: ", err);
@@ -105,8 +104,14 @@ function AdminUsers() {
       if (res.status === 201) {
         setMessage("Ny användare skapad!");
       }
-      setCreateFormData({ name: "", email: "", apt_nr: "", password: "", role: false });
-      setUsers(null)
+      setCreateFormData({
+        name: "",
+        email: "",
+        apt_nr: "",
+        password: "",
+        role: false,
+      });
+      setUsers(null);
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to create new user as an admin: ", err);
@@ -124,10 +129,10 @@ function AdminUsers() {
         withCredentials: true,
       });
 
-      if(res.data.message.includes('updated')) {
-        setMessage('Sparad, listan är uppdaterad, sök på nytt.')
+      if (res.data.message.includes("updated")) {
+        setMessage("Sparad, listan är uppdaterad, sök på nytt.");
       }
-      setUsers(null)
+      setUsers(null);
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to update user as an admin: ", err);
@@ -139,18 +144,36 @@ function AdminUsers() {
     e: React.MouseEvent<HTMLButtonElement>,
     user_id: string
   ) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const res = await axios.delete(`/user?id=${user_id}`, {
         withCredentials: true,
       });
-      setUsers((prev) => prev?.filter((user) => user_id !== user.id) || null)
-      if(res.data.message.includes('deleted')) {
-        setMessage('Användare borttagen.')
+      setUsers((prev) => prev?.filter((user) => user_id !== user.id) || null);
+      if (res.data.message.includes("deleted")) {
+        setMessage("Användare borttagen.");
       }
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to delete user as an admin: ", err);
+      }
+    }
+  };
+
+  const sendRequest = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    user_id: string,
+    name: string
+  ) => {
+    e.preventDefault();
+    try {
+     const res = await axios.get(`/getpasswordreset?id=${user_id}`);
+     if(res.status === 201) {
+      setMessage(`Mejl har skickats till ${name}`)
+     }
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Failed to send reset request: ", err);
       }
     }
   };
@@ -217,21 +240,23 @@ function AdminUsers() {
       </article>
       <article className="edit-container" id="edit-container-user">
         <form onSubmit={(e) => fetchUsers(e, searchWord, searchType)}>
-        <div>
-          <p>Sök efter:</p>
-          <select
-            name="users"
-            id="users"
-            required
-            value={searchType}
-            onChange={(e) => setSearchType(e.target.value)}
-          >
-            <option value="" style={{display: 'none'}}>Välj</option>
-            <option value="name">Namn</option>
-            <option value="email">Email</option>
-            <option value="apt_nr">Lägenhetsnummer</option>
-          </select>
-        </div>
+          <div>
+            <p>Sök efter:</p>
+            <select
+              name="users"
+              id="users"
+              required
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
+            >
+              <option value="" style={{ display: "none" }}>
+                Välj
+              </option>
+              <option value="name">Namn</option>
+              <option value="email">Email</option>
+              <option value="apt_nr">Lägenhetsnummer</option>
+            </select>
+          </div>
           <input
             type="text"
             placeholder="Sökterm"
@@ -243,14 +268,14 @@ function AdminUsers() {
           />
           {message && <p className="message">{message}</p>}
           <div className="btn-container-search">
-          <button className="primary-btn-green">SÖK</button>
-          <button
-            onClick={fetchAllUsers}
-            type="button"
-            className="primary-btn-booking"
-          >
-            VISA ALLA
-          </button>
+            <button className="primary-btn-green">SÖK</button>
+            <button
+              onClick={fetchAllUsers}
+              type="button"
+              className="primary-btn-booking"
+            >
+              VISA ALLA
+            </button>
           </div>
         </form>
         {message && <p>{message}</p>}
@@ -262,9 +287,13 @@ function AdminUsers() {
               onSubmit={(e) => updateUser(e, user.id)}
             >
               <label htmlFor="edit-user-form">
-                {user.role === 'admin' ? `Redigera boende ${index + 1} - Admin` :`Redigera boende ${index + 1}`}
+                {user.role === "admin"
+                  ? `Redigera boende ${index + 1} - Admin`
+                  : `Redigera boende ${index + 1}`}
               </label>
-              <label className="input-label" htmlFor="name">Namn:</label>
+              <label className="input-label" htmlFor="name">
+                Namn:
+              </label>
               <input
                 className="input-admin"
                 type="text"
@@ -273,7 +302,9 @@ function AdminUsers() {
                 value={user.name}
                 onChange={(e) => handleInputChange(e, index)}
               />
-              <label className="input-label" htmlFor="email">Email:</label>
+              <label className="input-label" htmlFor="email">
+                Email:
+              </label>
               <input
                 className="input-admin"
                 type="email"
@@ -282,7 +313,9 @@ function AdminUsers() {
                 value={user.email}
                 onChange={(e) => handleInputChange(e, index)}
               />
-              <label className="input-label" htmlFor="apt_nr">Lägenhetsnummer:</label>
+              <label className="input-label" htmlFor="apt_nr">
+                Lägenhetsnummer:
+              </label>
               <input
                 className="input-admin"
                 type="text"
@@ -293,11 +326,28 @@ function AdminUsers() {
               />
 
               <div className="btn-container">
-                <button id={`edit-user-${index}`} className="primary-btn-green">
-                  SPARA
-                </button>
-                <button onClick={(e) =>deleteUser(e, user.id)} type="button" id={`delete-user-${index}`} className="primary-btn-red">
-                  RADERA
+                <div className="save-delete">
+                  <button
+                    id={`edit-user-${index}`}
+                    className="primary-btn-green"
+                  >
+                    SPARA
+                  </button>
+                  <button
+                    onClick={(e) => deleteUser(e, user.id)}
+                    type="button"
+                    id={`delete-user-${index}`}
+                    className="primary-btn-red"
+                  >
+                    RADERA
+                  </button>
+                </div>
+                <button
+                  onClick={(e) => sendRequest(e, user.id, user.name)}
+                  type="button"
+                  className="primary-btn-booking"
+                >
+                  Skicka lösenord
                 </button>
               </div>
             </form>

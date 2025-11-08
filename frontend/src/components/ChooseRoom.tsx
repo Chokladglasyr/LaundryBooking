@@ -6,6 +6,7 @@ import axios from "axios";
 function ChooseRoom() {
   const [rooms, setRooms] = useState<RoomType[]>([]);
   const [formData, setFormData] = useState({});
+  const [selected, setSelected] = useState<string>()
 
   const navigate = useNavigate();
 
@@ -29,13 +30,15 @@ function ChooseRoom() {
   const handleInput = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
     setFormData(value);
+    setSelected(value)
+
   };
 
   return (
     <>
       <form className="booking-form" onSubmit={goToBooking}>
         <label htmlFor="room">Välj tvättstuga:</label>
-        <select name="room" id="room" onChange={handleInput} required>
+        <select value={selected} name="room" id="room" onChange={handleInput} required>
           <option value="" style={{ display: "none" }}>Tvättstuga</option>
           {rooms.map((room, index) => (
             <option key={index} value={room.id}>

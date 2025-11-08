@@ -3,6 +3,7 @@ import PostgresConnection from "../db";
 import { idRequest, searchRequest, userRequest } from "../types/requestTypes";
 import { TokenPayload, User, UserUpdateModel } from "../types/authTypes";
 import { saveUser, updateUser } from "../repository";
+import { sendEmail } from "../mailer";
 
 export async function getAllUsers(req: FastifyRequest, reply: FastifyReply) {
   try {

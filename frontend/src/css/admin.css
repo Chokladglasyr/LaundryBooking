@@ -62,8 +62,9 @@
   .btn-container {
     display: flex;
     gap: 1rem;
-    @media (min-width: 500px) {
-      justify-content: end;
+    flex-wrap: wrap;
+    .save-delete {
+      display: flex;
       gap: 1rem;
     }
   }

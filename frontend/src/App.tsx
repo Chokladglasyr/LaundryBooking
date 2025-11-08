@@ -3,6 +3,7 @@ import "./App.css";
 import Login from "./components/Login";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ResetPassword from "./components/ResetPassword";
 
 function App() {
   // axios.defaults.baseURL = "http://localhost:3000";
@@ -43,7 +44,7 @@ function App() {
   }, [admin, loggedIn, navigate]);
 
   return (
-    <>{!loggedIn && <Login setAdmin={setAdmin} setLoggedIn={setLoggedIn} />}</>
+    <>{!loggedIn && location.pathname.includes('reset') ? <ResetPassword /> : !loggedIn  && <Login setAdmin={setAdmin} setLoggedIn={setLoggedIn} />}</>
   );
 }
 

@@ -69,3 +69,12 @@ form {
 .primary-btn-red {
   background-color: var(--primary-red-color);
 }
+.reset {
+height: 100vh;
+display: grid;
+place-items: center;
+  form {
+    display: flex;
+    align-items: center;
+  }
+}
