@@ -13,6 +13,7 @@ function ResetPassword() {
     e.preventDefault();
     try {
       const res = await axios.post(`/resetpassword?id=${requestId}`, formData);
+
       if (res.status === 200) {
         setMessage("Tack!");
         setTimeout(() => {
