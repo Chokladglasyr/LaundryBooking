@@ -32,3 +32,12 @@ export type deleteRequest = {
     booking_date: string
     booking_timeslot: string
 }
+export type requestResetPassword = {
+    password: string
+}
+export type Mail = {
+  to: string
+  subject: string
+  text: string
+
+}

@@ -101,7 +101,6 @@ select {
   > h2,
   h3,
   p {
-    /* font-family: "Patrick Hand", cursive; */
     font-weight: 400;
     font-style: normal;
   }

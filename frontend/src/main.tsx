@@ -13,11 +13,18 @@ import AdminPosts from "./components/AdminPosts.tsx";
 import { authLoader, authMiddleware } from "./store/authMiddleware.ts";
 import Landing from "./components/Landing.tsx";
 import Home from "./components/Home.tsx";
+import ResetPassword from "./components/ResetPassword.tsx";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    children: [
+      {
+        path:"reset",
+        element: <ResetPassword/>
+      }
+    ]
   },
   {
     path: "/home",
