@@ -5,7 +5,7 @@ import PostgresConnection from "./db";
 import fastifyCors from "@fastify/cors";
 import fastifyCookie, { FastifyCookieOptions } from "@fastify/cookie";
 import fastifySchedule from "@fastify/schedule";
-import { cleanUpBooking, cleanUpReset, job } from "./jobs";
+import { cleanUpBooking, cleanUpReset } from "./jobs";
 
 const app = fastify({});
 
