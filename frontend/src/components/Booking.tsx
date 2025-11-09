@@ -16,6 +16,7 @@ function Booking() {
   const user = useLoaderData();
   const room_id = params.get("id");
 
+
   useEffect(() => {
     const controller = new AbortController();
     if (!room_id) return;
@@ -37,7 +38,6 @@ function Booking() {
         const bookingRoom = checkForBooking.data.room[0] as RoomType;
         let timeslot = "";
         const day = new Date(existingBooking.booking_date).getDay();
-        console.log(new Date(existingBooking.booking_date).getDay());
         if (existingBooking.booking_timeslot === "1") {
           if (day === 0 || day === 6) {
             timeslot = "7-13";

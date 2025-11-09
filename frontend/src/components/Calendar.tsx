@@ -31,6 +31,7 @@ function Calendar({ room_id }: CalendarProps) {
   const user = useLoaderData<User>();
 
   const timeslotRef = useRef<HTMLDivElement>(null);
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -96,8 +97,18 @@ function Calendar({ room_id }: CalendarProps) {
       }
     };
     document.addEventListener("mousedown", resetSelectedTime);
+    const resetSelectedDate = (e: MouseEvent) => {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(e.target as Node)
+      ) {
+        setSelectedDate(new Date());
+      }
+    };
+    document.addEventListener("mousedown", resetSelectedDate)
     return () => {
       document.removeEventListener("mousedown", resetSelectedTime);
+      document.removeEventListener("mousedown", resetSelectedDate)
     };
   }, []);
 
@@ -120,20 +131,20 @@ function Calendar({ room_id }: CalendarProps) {
     });
   };
   const isDayFullyBooked = (day: number) => {
-    const timeslot = ['1', '2', '3']
+    const timeslot = ["1", "2", "3"];
     return timeslot.every((slot) => {
-      const bookedSlot = roomBookings.find((booking) =>{
-        const d = new Date(booking.booking_date)
+      const bookedSlot = roomBookings.find((booking) => {
+        const d = new Date(booking.booking_date);
         return (
           d.getFullYear() === currentYear &&
           d.getMonth() === currentMonth &&
-          d.getDate() === day +1 &&
+          d.getDate() === day + 1 &&
           booking.booking_timeslot === slot
-        )
-      })
-      return bookedSlot !== undefined
-    })
-  }
+        );
+      });
+      return bookedSlot !== undefined;
+    });
+  };
   const handleDatePick = (day: number) => {
     const pickedDate = new Date(currentYear, currentMonth, day);
 
@@ -235,7 +246,7 @@ function Calendar({ room_id }: CalendarProps) {
 
   return (
     <>
-      <div className="calendar-app">
+      <div ref={calendarRef} className="calendar-app">
         <div className="calendar">
           <div className="navigate-date">
             <button onClick={prevMonth} className="left">
@@ -268,10 +279,10 @@ function Calendar({ room_id }: CalendarProps) {
                     : new Date(currentYear, currentMonth, day + 1) < today
                       ? "invalid-days"
                       : isDayFullyBooked(day)
-                      ? 'valid-days-full'
-                      : isDayBooked(day)
-                        ? "valid-days-with-booking"
-                        : "valid-days"
+                        ? "valid-days-full"
+                        : isDayBooked(day)
+                          ? "valid-days-with-booking"
+                          : "valid-days"
                 }
                 id={
                   day + 1 === currentDate.getDate() &&
@@ -290,6 +301,10 @@ function Calendar({ room_id }: CalendarProps) {
       </div>
       <div ref={timeslotRef} className="booking-container">
         <div className="timeslots-container">
+          <div>
+          <p>Tider för</p>
+        <p><strong>{selectedDate.toLocaleDateString()}</strong></p>
+          </div>
           <button
             onClick={() => handleTimePick(1)}
             className={classnameForTimeslot(1)}
