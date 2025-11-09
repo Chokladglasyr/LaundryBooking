@@ -31,7 +31,6 @@ function Calendar({ room_id }: CalendarProps) {
   const user = useLoaderData<User>();
 
   const timeslotRef = useRef<HTMLDivElement>(null);
-  const calendarRef = useRef<HTMLDivElement>(null);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -97,18 +96,9 @@ function Calendar({ room_id }: CalendarProps) {
       }
     };
     document.addEventListener("mousedown", resetSelectedTime);
-    const resetSelectedDate = (e: MouseEvent) => {
-      if (
-        calendarRef.current &&
-        !calendarRef.current.contains(e.target as Node)
-      ) {
-        setSelectedDate(new Date());
-      }
-    };
-    document.addEventListener("mousedown", resetSelectedDate);
+
     return () => {
       document.removeEventListener("mousedown", resetSelectedTime);
-      document.removeEventListener("mousedown", resetSelectedDate);
     };
   }, []);
 
@@ -247,7 +237,7 @@ function Calendar({ room_id }: CalendarProps) {
 
   return (
     <>
-      <div ref={calendarRef} className="calendar-app">
+      <div className="calendar-app">
         <div className="calendar">
           <div className="navigate-date">
             <button onClick={prevMonth} className="left">
