@@ -53,12 +53,16 @@ form {
   gap: 1rem;
 }
 .primary-btn, .primary-btn-booking, .primary-btn-green, .primary-btn-red {
-  padding: 1rem 3rem;
+  padding: 0.8rem 2.5rem;
   border-radius: 50px;
   border: 1px solid var(--primary-blue-color);
   color: #ffffff;
   text-decoration: none;
   width: fit-content;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 #login, .primary-btn-green {
   background-color: var(--primary-green-color);

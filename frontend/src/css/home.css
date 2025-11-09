@@ -32,7 +32,6 @@
 }
 .nav-rules {
   background-color: #fcb07e;
-
 }
 .nav-back {
   background-color: #ffffff;
@@ -83,6 +82,7 @@ select {
   padding: 0.5rem 1rem;
   border-radius: 20px;
   width: 200px;
+  cursor: pointer;
 }
 .booking-form {
   justify-content: center;
@@ -95,7 +95,7 @@ select {
   @media (min-width: 500px) {
     margin: 0 3rem;
   }
-  @media (min-width: 700px){
+  @media (min-width: 700px) {
     margin: 0 4rem;
   }
   > h2,
@@ -125,12 +125,17 @@ select {
   right: 1rem;
   top: 1rem;
 }
-.logout{
+.logout {
   border: none;
   background-color: transparent;
   position: absolute;
   top: 1rem;
   right: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 .message {
   text-align: center;
@@ -149,6 +154,6 @@ select {
     font-size: 2rem;
   }
 }
-.login{
+.login {
   align-items: center;
 }
