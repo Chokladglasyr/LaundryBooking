@@ -46,8 +46,8 @@ function AdminRules() {
       const res = await axios.post("/rule", createFormData, {
         withCredentials: true,
       });
-      if(res.data.message.includes('created')) {
-        setMessage('Ny regel skapad.')
+      if (res.data.message.includes("created")) {
+        setMessage("Ny regel skapad.");
       }
       setRules((prev) => (prev ? [res.data.rule, ...prev] : [res.data.rule]));
       setCreateFormData({ title: "", description: "" });
@@ -67,8 +67,8 @@ function AdminRules() {
       const res = await axios.put(`/rule?id=${rule_id}`, formData, {
         withCredentials: true,
       });
-      if(res.data.message.includes('updated')) {
-        setMessage('Sparad, listan uppdateras...')
+      if (res.data.message.includes("updated")) {
+        setMessage("Sparad, listan uppdateras...");
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -82,10 +82,13 @@ function AdminRules() {
     rule_id: string
   ) => {
     e.preventDefault();
+    if (!window.confirm("Vill du verkligen radera regel?")) return;
     try {
-      const res = await axios.delete(`/rule?id=${rule_id}`, { withCredentials: true });
-      if(res.data.message.includes('deleted')) {
-        setMessage('Regel borttagen.')
+      const res = await axios.delete(`/rule?id=${rule_id}`, {
+        withCredentials: true,
+      });
+      if (res.data.message.includes("deleted")) {
+        setMessage("Regel borttagen.");
       }
       setRules((prev) => prev?.filter((rule) => rule_id !== rule.id) || null);
     } catch (err) {
