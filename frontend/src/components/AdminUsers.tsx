@@ -145,6 +145,7 @@ function AdminUsers() {
     user_id: string
   ) => {
     e.preventDefault();
+    if (!window.confirm("Vill du verkligen radera användaren?")) return;
     try {
       const res = await axios.delete(`/user?id=${user_id}`, {
         withCredentials: true,
@@ -167,10 +168,10 @@ function AdminUsers() {
   ) => {
     e.preventDefault();
     try {
-     const res = await axios.get(`/getpasswordreset?id=${user_id}`);
-     if(res.status === 201) {
-      setMessage(`Mejl har skickats till ${name}`)
-     }
+      const res = await axios.get(`/getpasswordreset?id=${user_id}`);
+      if (res.status === 201) {
+        setMessage(`Mejl har skickats till ${name}`);
+      }
     } catch (err) {
       if (err instanceof Error) {
         console.error("Failed to send reset request: ", err);
