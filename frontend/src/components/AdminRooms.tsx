@@ -71,8 +71,8 @@ function AdminRooms() {
       const res = await axios.post("/room", createFormData, {
         withCredentials: true,
       });
-      if(res.data.message.includes('created')) {
-        setMessage('Ny tvättstuga skapad.')
+      if (res.data.message.includes("created")) {
+        setMessage("Ny tvättstuga skapad.");
       }
       setRooms((prev) =>
         prev ? [res.data.room[0], ...prev] : [res.data.room[0]]
@@ -93,8 +93,8 @@ function AdminRooms() {
       const res = await axios.put(`/room?id=${room_id}`, formData, {
         withCredentials: true,
       });
-      if(res.data.message.includes('updated')) {
-        setMessage('Sparad, listan uppdateras...')
+      if (res.data.message.includes("updated")) {
+        setMessage("Sparad, listan uppdateras...");
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -108,11 +108,14 @@ function AdminRooms() {
     room_id: string
   ) => {
     e.preventDefault();
+    if (!window.confirm("Vill du verkligen radera tvättstugan?")) return;
     try {
-      const res = await axios.delete(`room?id=${room_id}`, { withCredentials: true });
-      
-      if(res.data.message.includes('Deleted')) {
-        setMessage('Tvättstuga borttagen.')
+      const res = await axios.delete(`room?id=${room_id}`, {
+        withCredentials: true,
+      });
+
+      if (res.data.message.includes("Deleted")) {
+        setMessage("Tvättstuga borttagen.");
       }
       setRooms((prev) => prev?.filter((room) => room_id !== room.id) || null);
     } catch (err) {
