@@ -120,6 +120,11 @@
   );
   border-radius: 10px;
 }
+.valid-days-full {
+  cursor: pointer;
+  background-color: var(--primary-red-color);
+  border-radius: 10px;
+}
 #current-day {
   box-shadow: 0 0 0 3px var(--primary-blue-color);
 }
@@ -150,6 +155,12 @@
   cursor: pointer;
   &:hover {
     opacity: 0.8;
+  }
+  &:disabled {
+    cursor: default;
+  }
+  &:disabled:hover {
+    opacity: unset;
   }
 }
 .timeslot-selected,

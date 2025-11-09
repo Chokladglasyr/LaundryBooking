@@ -119,6 +119,21 @@ function Calendar({ room_id }: CalendarProps) {
       );
     });
   };
+  const isDayFullyBooked = (day: number) => {
+    const timeslot = ['1', '2', '3']
+    return timeslot.every((slot) => {
+      const bookedSlot = roomBookings.find((booking) =>{
+        const d = new Date(booking.booking_date)
+        return (
+          d.getFullYear() === currentYear &&
+          d.getMonth() === currentMonth &&
+          d.getDate() === day +1 &&
+          booking.booking_timeslot === slot
+        )
+      })
+      return bookedSlot !== undefined
+    })
+  }
   const handleDatePick = (day: number) => {
     const pickedDate = new Date(currentYear, currentMonth, day);
 
@@ -252,6 +267,8 @@ function Calendar({ room_id }: CalendarProps) {
                     ? "valid-days-selected"
                     : new Date(currentYear, currentMonth, day + 1) < today
                       ? "invalid-days"
+                      : isDayFullyBooked(day)
+                      ? 'valid-days-full'
                       : isDayBooked(day)
                         ? "valid-days-with-booking"
                         : "valid-days"
