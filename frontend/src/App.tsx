@@ -13,12 +13,15 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let cancel = false;
     const ifLoggedIn = async () => {
       try {
         const res = await axios.get("/me", { withCredentials: true });
-        // console.log(res);
+
         if (res) {
-          setLoggedIn(true);
+          if (!cancel) {
+            setLoggedIn(true);
+          }
           if (res.data.user[0].role === "admin") {
             setAdmin(true);
           }
@@ -41,10 +44,19 @@ function App() {
       navigate("/home");
     }
     ifLoggedIn();
+    return () => {
+      cancel = true;
+    };
   }, [admin, loggedIn, navigate]);
 
   return (
-    <>{!loggedIn && location.pathname.includes('reset') ? <ResetPassword /> : !loggedIn  && <Login setAdmin={setAdmin} setLoggedIn={setLoggedIn} />}</>
+    <>
+      {!loggedIn && location.pathname.includes("reset") ? (
+        <ResetPassword />
+      ) : (
+        !loggedIn && <Login setAdmin={setAdmin} setLoggedIn={setLoggedIn} />
+      )}
+    </>
   );
 }
 

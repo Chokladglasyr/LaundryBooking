@@ -11,15 +11,21 @@ function ChooseRoom() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let cancel = false
     async function getRooms() {
       try {
         const res = await axios.get("/rooms", { withCredentials: true });
-        setRooms(res.data.rooms);
+        if(!cancel) {
+          setRooms(res.data.rooms);
+        }
       } catch (err) {
         console.error("Failed to fetch rooms: ", err);
       }
     }
     getRooms();
+    return () => {
+      cancel = true
+    }
   }, []);
 
   const goToBooking = (e: React.FormEvent<HTMLFormElement>) => {

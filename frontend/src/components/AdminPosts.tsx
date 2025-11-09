@@ -9,17 +9,17 @@ function AdminPosts() {
     description: "",
   });
   const [posts, setPosts] = useState<PostType[] | null>(null);
-  const [message, setMessage] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     let cancel = false;
-    if(message) {
+    if (message) {
       const messageTimer = setTimeout(() => {
-        setMessage(null)
-      }, 1500)
+        setMessage(null);
+      }, 1500);
       return () => {
-        clearTimeout(messageTimer)
-      }
+        clearTimeout(messageTimer);
+      };
     }
     async function getPosts() {
       try {
@@ -67,8 +67,8 @@ function AdminPosts() {
         withCredentials: true,
       });
       setPosts((prev) => (prev ? [res.data.post, ...prev] : [res.data.post]));
-      if(res.data.message.includes('created')) {
-        setMessage('Ny meddelande skapad.')
+      if (res.data.message.includes("created")) {
+        setMessage("Ny meddelande skapad.");
       }
       setCreateFormData({ title: "", description: "" });
     } catch (err) {
@@ -87,10 +87,9 @@ function AdminPosts() {
       const res = await axios.put(`/post?id=${post_id}`, formData, {
         withCredentials: true,
       });
-      if(!res.data) return;
-      if(res.data.message.includes('updated')) {
-        setMessage('Sparad, listan uppdateras...')
-
+      if (!res.data) return;
+      if (res.data.message.includes("updated")) {
+        setMessage("Sparad, listan uppdateras...");
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -104,13 +103,14 @@ function AdminPosts() {
     id: string
   ) => {
     e.preventDefault();
+    if (!window.confirm("Vill du verkligen radera meddelandet?")) return;
     try {
       const res = await axios.delete(`post?id=${id}`, {
         withCredentials: true,
       });
       setPosts((prev) => prev?.filter((post) => id !== post.id) || null);
-      if(res.data.message.includes('deleted')) {
-        setMessage('Meddelande borttagen.')
+      if (res.data.message.includes("deleted")) {
+        setMessage("Meddelande borttagen.");
       }
     } catch (err) {
       if (err instanceof Error) {
