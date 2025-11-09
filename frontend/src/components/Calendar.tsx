@@ -105,10 +105,10 @@ function Calendar({ room_id }: CalendarProps) {
         setSelectedDate(new Date());
       }
     };
-    document.addEventListener("mousedown", resetSelectedDate)
+    document.addEventListener("mousedown", resetSelectedDate);
     return () => {
       document.removeEventListener("mousedown", resetSelectedTime);
-      document.removeEventListener("mousedown", resetSelectedDate)
+      document.removeEventListener("mousedown", resetSelectedDate);
     };
   }, []);
 
@@ -220,6 +220,7 @@ function Calendar({ room_id }: CalendarProps) {
   };
   const deleteBooking = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (!window.confirm("Vill du verkligen avboka tiden?")) return;
     try {
       const deleteBooking = {
         user_id: user.id,
@@ -302,8 +303,10 @@ function Calendar({ room_id }: CalendarProps) {
       <div ref={timeslotRef} className="booking-container">
         <div className="timeslots-container">
           <div>
-          <p>Tider för</p>
-        <p><strong>{selectedDate.toLocaleDateString()}</strong></p>
+            <p>Tider för</p>
+            <p>
+              <strong>{selectedDate.toLocaleDateString()}</strong>
+            </p>
           </div>
           <button
             onClick={() => handleTimePick(1)}
