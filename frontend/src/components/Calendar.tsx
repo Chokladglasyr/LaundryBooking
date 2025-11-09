@@ -30,7 +30,7 @@ function Calendar({ room_id }: CalendarProps) {
   const [selectedTime, setSelectedTime] = useState(0);
   const user = useLoaderData<User>();
 
-  const timeslotRef = useRef<HTMLDivElement>(null)
+  const timeslotRef = useRef<HTMLDivElement>(null);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -88,7 +88,10 @@ function Calendar({ room_id }: CalendarProps) {
 
   useEffect(() => {
     const resetSelectedTime = (e: MouseEvent) => {
-      if (timeslotRef.current && !timeslotRef.current.contains(e.target as Node)) {
+      if (
+        timeslotRef.current &&
+        !timeslotRef.current.contains(e.target as Node)
+      ) {
         setSelectedTime(0);
       }
     };
@@ -185,7 +188,7 @@ function Calendar({ room_id }: CalendarProps) {
         if (axios.isAxiosError(err) && err.response?.status === 409) {
           setMessage("Du har en aktiv bokning.");
         }
-        console.error("fel,", err)
+        console.error("fel,", err);
       }
     }
   };
@@ -214,7 +217,7 @@ function Calendar({ room_id }: CalendarProps) {
       }
     }
   };
-console.log(selectedTime)
+
   return (
     <>
       <div className="calendar-app">
@@ -269,7 +272,7 @@ console.log(selectedTime)
         </div>
       </div>
       <div ref={timeslotRef} className="booking-container">
-        <div  className="timeslots-container">
+        <div className="timeslots-container">
           <button
             onClick={() => handleTimePick(1)}
             className={classnameForTimeslot(1)}
@@ -282,7 +285,9 @@ console.log(selectedTime)
                   : true
             }
           >
-            8-12
+            {selectedDate.getDay() === 0 || selectedDate.getDay() === 6
+              ? "9-13"
+              : "8-12"}
           </button>
           <button
             onClick={() => handleTimePick(2)}
@@ -296,7 +301,9 @@ console.log(selectedTime)
                   : true
             }
           >
-            12-17
+            {selectedDate.getDay() === 0 || selectedDate.getDay() === 6
+              ? "13-17"
+              : "12-17"}
           </button>
           <button
             onClick={() => handleTimePick(3)}
@@ -310,12 +317,13 @@ console.log(selectedTime)
                   : true
             }
           >
-            17-21
+            {selectedDate.getDay() === 0 || selectedDate.getDay() === 6
+              ? "17-20"
+              : "17-21"}
           </button>
         </div>
         <div className="booking-btn-container">
           {message && <p className="booking-msg">{message}</p>}
-          {/* <p className="booking-msg">Du har en aktiv bokning.</p> */}
           <button
             type="button"
             onClick={(e) => {
