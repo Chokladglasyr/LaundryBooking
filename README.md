@@ -6,6 +6,7 @@ Go to...
    - [ER diagram](#er-diagram)
    - [Endpoints](#endpoints)  
    - [Reponse examples](#response-examples)  
++ [Email example](#email-example)
 
 ## Install
 + ```git clone https://github.com/Chokladglasyr/LaundryBooking.git```
@@ -61,7 +62,7 @@ Includes:
 
 ### API Design
 #### ER diagram
-<img src="./assets/ER.png">
+<img src="./assets/ER.png" alt="ER diagram">
 
 ## Endpoints:
 ### Misc
@@ -140,3 +141,6 @@ POST /booking
 `404 Not Found`: If user/item/booking is not found  
 `409 Conflict`: If user tries to save a booking when they have one active   
 `500 Internal Server Error`: If something happens on server side
+
+### Email example
+<img src="./assets/emailpreview.png" alt="preview of an email for resetting password">
