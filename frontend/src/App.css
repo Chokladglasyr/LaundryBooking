@@ -59,6 +59,10 @@ form {
   color: #ffffff;
   text-decoration: none;
   width: fit-content;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 #login, .primary-btn-green {
   background-color: var(--primary-green-color);

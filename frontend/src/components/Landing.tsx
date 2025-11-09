@@ -41,7 +41,7 @@ function Landing() {
       </nav>
       <Outlet />
       <button className="logout" onClick={logout}>
-        <img src={Logout} alt="exit" />
+        <img src={Logout} alt="exit" title="Logga ut"/>
       </button>
     </>
   );
