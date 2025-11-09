@@ -104,6 +104,7 @@ function AdminPosts() {
     id: string
   ) => {
     e.preventDefault();
+    if(!window.confirm('Vill du verkligen radera meddelandet?')) return;
     try {
       const res = await axios.delete(`post?id=${id}`, {
         withCredentials: true,
