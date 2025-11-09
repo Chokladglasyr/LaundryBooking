@@ -41,7 +41,6 @@ function Booking() {
         }
         setActiveBooking({date: new Date(existingBooking.booking_date).toLocaleDateString('sv-SE'), timeslot: timeslot, room: bookingRoom.name});
       } catch (err) {
-        console.log(err);
         if (err instanceof Error) {
           if (err.name === "AbortError") {
             console.log("Fetch was aborted.");
