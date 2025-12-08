@@ -2,6 +2,7 @@ export type TokenPayload = {
   user_id: string;
   email: string;
   type: string;
+  role: string | "user" | "admin"
 };
 export type UserDatabaseModel = {
   id: string;

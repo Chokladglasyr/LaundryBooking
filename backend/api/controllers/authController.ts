@@ -48,6 +48,7 @@ export async function signup(
     const tokenPayload: TokenPayload = {
       user_id: newUser.id,
       email: newUser.email,
+      role: 'user',
       type: "",
     };
 
@@ -110,6 +111,7 @@ export async function login(
     const tokenPayload: TokenPayload = {
       user_id: user[0].id,
       email: user[0].email,
+      role: user[0].role,
       type: "",
     };
 

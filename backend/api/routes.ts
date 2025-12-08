@@ -59,19 +59,19 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
   server.route({
     method: "PUT",
     url: "/user",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: userController.updateOneUser,
   });
   server.route({
     method: "DELETE",
     url: "/user",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: userController.deleteUser,
   });
   server.route({
     method: "GET",
     url: "/search",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: userController.searchUser,
   });
 
@@ -90,19 +90,19 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
   server.route({
     method: "POST",
     url: "/rule",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: ruleController.createRule,
   });
   server.route({
     method: "PUT",
     url: "/rule",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: ruleController.updateOneRule,
   });
   server.route({
     method: "DELETE",
     url: "/rule",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: ruleController.deleteRule,
   });
 
@@ -121,19 +121,19 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
   server.route({
     method: "POST",
     url: "/post",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: postController.createPost,
   });
   server.route({
     method: "PUT",
     url: "/post",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: postController.updateOnePost,
   });
   server.route({
     method: "DELETE",
     url: "/post",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: postController.deletePost,
   });
   server.route({
@@ -151,19 +151,19 @@ async function routes(server: FastifyInstance, options: FastifyPluginOptions) {
   server.route({
     method: "POST",
     url: "/room",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: roomController.createRoom,
   });
   server.route({
     method: "PUT",
     url: "/room",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: roomController.updateOneRoom,
   });
   server.route({
     method: "DELETE",
     url: "/room",
-    preHandler: server.authenticate,
+    preHandler: server.adminAuthenticate,
     handler: roomController.deleteRoom,
   });
   server.route({
